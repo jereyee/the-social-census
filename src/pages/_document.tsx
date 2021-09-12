@@ -16,7 +16,7 @@ import * as React from "react";
 
 import createEmotionCache from "styles/createEmotionCache";
 
-const APP_NAME = "nextchakra-starter";
+const APP_NAME = "The Social Census";
 const APP_DESCRIPTION =
   "Next.js app template with Chakra-UI, TypeScript, and PWA configured";
 

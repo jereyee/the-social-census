@@ -1,28 +1,24 @@
 import { theme, extendTheme } from "@chakra-ui/react";
+import { themeColors } from "./colors";
+import { buttonStyles } from "./overrides/button";
+import { headingStyles } from "./overrides/heading";
+import { textStyles } from "./overrides/text";
+import { textVariants } from "./typography";
 
 const customTheme = extendTheme({
   fonts: {
     ...theme.fonts,
-    body: "Lexend, sans-serif",
-    heading: "Lexend, serif",
+    body: "Inter",
+    heading: "Inter",
   },
   colors: {
     ...theme.colors,
-    /** Example */
-    // teal: {
-    //   ...theme.colors.teal,
-    //   700: "#005661",
-    //   500: "#00838e",
-    //   300: "#4fb3be",
-    // },
+    ...themeColors,
   },
   components: {
-    /** Example */
-    // Button: {
-    //   baseStyle: {
-    //     borderRadius: 24,
-    //   },
-    // },
+    Button: buttonStyles,
+    Text: textStyles,
+    Heading: headingStyles,
   },
 });
 

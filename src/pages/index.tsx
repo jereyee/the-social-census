@@ -8,7 +8,6 @@ const Home = () => {
   return (
     <Box mb={8} w="full">
       <SomeText />
-      <SomeImage />
       <CTASection />
     </Box>
   );

@@ -14,7 +14,7 @@ const SomeText = () => {
 
   return (
     <>
-      <Heading as="h2" fontSize="3xl">
+      <Heading as="h2" variant="heading2">
         Hello
       </Heading>
 

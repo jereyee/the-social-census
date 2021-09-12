@@ -1,7 +1,7 @@
 import { Box, Button, Code, Flex, Image, Link } from "@chakra-ui/react";
 import { AiFillGithub } from "react-icons/ai";
 
-const repoLink = "https://github.com/sozonome/nextchakra-starter";
+const repoLink = "https://github.com/jereyee/the-social-census";
 
 const CTASection = () => {
   return (
@@ -38,7 +38,7 @@ const CTASection = () => {
           as="a"
           href="https://github.com/sozonome/nextchakra-starter/generate"
           target="_blank"
-          size="sm"
+          variant="secondary"
         >
           Use This Template
         </Button>
