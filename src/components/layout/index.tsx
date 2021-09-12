@@ -14,13 +14,11 @@ const Layout = ({ children }: LayoutProps) => {
 
   /* removes the header from certain pages (i.e., home page) */
   const headerExclusions = ["/"];
-  
+
   return (
     <Box margin="0 auto" maxWidth={800} transition="0.5s ease-out">
       <Box marginY="8" marginX="4">
-        { !headerExclusions.includes(router.pathname) &&
-          <Header />
-        }
+        {!headerExclusions.includes(router.pathname) && <Header />}
         <Box as="main" marginY="10%">
           {children}
         </Box>

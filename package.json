@@ -9,7 +9,7 @@
     "postbuild": "next-sitemap --config next-sitemap.config.js",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "eslint src --fix && yarn format",
+    "lint:fix": "eslint src --fix && npm run format",
     "format": "prettier --write src",
     "up-latest": "yarn upgrade-interactive --latest",
     "release": "standard-version",

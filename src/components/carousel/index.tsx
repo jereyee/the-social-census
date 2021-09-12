@@ -1,15 +1,17 @@
 import { Heading, HStack, Text, VStack } from "@chakra-ui/react";
-import Box from "components/motion/Box";
 import { useEmblaCarousel } from "embla-carousel/react";
 import Image from "next/image";
 import React, { useCallback, useEffect, useState } from "react";
+
 import styles from "../../styles/modules/carousel.module.css";
+import Box from "components/motion/Box";
+
 import { DotButton } from "./Buttons";
 
 export const Carousel = () => {
   const slides = [
     {
-      img: <Image src="/homepage/screenshot1.png" layout="fill" />,
+      img: <Image src="/homepage/screenshot1.png" layout="fill" alt="App Screenshot 1"/>,
       heading: "Answer simple, yet <br/> thought-provoking questions.",
       subText: "Or if you're uncomfortable, just skip!",
     },
@@ -19,6 +21,7 @@ export const Carousel = () => {
           src="/homepage/screenshot2.png"
           layout="fill"
           objectFit="contain"
+          alt="App Screenshot 2"
         />
       ),
       heading: "See the results, <br/> join the conversation.",
@@ -32,6 +35,7 @@ export const Carousel = () => {
   });
 
   const [selectedIndex, setSelectedIndex] = useState(0);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [scrollSnaps, setScrollSnaps] = useState<any[]>([]);
 
   const scrollTo = useCallback(

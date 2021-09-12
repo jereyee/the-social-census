@@ -1,4 +1,5 @@
 import { theme, extendTheme } from "@chakra-ui/react";
+
 import { themeColors } from "./colors";
 import { buttonStyles } from "./overrides/button";
 import { headingStyles } from "./overrides/heading";
@@ -10,7 +11,7 @@ const customTheme = extendTheme({
     global: {
       body: {
         bg: themeColors.grayscale.black,
-        overflowX: 'hidden',
+        overflowX: "hidden",
       },
     },
   },
@@ -28,7 +29,6 @@ const customTheme = extendTheme({
     Text: textStyles,
     Heading: headingStyles,
   },
-  
 });
 
 export default customTheme;

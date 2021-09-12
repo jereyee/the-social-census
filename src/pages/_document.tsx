@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 /* eslint-disable react/jsx-props-no-spreading */
 /**
  * @todo: remove this comment below when ready
@@ -26,11 +27,12 @@ class MyDocument extends Document {
     const originalRenderPage = ctx.renderPage;
     const cache = createEmotionCache();
 
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     const { extractCriticalToChunks } = createEmotionServer(cache);
 
     ctx.renderPage = () =>
       originalRenderPage({
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line  @typescript-eslint/no-explicit-any
         enhanceApp: (App: any) => (props) =>
           <App emotionCache={cache} {...props} />,
       });

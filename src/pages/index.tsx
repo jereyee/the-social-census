@@ -1,15 +1,12 @@
 import {
-  Box,
-  Heading,
-  VStack,
-  Button,
-  Circle,
-  HStack,
-  Text,
+  Button, Heading,
+  VStack
 } from "@chakra-ui/react";
 import { Carousel } from "components/carousel";
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import { APP_NAME, APP_TAGLINE } from "./_document";
+
+
 
 const Home = () => {
   return (

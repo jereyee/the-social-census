@@ -6,7 +6,7 @@ import { DefaultSeo } from "next-seo";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import "@fontsource/lexend/latin.css";
-import "@fontsource/inter"
+import "@fontsource/inter";
 
 import defaultSEOConfig from "../../next-seo.config";
 import Layout from "components/layout";

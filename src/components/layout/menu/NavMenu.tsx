@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import {
   Box,
   Circle,
@@ -8,8 +9,10 @@ import {
   VStack,
   Text,
 } from "@chakra-ui/react";
-import Card from "components/micro/Card";
 import React, { FC } from "react";
+
+import Card from "components/micro/Card";
+
 import {
   QuestionsAnswered,
   MatchResponses,
@@ -54,7 +57,7 @@ const NavMenu = () => {
       <Card w="100%" padding="10%">
         <VStack w="100%" h="100%" align="flex-start" spacing={4}>
           {menuItems.map((menuItem, index) => {
-            const Icon = menuItem["icon"];
+            const Icon = menuItem.icon;
             return (
               <VStack w="100%" align="flex-start" spacing={4} key={index}>
                 <HStack spacing={2} align="center">
