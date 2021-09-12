@@ -19,7 +19,7 @@ const Layout = ({ children }: LayoutProps) => {
     <Box margin="0 auto" maxWidth={800} transition="0.5s ease-out">
       <Box marginY="8" marginX="4">
         {!headerExclusions.includes(router.pathname) && <Header />}
-        <Box as="main" marginY="10%">
+        <Box as="main" marginY="5%">
           {children}
         </Box>
         {/* <Footer /> */}

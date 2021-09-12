@@ -10,7 +10,7 @@ import { APP_NAME, APP_TAGLINE } from "./_document";
 
 const Home = () => {
   return (
-    <VStack mb={8} w="full" spacing={10} pt="5%" h="85vh">
+    <VStack mb={8} w="full" spacing={10} py="5%" >
       <VStack spacing={2}>
         <Heading as="h1" variant="title">
           {APP_NAME}

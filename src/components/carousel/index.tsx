@@ -11,7 +11,14 @@ import { DotButton } from "./Buttons";
 export const Carousel = () => {
   const slides = [
     {
-      img: <Image src="/homepage/screenshot1.png" layout="fill" alt="App Screenshot 1"/>,
+      img: (
+        <Image
+          src="/homepage/screenshot1.png"
+          layout="fill"
+          objectFit="contain"
+          alt="App Screenshot 1"
+        />
+      ),
       heading: "Answer simple, yet <br/> thought-provoking questions.",
       subText: "Or if you're uncomfortable, just skip!",
     },
@@ -67,7 +74,7 @@ export const Carousel = () => {
               paddingLeft="10px"
               key={index}
             >
-              <Box w="330px" h="330px" position="relative">
+              <Box w="clamp(330px, 80vw, 40vh)" h="40vh" position="relative">
                 {slide.img}
               </Box>
               <VStack
