@@ -6,6 +6,13 @@ import { textStyles } from "./overrides/text";
 import { textVariants } from "./typography";
 
 const customTheme = extendTheme({
+  styles: {
+    global: {
+      body: {
+        bg: themeColors.grayscale.black,
+      },
+    },
+  },
   fonts: {
     ...theme.fonts,
     body: "Inter",
@@ -20,6 +27,7 @@ const customTheme = extendTheme({
     Text: textStyles,
     Heading: headingStyles,
   },
+  
 });
 
 export default customTheme;
