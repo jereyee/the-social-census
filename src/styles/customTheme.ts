@@ -10,6 +10,7 @@ const customTheme = extendTheme({
     global: {
       body: {
         bg: themeColors.grayscale.black,
+        overflowX: 'hidden',
       },
     },
   },

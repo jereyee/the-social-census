@@ -16,8 +16,9 @@ import * as React from "react";
 
 import createEmotionCache from "styles/createEmotionCache";
 
-const APP_NAME = "The Social Census";
-const APP_DESCRIPTION =
+export const APP_NAME = "The Social Census";
+export const APP_TAGLINE = "Discover new perspectives";
+export const APP_DESCRIPTION =
   "Next.js app template with Chakra-UI, TypeScript, and PWA configured";
 
 class MyDocument extends Document {

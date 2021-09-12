@@ -1,5 +1,4 @@
 import Icon, { IconProps } from "@chakra-ui/icon";
-import { SettingsIcon } from "@chakra-ui/icons";
 
 export const SuggestQuestion: React.FC<IconProps> = (props: IconProps) => (
   <Icon width="22px" height="23px" viewBox="0 0 22 23" {...props}>

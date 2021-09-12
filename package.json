@@ -27,13 +27,16 @@
     "@emotion/styled": "^11.3.0",
     "@fontsource/inter": "^4.5.0",
     "@fontsource/lexend": "^4.5.1",
+    "embla-carousel": "^4.5.3",
     "framer-motion": "^4.1.17",
     "next": "^11.1.2",
     "next-pwa": "^5.3.1",
     "next-seo": "^4.26.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-icons": "^4.2.0"
+    "react-icons": "^4.2.0",
+    "react-id-swiper": "^4.0.0",
+    "swiper": "^7.0.5"
   },
   "devDependencies": {
     "@chakra-ui/cli": "^1.5.0",

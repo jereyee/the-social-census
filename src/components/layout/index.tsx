@@ -1,4 +1,5 @@
 import { Box } from "@chakra-ui/react";
+import { useRouter } from "next/dist/client/router";
 import { ReactNode } from "react";
 
 import Footer from "./Footer";
@@ -9,14 +10,21 @@ type LayoutProps = {
 };
 
 const Layout = ({ children }: LayoutProps) => {
+  const router = useRouter();
+
+  /* removes the header from certain pages (i.e., home page) */
+  const headerExclusions = ["/"];
+  
   return (
     <Box margin="0 auto" maxWidth={800} transition="0.5s ease-out">
       <Box marginY="8" marginX="4">
-        <Header />
-        <Box as="main" marginY={22}>
+        { !headerExclusions.includes(router.pathname) &&
+          <Header />
+        }
+        <Box as="main" marginY="10%">
           {children}
         </Box>
-        <Footer />
+        {/* <Footer /> */}
       </Box>
     </Box>
   );
