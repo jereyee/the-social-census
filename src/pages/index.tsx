@@ -22,8 +22,8 @@ const Home = () => {
 
       <Carousel />
 
-      <Button as="a" href="/home" variant="primary" w="95px">
-        Begin
+      <Button as="a" href="/login" variant="primary" w="135px">
+        Get Started
       </Button>
     </VStack>
   );

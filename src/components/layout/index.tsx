@@ -13,7 +13,7 @@ const Layout = ({ children }: LayoutProps) => {
   const router = useRouter();
 
   /* removes the header from certain pages (i.e., home page) */
-  const headerExclusions = ["/"];
+  const headerExclusions = ["/", "/login"];
 
   return (
     <Box margin="0 auto" maxWidth={800} transition="0.5s ease-out">
