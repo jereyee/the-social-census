@@ -1,16 +1,12 @@
-import {
-  Button, Heading,
-  VStack
-} from "@chakra-ui/react";
+import { Button, Heading, VStack } from "@chakra-ui/react";
 import { Carousel } from "components/carousel";
+import Link from "next/link";
 import React from "react";
 import { APP_NAME, APP_TAGLINE } from "./_document";
 
-
-
 const Home = () => {
   return (
-    <VStack mb={8} w="full" spacing={10} py="5%" >
+    <VStack mb={8} w="full" spacing={10} py="5%">
       <VStack spacing={2}>
         <Heading as="h1" variant="title">
           {APP_NAME}
@@ -21,9 +17,8 @@ const Home = () => {
       </VStack>
 
       <Carousel />
-
-      <Button as="a" href="/login" variant="primary" w="135px">
-        Get Started
+      <Button variant="primary" w="135px">
+        <Link href="/login">Get Started</Link>
       </Button>
     </VStack>
   );
