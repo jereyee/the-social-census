@@ -10,6 +10,10 @@ export const buttonStyles = {
     primary: {
       border: `1px solid ${themeColors.grayscale.white[100]}`,
       ...textVariants.caption,
+      _disabled: {
+        border: `1px solid ${themeColors.grayscale.white[60]}`,
+        color: `${themeColors.grayscale.white[60]}`,
+      },
     },
     secondary: {
       border: `1px solid ${themeColors.grayscale.white[60]}`,
@@ -48,6 +52,13 @@ export const buttonStyles = {
       borderTopRightRadius: "0px",
       borderBottomRightRadius: "0px",
       borderBottomLeftRadius: "4.53px",
+      backgroundColor: `${themeColors.grayscale.gray[200]}`,
+      _hover: {
+        backgroundColor: `${themeColors.grayscale.white[80]}`,
+      },
+      _active: {
+        backgroundColor: `${themeColors.grayscale.white[100]}`,
+      },
     },
   },
 };

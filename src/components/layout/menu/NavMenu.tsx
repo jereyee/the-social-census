@@ -8,6 +8,7 @@ import {
   IconProps,
   VStack,
   Text,
+  Button,
 } from "@chakra-ui/react";
 import React, { FC } from "react";
 
@@ -19,8 +20,12 @@ import {
   SuggestQuestion,
   Settings,
 } from "./Icons";
+import { signOutUser } from "utils/firebase-config";
+import { useRouter } from "next/dist/client/router";
 
 const NavMenu = () => {
+  const router = useRouter();
+
   type menuItemsType = { icon: FC<IconProps>; text: string }[];
   const menuItems: menuItemsType = [
     {
@@ -47,9 +52,22 @@ const NavMenu = () => {
       <Card w="100%" h="111px" padding="10%">
         <HStack w="100%" h="100%" justify="flex-start" spacing={6}>
           <Circle size="74px" bg="white" />
-          <Heading as="h3" variant="heading3">
-            username
-          </Heading>
+          <VStack>
+            <Heading as="h3" variant="heading3">
+              username
+            </Heading>
+
+            <Button
+              onClick={() => {
+                signOutUser();
+                void router.push("/");
+              }}
+              variant="primary"
+              height="20px"
+            >
+              Sign out
+            </Button>
+          </VStack>
         </HStack>
       </Card>
 
