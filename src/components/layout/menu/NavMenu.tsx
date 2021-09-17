@@ -47,7 +47,16 @@ const NavMenu = () => {
   ];
 
   return (
-    <>
+    <VStack
+      position="fixed"
+      w="100%"
+      h="100%"
+      left="0"
+      p={4}
+      spacing={6}
+      overflow="-moz-hidden-unscrollable"
+      pt={8}
+    >
       {/* user card */}
       <Card w="100%" h="111px" padding="10%">
         <HStack w="100%" h="100%" justify="flex-start" spacing={6}>
@@ -91,7 +100,7 @@ const NavMenu = () => {
           })}
         </VStack>
       </Card>
-    </>
+    </VStack>
   );
 };
 

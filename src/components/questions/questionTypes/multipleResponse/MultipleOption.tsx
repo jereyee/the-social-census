@@ -1,9 +1,9 @@
 /* Single option component */
 
 import Card from "components/micro/Card";
+import { IOptionData } from "components/questions/Questions";
 import React from "react";
 import { themeColors } from "styles/colors";
-import { IOptionData } from "./MultipleResponse";
 
 const MultipleOption = ({
   selectOption,

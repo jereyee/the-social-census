@@ -1,13 +1,8 @@
 import { Button } from "@chakra-ui/button";
 import { Divider, HStack } from "@chakra-ui/layout";
+import { IOptionData } from "components/questions/Questions";
 import React from "react";
 import BinaryOption from "./BinaryOption";
-
-export interface IOptionData {
-  id: number;
-  questionId: number;
-  body: string;
-}
 
 export interface IBinary {
   options: IOptionData[];

@@ -1,14 +1,9 @@
 import { Button } from "@chakra-ui/button";
 import { Divider, HStack, SimpleGrid } from "@chakra-ui/layout";
+import { IOptionData } from "components/questions/Questions";
 import React from "react";
 import { themeColors } from "styles/colors";
 import MultipleOption from "./MultipleOption";
-
-export interface IOptionData {
-  id: number;
-  questionId: number;
-  body: string;
-}
 
 export interface IMultipleResponse {
   options: IOptionData[];

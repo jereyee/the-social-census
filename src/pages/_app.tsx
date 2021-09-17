@@ -13,6 +13,8 @@ import Layout from "components/layout";
 import createEmotionCache from "styles/createEmotionCache";
 import customTheme from "styles/customTheme";
 import "styles/globals.css";
+import { defaultState, QuestionsProvider } from "utils/questionsContext";
+import { useState } from "react";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -25,6 +27,8 @@ const MyApp = ({
   pageProps,
   emotionCache = clientSideEmotionCache,
 }: MyAppProps) => {
+  const [questionsContext, setQuestionsContext] = useState(defaultState);
+
   return (
     <CacheProvider value={emotionCache}>
       <ChakraProvider theme={customTheme}>
@@ -36,7 +40,14 @@ const MyApp = ({
         </Head>
         <DefaultSeo {...defaultSEOConfig} />
         <Layout>
-          <Component {...pageProps} />
+          <QuestionsProvider
+            value={{
+              questionState: questionsContext,
+              updateQuestionState: setQuestionsContext,
+            }}
+          >
+            <Component {...pageProps} />
+          </QuestionsProvider>
         </Layout>
       </ChakraProvider>
     </CacheProvider>

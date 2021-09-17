@@ -1,22 +1,46 @@
 import { Button } from "@chakra-ui/button";
 import { Center, Heading, VStack } from "@chakra-ui/layout";
 import Card from "components/micro/Card";
-import { valueScaleCorrection } from "framer-motion/types/render/dom/projection/scale-correction";
 import React, { useEffect, useRef, useState } from "react";
 import { themeColors } from "styles/colors";
 import Binary from "./questionTypes/binary/Binary";
-import MultipleOption from "./questionTypes/multipleResponse/MultipleOption";
 import MultipleResponse from "./questionTypes/multipleResponse/MultipleResponse";
 import Scale from "./questionTypes/scale/Scale";
 
-enum QuestionType {
+export enum QuestionType {
   BINARY = "BINARY",
   MULTIPLE_CHOICE = "MULTIPLE_CHOICE",
   MULTIPLE_RESPONSE = "MULTIPLE_RESPONSE",
   SCALE = "SCALE",
 }
 
-const Questions = () => {
+export interface IOptionData {
+  id: number;
+  questionId: number;
+  body: string;
+}
+
+export interface IQuestionData {
+  id: number;
+  body: string;
+  category: string;
+  type: QuestionType;
+  knowMore: Record<string, unknown>;
+  createdAt: string;
+  options: IOptionData[];
+}
+
+const Questions = ({
+  questionData,
+  questionIndex,
+  changeQuestion,
+  answerQuestion,
+}: {
+  questionData: IQuestionData;
+  questionIndex: number;
+  changeQuestion: (index: number) => void;
+  answerQuestion: (response: number[]) => void;
+}) => {
   const [response, setResponse] = useState<number[]>([]);
 
   const brandColors = Object.values(themeColors.brand);
@@ -26,7 +50,7 @@ const Questions = () => {
   useEffect(() => {
     cardBgColor.current =
       brandColors[Math.floor(Math.random() * brandColors.length)];
-  }, []); 
+  }, []);
   console.log(response);
 
   const selectResponse = (selectedOption: number) => {
@@ -35,104 +59,6 @@ const Questions = () => {
 
   const removeResponse = (selectedOption: number) => {
     setResponse((arr) => arr.filter((item) => item !== selectedOption));
-  };
-
-  /* const questionData = {
-    id: 1,
-    body: "Would you marry someone from a different race?",
-    category: "race",
-    type: QuestionType.BINARY,
-    knowMore: {},
-    createdAt: "2021-09-12T12:53:54.937Z",
-    options: [
-      {
-        id: 0,
-        questionId: 1,
-        body: "Yes",
-      },
-      {
-        id: 1,
-        questionId: 1,
-        body: "No",
-      },
-    ],
-  }; */
-
-  /* const questionData = {
-    id: 2,
-    body: "My personal aspirations are held back by my financial situation.",
-    category: "finance",
-    type: QuestionType.SCALE,
-    knowMore: {},
-    createdAt: "2021-09-12T12:53:54.991Z",
-    options: [
-      {
-        id: 0,
-        questionId: 2,
-        body: "1",
-      },
-      {
-        id: 1,
-        questionId: 2,
-        body: "2",
-      },
-      {
-        id: 2,
-        questionId: 2,
-        body: "3",
-      },
-      {
-        id: 3,
-        questionId: 2,
-        body: "4",
-      },
-      {
-        id: 4,
-        questionId: 2,
-        body: "5",
-      },
-    ],
-  }; */
-
-  const questionData = {
-    id: 3,
-    body: "Have you ever felt discriminated for any of these areas?",
-    category: "discrimination",
-    type: QuestionType.MULTIPLE_CHOICE,
-    knowMore: {},
-    createdAt: "2021-09-12T12:53:54.991Z",
-    options: [
-      {
-        id: 0,
-        questionId: 2,
-        body: "Race",
-      },
-      {
-        id: 1,
-        questionId: 2,
-        body: "Religion",
-      },
-      {
-        id: 2,
-        questionId: 2,
-        body: "Gender",
-      },
-      {
-        id: 3,
-        questionId: 2,
-        body: "Sexuality",
-      },
-      {
-        id: 4,
-        questionId: 2,
-        body: "Disability",
-      },
-      {
-        id: 5,
-        questionId: 2,
-        body: "None",
-      },
-    ],
   };
 
   if (questionData.type === "SCALE" && response.length === 0) setResponse([3]);
@@ -193,10 +119,19 @@ const Questions = () => {
 
           <Options />
         </VStack>
-        <Button variant="primary" isDisabled={response.length === 0}>
+        <Button
+          variant="primary"
+          isDisabled={response.length === 0}
+          onClick={() => answerQuestion(response)}
+        >
           Submit Answer
         </Button>
-        <Button variant="naked">skip question</Button>
+        <Button
+          variant="naked"
+          onClick={() => changeQuestion(questionIndex + 1)}
+        >
+          skip question
+        </Button>
       </VStack>
     </Center>
   );
