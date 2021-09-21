@@ -9,64 +9,15 @@ import { GetServerSideProps } from "next";
 import axios from "axios";
 import { getAuth } from "@firebase/auth";
 import { useAuth } from "utils/AuthProvider";
-
-/* export const getServerSideProps: GetServerSideProps = async (context) => {
-  const token = nookies.get(undefined, "token");
-  console.log(token);
-  const res = await axios.get("https://api.social-census.com/v1.0/questions", {
-    withCredentials: false,
-    headers: {
-      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-      Authorization: "Bearer " + token,
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-      "Access-Control-Allow-Headers": " Origin, Content-Type, X-Auth-Token",
-    },
-  });
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const data = res.data as typeof questionList;
-
-  console.log(res);
-
-  return { props: { data } };
-}; */
+import { useQuestionsFetcher } from "utils/api/hooks";
 
 const Home = () => {
   const token = nookies.get(undefined, "token");
   const { user } = useAuth();
   console.log(user?.displayName);
-  const [questionsList, setQuestionsList] = useState<IQuestion[]>([]);
-  const isQuestionsFetched = questionsList.length > 0;
 
-  const fetchQuestions = async (token: string) => {
-    const res = await axios.get(
-      "https://api.social-census.com/v1.0/questions",
-      {
-        withCredentials: false,
-        headers: {
-          Authorization: "Bearer " + token,
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods":
-            "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-          "Access-Control-Allow-Headers": " Origin, Content-Type, X-Auth-Token",
-        },
-      }
-    );
-    const data = res.data as { value: IQuestion[] };
-    return data.value;
-  };
-
-  useEffect(() => {
-    if (token && !isQuestionsFetched) {
-      fetchQuestions(token.token)
-        .then((data) => {
-          setQuestionsList(data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  }, [token]);
+  const { fetchSuccess, fetchedQuestions: questionsList } =
+    useQuestionsFetcher();
 
   const router = useRouter();
 
@@ -74,7 +25,7 @@ const Home = () => {
 
   const [questionIndex, setQuestionIndex] = useState(questionState.lastIndex);
 
-  if (questionIndex === questionsList.length && isQuestionsFetched)
+  if (questionIndex === questionsList.length && fetchSuccess)
     setQuestionIndex(0);
 
   const changeQuestion = (index: number) => {
@@ -97,7 +48,7 @@ const Home = () => {
     );
   };
 
-  const questionsComponents = isQuestionsFetched
+  const questionsComponents = fetchSuccess
     ? questionsList.map((question, index) => (
         <Questions
           key={index}

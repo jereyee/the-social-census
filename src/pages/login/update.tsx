@@ -4,8 +4,25 @@ import {
   FormLabel,
   FormErrorMessage,
 } from "@chakra-ui/form-control";
+import { useDisclosure, UseDisclosureProps } from "@chakra-ui/hooks";
+import { WarningIcon } from "@chakra-ui/icons";
 import { Input } from "@chakra-ui/input";
-import { Box, Center, Stack } from "@chakra-ui/layout";
+import { Box, Center, Heading, HStack, Stack } from "@chakra-ui/layout";
+import {
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogBody,
+  AlertDialogFooter,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+} from "@chakra-ui/modal";
 import { updateProfile } from "@firebase/auth";
 import {
   Field,
@@ -20,8 +37,13 @@ import {
   FormikValues,
   useField,
 } from "formik";
-import React, { FC } from "react";
+import { useRouter } from "next/dist/client/router";
+import React, { FC, useState } from "react";
 import { useAuth } from "utils/AuthProvider";
+
+import Lottie from "react-lottie";
+import * as animationData from "../../../public/lottie/loading_spinner_with_tick.json";
+import ErrorModal from "components/ErrorModal";
 
 // intersecting
 interface ICustomFieldProps {
@@ -51,6 +73,30 @@ export const CustomInput: FC<FieldHookConfig<string> & ICustomFieldProps> = ({
 
 const Update = () => {
   const { user } = useAuth();
+  const router = useRouter();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [success, setSuccess] = useState(false);
+
+  const errorMessage =
+    "Sorry! <br/> We couldn't update your account ☹ <br/> Please try again.";
+
+  const successLottieOptions = {
+    loop: false,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
+
+  const successCallback = () =>
+    void router.push(
+      {
+        pathname: "/home",
+      },
+      "/home"
+    );
 
   const submitName = (name: string) => {
     if (user) {
@@ -59,10 +105,13 @@ const Update = () => {
         //photoURL: "https://example.com/jane-q-user/profile.jpg",
       })
         .then(() => {
-          // Profile updated!
+          console.log("Profile updated!");
+          setSuccess(true);
           // ...
         })
         .catch((error) => {
+          console.log(error);
+          onOpen();
           // An error occurred
           // ...
         });
@@ -80,48 +129,44 @@ const Update = () => {
 
   return (
     <Center w="100%" h="80vh">
-      <Formik
-        initialValues={{ name: "harrypotter" }}
-        onSubmit={(values, actions) => {
-          console.log({ values, actions });
-          //submitName(values.name);
-          actions.setSubmitting(false);
-        }}
-        validate={validateName}
-      >
-        <Form style={{ textAlign: "center" }}>
-          <CustomInput label="Choose a username" id="name" name="name" />
-          <Button mt={4} type="submit" w="100px" variant="primary">
-            Enter
-          </Button>
-        </Form>
-      </Formik>
-    </Center>
-  );
-
-  return (
-    <Center w="100%" h="80vh">
-      <form style={{ textAlign: "center" }}>
-        <FormControl>
-          <FormLabel htmlFor="name" textAlign="center" id="label">
-            Choose a username:
-          </FormLabel>
-          <Input id="name" placeholder="name" />
-          {/* <FormErrorMessage>{form.errors.name}</FormErrorMessage> */}
-        </FormControl>
-        <Button
-          mt={4}
-          variant="primary"
-          /* isLoading={props.isSubmitting} */
-          type="submit"
-          w="100px"
-          onClick={() => submitName}
-        >
-          Enter
-        </Button>
-      </form>
+      {!success ? (
+        <>
+          <Formik
+            initialValues={{ name: "john cena" }}
+            onSubmit={(values, actions) => {
+              console.log({ values, actions });
+              submitName(values.name);
+              actions.setSubmitting(false);
+            }}
+            validate={validateName}
+          >
+            <Form style={{ textAlign: "center" }}>
+              <CustomInput
+                label="Choose a display name"
+                id="name"
+                name="name"
+              />
+              <Button mt={4} type="submit" w="100px" variant="primary">
+                Enter
+              </Button>
+            </Form>
+          </Formik>
+          <ErrorModal error={errorMessage} isOpen={isOpen} onClose={onClose} />
+        </>
+      ) : (
+        <Lottie
+          options={successLottieOptions}
+          height={200}
+          width={200}
+          eventListeners={[
+            {
+              eventName: "complete",
+              callback: () => successCallback(),
+            },
+          ]}
+        />
+      )}
     </Center>
   );
 };
-
 export default Update;

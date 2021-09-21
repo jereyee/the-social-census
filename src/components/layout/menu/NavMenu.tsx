@@ -9,6 +9,7 @@ import {
   VStack,
   Text,
   Button,
+  Avatar,
 } from "@chakra-ui/react";
 import React, { FC } from "react";
 
@@ -22,9 +23,12 @@ import {
 } from "./Icons";
 import { signOutUser } from "utils/firebase-config";
 import { useRouter } from "next/dist/client/router";
+import { useAuth } from "utils/AuthProvider";
 
 const NavMenu = () => {
   const router = useRouter();
+  const { user } = useAuth();
+  console.log({ user });
 
   type menuItemsType = { icon: FC<IconProps>; text: string }[];
   const menuItems: menuItemsType = [
@@ -54,16 +58,15 @@ const NavMenu = () => {
       left="0"
       p={4}
       spacing={6}
-      overflow="-moz-hidden-unscrollable"
       pt={8}
     >
       {/* user card */}
       <Card w="100%" h="111px" padding="10%">
         <HStack w="100%" h="100%" justify="flex-start" spacing={6}>
-          <Circle size="74px" bg="white" />
-          <VStack>
+          <Avatar name={user?.displayName ?? undefined} />
+          <VStack alignItems="flex-start">
             <Heading as="h3" variant="heading3">
-              username
+              {user?.displayName}
             </Heading>
 
             <Button
