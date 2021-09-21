@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 import Box from "components/motion/Box";
 import React, { useState } from "react";
+import ScaleEnds from "./ScaleEnds";
 
 export interface ISCale {
   selectResponse: (selectedOptions: number) => void;
@@ -52,14 +53,7 @@ const Scale = ({ selectedOptions, selectResponse }: ISCale) => {
         </SliderTrack>
         <SliderThumb boxSize={6} />
       </Slider>
-      <HStack justifyContent="space-between" w="120%">
-        <Text variant="overline" maxW="10ch" textAlign="center">
-          Can&apos;t relate at all
-        </Text>
-        <Text variant="overline" maxW="10ch" textAlign="center">
-          Relate completely
-        </Text>
-      </HStack>
+      <ScaleEnds />
     </VStack>
   );
 };

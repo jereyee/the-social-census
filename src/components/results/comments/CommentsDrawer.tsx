@@ -1,4 +1,5 @@
 import { useDisclosure } from "@chakra-ui/hooks";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Input } from "@chakra-ui/input";
 import { HStack, Circle, Divider, VStack, Box } from "@chakra-ui/layout";
 import {
@@ -10,10 +11,27 @@ import {
   Drawer,
   DrawerOverlay,
 } from "@chakra-ui/modal";
-import { Button, Icon, Text } from "@chakra-ui/react";
+import {
+  Button,
+  Icon,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverFooter,
+  PopoverHeader,
+  PopoverTrigger,
+  Portal,
+  Text,
+} from "@chakra-ui/react";
 import { ICommentsList } from "pages/result";
 import React, { useRef, useState } from "react";
-import { AiOutlineLike } from "react-icons/ai";
+import { AiOutlineLike, AiOutlineMore } from "react-icons/ai";
 import Likes from "./CommentLikes";
 import RepliesDrawer from "./replies/RepliesDrawer";
 
@@ -52,32 +70,54 @@ const CommentsDrawer = ({ data, onClose }: IComments) => {
         {data.map((comment, index) => (
           <React.Fragment key={index}>
             <VStack alignItems="flex-start" py={4}>
-              <HStack alignItems="flex-start">
-                <Circle size="30px" bg="black" />
-                <VStack alignItems="flex-start">
+              <HStack
+                alignItems="flex-start"
+                justifyContent="space-between"
+                w="100%"
+              >
+                <HStack alignItems="flex-start">
+                  <Circle size="30px" bg="black" />
                   <VStack alignItems="flex-start">
-                    <Text variant="overline">
-                      {comment.uid.substring(0, 10)} - 1 day ago
+                    <VStack alignItems="flex-start">
+                      <Text variant="overline">
+                        {comment.uid.substring(0, 10)} - 1 day ago
+                      </Text>
+                      <Text variant="body">{comment.body}</Text>
+                      <Likes likes={comment.likes} id={comment.id} />
+                    </VStack>
+                    <Text
+                      variant="headline"
+                      color="brand.pink"
+                      ref={repliesRef}
+                      onClick={() => setClickedComment(comment)}
+                      data-question-index={index}
+                      _hover={{
+                        cursor: "pointer",
+                        color: "brand.magenta",
+                        backgroundColor: "grayscale.white.60",
+                      }}
+                    >
+                      {comment.children.length}{" "}
+                      {comment.children.length === 1 ? "REPLY" : "REPLIES"}
                     </Text>
-                    <Text variant="body">{comment.body}</Text>
-                    <Likes likes={comment.likes} id={comment.id} />
                   </VStack>
-                  <Text
-                    variant="headline"
-                    color="brand.pink"
-                    ref={repliesRef}
-                    onClick={() => setClickedComment(comment)}
-                    data-question-index={index}
-                    _hover={{
-                      cursor: "pointer",
-                      color: "brand.magenta",
-                      backgroundColor: "grayscale.white.60",
-                    }}
+                </HStack>
+                {/* more button */}
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    bg="none"
+                    _active={{ bg: "none" }}
+                    _focus={{ bg: "none" }}
+                    _hover={{ bg: "none" }}
                   >
-                    {comment.children.length}{" "}
-                    {comment.children.length === 1 ? "REPLY" : "REPLIES"}
-                  </Text>
-                </VStack>
+                    <AiOutlineMore />
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem>Report</MenuItem>
+                    {/* <MenuItem>Delete</MenuItem> */}
+                  </MenuList>
+                </Menu>
               </HStack>
             </VStack>
             <Divider />

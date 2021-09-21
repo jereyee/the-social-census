@@ -1,3 +1,4 @@
+import { ArrowUpDownIcon } from "@chakra-ui/icons";
 import {
   Divider,
   Drawer,
@@ -6,6 +7,8 @@ import {
   useDisclosure,
   VStack,
   Text,
+  HStack,
+  Box,
 } from "@chakra-ui/react";
 import { ICommentsList } from "pages/result";
 import React, { useRef, useState } from "react";
@@ -78,14 +81,17 @@ const Sections = ({ commentsList }: { commentsList: ICommentsList[] }) => {
           }}
         >
           <Divider borderWidth="1px" />
-          <VStack alignItems="flex-start" px="2%">
-            <Heading as="h5" variant="headline">
-              {section[1].title}
-            </Heading>
-            <Text variant="caption" color="grayscale.gray.100">
-              {section[1].preview}
-            </Text>
-          </VStack>
+          <HStack justifyContent="space-between" w="98%">
+            <VStack alignItems="flex-start" px="2%">
+              <Heading as="h5" variant="headline">
+                {section[1].title}
+              </Heading>
+              <Text variant="caption" color="grayscale.gray.100">
+                {section[1].preview}
+              </Text>
+            </VStack>
+            <ArrowUpDownIcon height="18px" width="18px" />
+          </HStack>
         </VStack>
       ))}
       <Divider borderWidth="1px" />
