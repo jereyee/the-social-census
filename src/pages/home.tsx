@@ -1,17 +1,81 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Center, Spinner } from "@chakra-ui/react";
 import Questions, { QuestionType } from "components/questions/Questions";
 import { useRouter } from "next/dist/client/router";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import QuestionsContext from "utils/questionsContext";
+import nookies from "nookies";
+
+import { GetServerSideProps } from "next";
+import axios from "axios";
+import { getAuth } from "@firebase/auth";
+import { useAuth } from "utils/AuthProvider";
+
+/* export const getServerSideProps: GetServerSideProps = async (context) => {
+  const token = nookies.get(undefined, "token");
+  console.log(token);
+  const res = await axios.get("https://api.social-census.com/v1.0/questions", {
+    withCredentials: false,
+    headers: {
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+      Authorization: "Bearer " + token,
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers": " Origin, Content-Type, X-Auth-Token",
+    },
+  });
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const data = res.data as typeof questionList;
+
+  console.log(res);
+
+  return { props: { data } };
+}; */
 
 const Home = () => {
+  const token = nookies.get(undefined, "token");
+  const { user } = useAuth();
+  console.log(user?.displayName);
+  const [questionsList, setQuestionsList] = useState<IQuestion[]>([]);
+  const isQuestionsFetched = questionsList.length > 0;
+
+  const fetchQuestions = async (token: string) => {
+    const res = await axios.get(
+      "https://api.social-census.com/v1.0/questions",
+      {
+        withCredentials: false,
+        headers: {
+          Authorization: "Bearer " + token,
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods":
+            "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": " Origin, Content-Type, X-Auth-Token",
+        },
+      }
+    );
+    const data = res.data as { value: IQuestion[] };
+    return data.value;
+  };
+
+  useEffect(() => {
+    if (token && !isQuestionsFetched) {
+      fetchQuestions(token.token)
+        .then((data) => {
+          setQuestionsList(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [token]);
+
   const router = useRouter();
 
   const { questionState, updateQuestionState } = useContext(QuestionsContext);
 
   const [questionIndex, setQuestionIndex] = useState(questionState.lastIndex);
 
-  if (questionIndex === questionList.length) setQuestionIndex(0);
+  if (questionIndex === questionsList.length && isQuestionsFetched)
+    setQuestionIndex(0);
 
   const changeQuestion = (index: number) => {
     updateQuestionState({ ...questionState, lastIndex: index });
@@ -19,15 +83,11 @@ const Home = () => {
   };
 
   const answerQuestion = (response: number[]) => {
-    const questionData = {
-      questionId: questionList[questionIndex].id,
-      knowMore: questionList[questionIndex].knowMore,
-    };
     updateQuestionState({
       ...questionState,
       lastIndex: questionIndex + 1,
       response: response,
-      ...questionData,
+      ...questionsList[questionIndex],
     });
     void router.push(
       {
@@ -37,22 +97,44 @@ const Home = () => {
     );
   };
 
-  const questionsComponents = questionList.map((question, index) => (
-    <Questions
-      key={index}
-      questionIndex={index}
-      questionData={question}
-      changeQuestion={changeQuestion}
-      answerQuestion={answerQuestion}
-    />
-  ));
+  const questionsComponents = isQuestionsFetched
+    ? questionsList.map((question, index) => (
+        <Questions
+          key={index}
+          questionIndex={index}
+          questionData={question}
+          changeQuestion={changeQuestion}
+          answerQuestion={answerQuestion}
+        />
+      ))
+    : [];
 
-  return <Box w="full">{questionsComponents[questionIndex]}</Box>;
+  return questionsList.length > 0 ? (
+    <Box w="full">{questionsComponents[questionIndex]}</Box>
+  ) : (
+    <Center w="100%" h="80vh">
+      <Spinner />
+    </Center>
+  );
 };
 
 export default Home;
 
-const questionList = [
+export interface IQuestion {
+  id: number;
+  body: string;
+  category: string;
+  type: QuestionType;
+  knowMore: Record<string, unknown>;
+  createdAt: string;
+  options: {
+    id: number;
+    questionId: number;
+    body: string;
+  }[];
+}
+
+/* const questionList = [
   {
     id: 1,
     body: "Would you marry someone from a different race?",
@@ -189,3 +271,4 @@ const questionList = [
     ],
   },
 ];
+ */

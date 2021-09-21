@@ -14,9 +14,14 @@ import createEmotionCache from "styles/createEmotionCache";
 import customTheme from "styles/customTheme";
 import "styles/globals.css";
 import { defaultState, QuestionsProvider } from "utils/questionsContext";
-import { useState } from "react";
+import React, { useState } from "react";
+import { AuthProvider } from "utils/AuthProvider";
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "utils/firebase-config";
 
 const clientSideEmotionCache = createEmotionCache();
+
+const app = initializeApp(firebaseConfig);
 
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
@@ -39,16 +44,18 @@ const MyApp = ({
           />
         </Head>
         <DefaultSeo {...defaultSEOConfig} />
-        <Layout>
-          <QuestionsProvider
-            value={{
-              questionState: questionsContext,
-              updateQuestionState: setQuestionsContext,
-            }}
-          >
-            <Component {...pageProps} />
-          </QuestionsProvider>
-        </Layout>
+        <AuthProvider>
+          <Layout>
+            <QuestionsProvider
+              value={{
+                questionState: questionsContext,
+                updateQuestionState: setQuestionsContext,
+              }}
+            >
+              <Component {...pageProps} />
+            </QuestionsProvider>
+          </Layout>
+        </AuthProvider>
       </ChakraProvider>
     </CacheProvider>
   );

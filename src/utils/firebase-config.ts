@@ -32,9 +32,8 @@ export const actionCodeSettings = {
 
 export const signOutUser = () => {
   // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
   const auth = getAuth();
-  
+
   signOut(auth)
     .then(() => {
       // Sign-out successful.
