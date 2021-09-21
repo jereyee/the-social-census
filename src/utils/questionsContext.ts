@@ -1,19 +1,23 @@
+import { IQuestionData, QuestionType } from "components/questions/Questions";
 import React, { Dispatch, SetStateAction } from "react";
 
 type UpdateType = Dispatch<SetStateAction<IQuestionState>>;
 
-type IQuestionState = {
+interface IQuestionState extends IQuestionData {
   lastIndex: number;
-  questionId: number;
-  knowMore: Record<string, unknown>;
   response: number[];
-};
+}
 
 export const defaultState: IQuestionState = {
   lastIndex: 0,
-  questionId: 0,
+  id: 1,
+  body: "Would you marry someone from a different race?",
+  category: "race",
+  type: QuestionType.BINARY,
   knowMore: {},
   response: [],
+  createdAt: "",
+  options: [],
 };
 
 const defaultUpdate: UpdateType = () => {
