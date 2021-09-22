@@ -1,27 +1,35 @@
 import { Button } from "@chakra-ui/button";
 import { UseDisclosureProps } from "@chakra-ui/hooks";
 import { WarningIcon } from "@chakra-ui/icons";
-import { HStack, Heading } from "@chakra-ui/layout";
+import { Heading, HStack } from "@chakra-ui/layout";
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
+  Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay
 } from "@chakra-ui/modal";
 import React from "react";
 
 interface IModal extends UseDisclosureProps {
   error: string;
+  finalFocusRef?: React.MutableRefObject<HTMLElement>;
+  initialFocusRef?: React.MutableRefObject<HTMLElement>;
 }
 
-const ErrorModal = ({ error, isOpen, onClose }: IModal) => {
+const ErrorModal = ({
+  error,
+  isOpen,
+  onClose,
+  finalFocusRef,
+  initialFocusRef,
+}: IModal) => {
   return (
     <>
       {isOpen && !!onClose && (
-        <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <Modal
+          isOpen={isOpen}
+          onClose={onClose}
+          isCentered
+          finalFocusRef={finalFocusRef}
+          initialFocusRef={initialFocusRef}
+        >
           <ModalOverlay />
           <ModalContent w="80%">
             <ModalHeader>

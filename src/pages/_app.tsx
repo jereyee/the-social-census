@@ -15,9 +15,10 @@ import customTheme from "styles/customTheme";
 import "styles/globals.css";
 import { defaultState, QuestionsProvider } from "utils/questionsContext";
 import React, { useState } from "react";
-import { AuthProvider } from "utils/AuthProvider";
+import { AuthProvider } from "utils/auth/AuthProvider";
 import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "utils/firebase-config";
+import { firebaseConfig } from "utils/auth/firebase-config";
+import { getAnalytics } from "firebase/analytics";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -33,6 +34,8 @@ const MyApp = ({
   emotionCache = clientSideEmotionCache,
 }: MyAppProps) => {
   const [questionsContext, setQuestionsContext] = useState(defaultState);
+
+  // const analytics = getAnalytics(app);
 
   return (
     <CacheProvider value={emotionCache}>

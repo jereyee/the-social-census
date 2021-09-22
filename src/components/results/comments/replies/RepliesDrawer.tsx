@@ -9,9 +9,11 @@ import {
   DrawerFooter,
 } from "@chakra-ui/modal";
 import { Button, Text } from "@chakra-ui/react";
+import UserAvatar from "components/layout/menu/UserAvatar";
 import { ICommentsList } from "pages/result";
 import React from "react";
 import { AiOutlineLike } from "react-icons/ai";
+import { timeOfCommentChecker } from "utils/dateParser";
 import Likes from "../CommentLikes";
 
 interface IReplies {
@@ -29,6 +31,7 @@ const RepliesDrawer = ({ data, onClose, onRepliesClose }: IReplies) => {
       borderTopRadius="25px"
       left={0}
       maxW="100vw !important"
+      bg="grayscale.gray.300"
     >
       <DrawerCloseButton onClick={onClose} />
       <DrawerHeader>
@@ -49,11 +52,20 @@ const RepliesDrawer = ({ data, onClose, onRepliesClose }: IReplies) => {
       <DrawerBody>
         <VStack alignItems="flex-start" spacing={4}>
           <HStack alignItems="flex-start">
-            <Circle size="30px" bg="white" />
+            <UserAvatar
+              currentUser={false}
+              otherUser={{
+                displayName: data.user.displayName,
+                photoURL: data.user.photoURL,
+              }}
+            />
             <VStack alignItems="flex-start">
               <VStack alignItems="flex-start">
                 <Text variant="overline">
-                  {data.uid.substring(0, 10)} - 1 day ago
+                  {data.user.displayName} -{" "}
+                  {`${timeOfCommentChecker(data.createdAt).number} ${
+                    timeOfCommentChecker(data.createdAt).metric
+                  } ago`}
                 </Text>
                 <Text variant="body">{data.body}</Text>
                 <Likes id={data.id} likes={data.likes} />
@@ -61,7 +73,7 @@ const RepliesDrawer = ({ data, onClose, onRepliesClose }: IReplies) => {
             </VStack>
           </HStack>
           <HStack>
-            <Circle size="32px" bg="black" />
+            <UserAvatar currentUser={true} />
             <Input placeholder="Add a public reply..." />
           </HStack>
 

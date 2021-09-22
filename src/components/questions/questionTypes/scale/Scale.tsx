@@ -6,7 +6,7 @@ import {
   SliderThumb,
   Text,
 } from "@chakra-ui/react";
-import Box from "components/motion/Box";
+import { MotionBox } from "components/motion";
 import React, { useState } from "react";
 import ScaleEnds from "./ScaleEnds";
 
@@ -48,7 +48,7 @@ const Scale = ({ selectedOptions, selectResponse }: ISCale) => {
         id="scale-slider"
       >
         <SliderTrack bg="brand.orange">
-          <Box position="relative" right={10} />
+          <MotionBox position="relative" right={10} />
           <SliderFilledTrack bg="brand.magenta" />
         </SliderTrack>
         <SliderThumb boxSize={6} />

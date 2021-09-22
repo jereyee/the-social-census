@@ -1,29 +1,27 @@
 /* eslint-disable react/display-name */
 import {
   Box,
-  Circle,
+  Button,
   Divider,
   Heading,
   HStack,
   IconProps,
-  VStack,
   Text,
-  Button,
-  Avatar,
+  VStack,
 } from "@chakra-ui/react";
-import React, { FC } from "react";
-
 import Card from "components/micro/Card";
-
-import {
-  QuestionsAnswered,
-  MatchResponses,
-  SuggestQuestion,
-  Settings,
-} from "./Icons";
-import { signOutUser } from "utils/firebase-config";
+import { MotionVStack } from "components/motion";
 import { useRouter } from "next/dist/client/router";
-import { useAuth } from "utils/AuthProvider";
+import React, { FC } from "react";
+import { useAuth } from "utils/auth/AuthProvider";
+import { signOutUser } from "utils/auth/firebase-config";
+import {
+  MatchResponses,
+  QuestionsAnswered,
+  Settings,
+  SuggestQuestion,
+} from "./Icons";
+import UserAvatar from "./UserAvatar";
 
 const NavMenu = () => {
   const router = useRouter();
@@ -51,7 +49,7 @@ const NavMenu = () => {
   ];
 
   return (
-    <VStack
+    <MotionVStack
       position="fixed"
       w="100%"
       h="100%"
@@ -59,11 +57,20 @@ const NavMenu = () => {
       p={4}
       spacing={6}
       pt={8}
+      initial={{
+        opacity: 0,
+      }}
+      animate={{
+        opacity: 1,
+      }}
+      transition={{
+        duration: .2,
+      }}
     >
       {/* user card */}
       <Card w="100%" h="111px" padding="10%">
         <HStack w="100%" h="100%" justify="flex-start" spacing={6}>
-          <Avatar name={user?.displayName ?? undefined} />
+          <UserAvatar currentUser={true} width="48px" height="48px" />
           <VStack alignItems="flex-start">
             <Heading as="h3" variant="heading3">
               {user?.displayName}
@@ -103,7 +110,7 @@ const NavMenu = () => {
           })}
         </VStack>
       </Card>
-    </VStack>
+    </MotionVStack>
   );
 };
 

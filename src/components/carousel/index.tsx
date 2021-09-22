@@ -4,7 +4,7 @@ import Image from "next/image";
 import React, { useCallback, useEffect, useState } from "react";
 
 import styles from "../../styles/modules/carousel.module.css";
-import Box from "components/motion/Box";
+import { MotionBox } from "components/motion";
 
 import { DotButton } from "./Buttons";
 
@@ -67,16 +67,20 @@ export const Carousel = () => {
       <div className={styles.embla} ref={viewportRef}>
         <div className={styles.embla__container}>
           {slides.map((slide, index) => (
-            <Box
+            <MotionBox
               opacity={selectedIndex === index ? "100%" : "0"}
               position="relative"
               minWidth="100"
               paddingLeft="10px"
               key={index}
             >
-              <Box w="clamp(330px, 80vw, 40vh)" h="40vh" position="relative">
+              <MotionBox
+                w="clamp(330px, 80vw, 40vh)"
+                h="40vh"
+                position="relative"
+              >
                 {slide.img}
-              </Box>
+              </MotionBox>
               <VStack
                 px="5%"
                 spacing={2}
@@ -93,7 +97,7 @@ export const Carousel = () => {
                   {slide.subText}
                 </Text>
               </VStack>
-            </Box>
+            </MotionBox>
           ))}
         </div>
       </div>

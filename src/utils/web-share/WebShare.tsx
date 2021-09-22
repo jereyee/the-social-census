@@ -7,16 +7,22 @@ const WebShare = ({
   questionId,
   buttonVariant,
   buttonProps,
+  title,
+  body,
 }: {
   questionId: number;
   buttonVariant: string;
   buttonProps?: ButtonProps;
+  title: string;
+  body: string;
 }) => {
   const handleShareButton = () => {
     // Check if navigator.share is supported by the browser
     if (navigator.share) {
       navigator
         .share({
+          title: title,
+          text: body,
           url: `https://google.com/${questionId}`,
         })
         .then(() => {

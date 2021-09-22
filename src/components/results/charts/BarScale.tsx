@@ -1,6 +1,4 @@
-import {
-  Box, VStack
-} from "@chakra-ui/layout";
+import { Box, VStack } from "@chakra-ui/layout";
 import ScaleEnds from "components/questions/questionTypes/scale/ScaleEnds";
 import React from "react";
 import { Bar } from "react-chartjs-2";
@@ -52,7 +50,7 @@ const transformStatistics = (statistics: IOptionStats[]) => {
   };
 };
 
-const BarScale = ({ statistics = stats }: { statistics?: IOptionStats[] }) => {
+const BarScale = ({ statistics }: { statistics: IOptionStats[] }) => {
   const transformedStatistics = transformStatistics(statistics);
 
   const chartConfig = {

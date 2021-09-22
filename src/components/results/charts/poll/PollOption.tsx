@@ -1,6 +1,6 @@
 /* Single option component */
 
-import { Button } from "@chakra-ui/button";
+import { Button, ButtonProps } from "@chakra-ui/button";
 import { Divider, VStack } from "@chakra-ui/layout";
 import { Text } from "@chakra-ui/react";
 import React from "react";
@@ -16,9 +16,11 @@ export interface IOptionStats {
 const PollOption = ({
   optionData,
   index,
+  buttonProps,
 }: {
   optionData: IOptionStats;
   index: number;
+  buttonProps?: ButtonProps;
 }) => {
   const optionSettings = [
     {
@@ -47,6 +49,7 @@ const PollOption = ({
       {...optionSettings[index]}
       w={`${optionData.percent ?? 50}%`}
       py={8}
+      {...buttonProps}
     >
       <VStack spacing={1}>
         <Text textAlign="center">{optionData.body}</Text>

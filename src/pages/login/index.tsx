@@ -16,8 +16,7 @@ import {
 } from "firebase/auth";
 import { useRouter } from "next/dist/client/router";
 import React, { useEffect, useState } from "react";
-import { firebaseConfig } from "utils/firebase-config";
-
+import { firebaseConfig } from "utils/auth/firebase-config";
 export interface SignInError extends FirebaseError {
   email: string;
 }
@@ -29,7 +28,7 @@ const Login = () => {
   const router = useRouter();
 
   // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
+  //const app = initializeApp(firebaseConfig);
   const auth = getAuth();
 
   useEffect(() => {
@@ -72,8 +71,6 @@ const Login = () => {
         });
       }
     });
-
-    const analytics = getAnalytics(app);
 
     return () => {
       setIsAuth(false);

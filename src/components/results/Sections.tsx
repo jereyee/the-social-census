@@ -15,7 +15,13 @@ import React, { useRef, useState } from "react";
 import CommentsDrawer from "./comments/CommentsDrawer";
 import KnowMoreDrawer from "./knowMore/KnowMoreDrawer";
 
-const Sections = ({ commentsList }: { commentsList: ICommentsList[] }) => {
+const Sections = ({
+  commentsList,
+  knowMore,
+}: {
+  commentsList: ICommentsList[] | undefined;
+  knowMore: Record<string, unknown>;
+}) => {
   const {
     isOpen: isKnowMoreOpen,
     onOpen: onKnowMoreOpen,
@@ -41,7 +47,11 @@ const Sections = ({ commentsList }: { commentsList: ICommentsList[] }) => {
     },
     comments: {
       title: "Comments",
-      preview: commentsList[0].body,
+      preview: commentsList
+        ? commentsList.length > 0
+          ? commentsList[0].body
+          : "No one has commented. Be the first."
+        : "☹ Couldn't load comments",
       data: commentsList,
     },
   };
@@ -110,19 +120,21 @@ const Sections = ({ commentsList }: { commentsList: ICommentsList[] }) => {
         />
       </Drawer>
 
-      <Drawer
-        isOpen={isCommentsOpen}
-        placement="bottom"
-        onClose={closeComments}
-        finalFocusRef={sectionRef}
-        autoFocus={false}
-      >
-        <DrawerOverlay />
-        <CommentsDrawer
-          data={sectionData.comments.data}
+      {sectionData.comments.data && (
+        <Drawer
+          isOpen={isCommentsOpen}
+          placement="bottom"
           onClose={closeComments}
-        />
-      </Drawer>
+          finalFocusRef={sectionRef}
+          autoFocus={false}
+        >
+          <DrawerOverlay />
+          <CommentsDrawer
+            data={sectionData.comments.data}
+            onClose={closeComments}
+          />
+        </Drawer>
+      )}
     </VStack>
   );
 };

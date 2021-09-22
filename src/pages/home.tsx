@@ -1,4 +1,4 @@
-import { Box, Center, Spinner } from "@chakra-ui/react";
+import { Box, Center, Heading, Spinner } from "@chakra-ui/react";
 import Questions, { QuestionType } from "components/questions/Questions";
 import { useRouter } from "next/dist/client/router";
 import React, { useContext, useEffect, useState } from "react";
@@ -8,8 +8,9 @@ import nookies from "nookies";
 import { GetServerSideProps } from "next";
 import axios from "axios";
 import { getAuth } from "@firebase/auth";
-import { useAuth } from "utils/AuthProvider";
+import { useAuth } from "utils/auth/AuthProvider";
 import { useQuestionsFetcher } from "utils/api/hooks";
+import { submitQuestion } from "utils/api/POST";
 
 const Home = () => {
   const token = nookies.get(undefined, "token");
@@ -25,7 +26,11 @@ const Home = () => {
 
   const [questionIndex, setQuestionIndex] = useState(questionState.lastIndex);
 
-  if (questionIndex === questionsList.length && fetchSuccess)
+  if (
+    questionIndex === questionsList.length &&
+    fetchSuccess &&
+    questionIndex !== 0
+  )
     setQuestionIndex(0);
 
   const changeQuestion = (index: number) => {
@@ -40,12 +45,25 @@ const Home = () => {
       response: response,
       ...questionsList[questionIndex],
     });
-    void router.push(
-      {
-        pathname: "/result",
-      },
-      "/result"
-    );
+
+    submitQuestion({
+      questionId: questionState.id,
+      responses: response,
+      token: token.token,
+    })
+      .then((data) => {
+        console.log(data);
+        //push success
+        void router.push(
+          {
+            pathname: "/result",
+          },
+          "/result"
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const questionsComponents = fetchSuccess
@@ -60,8 +78,17 @@ const Home = () => {
       ))
     : [];
 
-  return questionsList.length > 0 ? (
-    <Box w="full">{questionsComponents[questionIndex]}</Box>
+  return fetchSuccess ? (
+    questionsList.length > 0 ? (
+      <Box w="full">{questionsComponents[questionIndex]}</Box>
+    ) : (
+      <Center h="80vh">
+        <Heading as="h3" variant="heading3">
+          {" "}
+          No questions to show ☹
+        </Heading>
+      </Center>
+    )
   ) : (
     <Center w="100%" h="80vh">
       <Spinner />

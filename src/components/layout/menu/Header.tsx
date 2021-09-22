@@ -1,7 +1,7 @@
 import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { Box, Flex, Heading, Stack } from "@chakra-ui/react";
+import { MotionBox } from "components/motion";
 import React, { useEffect, useState } from "react";
-
 import NavMenu from "./NavMenu";
 
 const Header = () => {

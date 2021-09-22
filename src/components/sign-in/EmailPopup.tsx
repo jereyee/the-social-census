@@ -13,7 +13,7 @@ import { Input } from "@chakra-ui/react";
 import { getAuth, sendSignInLinkToEmail } from "firebase/auth";
 import { SignInError } from "pages/login";
 import React, { useState } from "react";
-import { actionCodeSettings } from "utils/firebase-config";
+import { actionCodeSettings } from "utils/auth/firebase-config";
 
 export const EmailPopup = ({
   isOpen,
