@@ -18,9 +18,11 @@ import KnowMoreDrawer from "./knowMore/KnowMoreDrawer";
 const Sections = ({
   commentsList,
   knowMore,
+  refreshComments,
 }: {
   commentsList: ICommentsList[] | undefined;
   knowMore: Record<string, unknown>;
+  refreshComments: () => void;
 }) => {
   const {
     isOpen: isKnowMoreOpen,
@@ -132,6 +134,7 @@ const Sections = ({
           <CommentsDrawer
             data={sectionData.comments.data}
             onClose={closeComments}
+            refreshComments={refreshComments}
           />
         </Drawer>
       )}

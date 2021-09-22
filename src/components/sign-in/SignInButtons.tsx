@@ -1,5 +1,4 @@
-import { VStack, Button, HStack, Center } from "@chakra-ui/react";
-import Box from "components/motion/Box";
+import { VStack, Button, HStack, Center, Box } from "@chakra-ui/react";
 import React from "react";
 import Image from "next/image";
 

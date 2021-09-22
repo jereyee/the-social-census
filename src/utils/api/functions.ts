@@ -1,4 +1,3 @@
-
 export const getHeaders = (token: string) => {
   return {
     Authorization: "Bearer " + token,
@@ -7,6 +6,8 @@ export const getHeaders = (token: string) => {
     "Access-Control-Allow-Headers": " Origin, Content-Type, X-Auth-Token",
   };
 };
+
+export const baseURL = "https://api.social-census.com/v1.0";
 
 export enum APIMethods {
   GET,
@@ -21,6 +22,7 @@ export enum APIEndpoints {
   DELETE_ACCOUNT,
   LIST_QUESTIONS,
   GET_QUESTION,
+  GET_USER_RESPONSES,
   SEND_RESPONSE_FOR_QUESTION,
   GET_QUESTION_STATISTICS,
   GET_QUESTION_COMMENTS,
@@ -47,7 +49,6 @@ export const getEndpoint = (
   matchId?: number
 ) => {
   let endpoint = "";
-  const baseURL = "https://api.social-census.com/v1.0";
 
   switch (endpointType) {
     case APIEndpoints.DELETE_ACCOUNT:
@@ -55,6 +56,9 @@ export const getEndpoint = (
       break;
     case APIEndpoints.LIST_QUESTIONS:
       endpoint = `${baseURL}/questions`;
+      break;
+    case APIEndpoints.GET_USER_RESPONSES:
+      endpoint = `${baseURL}/responses`;
       break;
     case APIEndpoints.GET_QUESTION:
       if (questionId) endpoint = `${baseURL}/questions/${questionId}`;
@@ -68,8 +72,11 @@ export const getEndpoint = (
       break;
     case APIEndpoints.GET_QUESTION_COMMENTS:
     case APIEndpoints.CREATE_QUESTION_COMMENT:
-    case APIEndpoints.DELETE_QUESTION_COMMENT:
       if (questionId) endpoint = `${baseURL}/questions/${questionId}/comments`;
+      break;
+    case APIEndpoints.DELETE_QUESTION_COMMENT:
+      if (questionId && commentId)
+        endpoint = `${baseURL}/questions/${questionId}/comments/${commentId}`;
       break;
     case APIEndpoints.LIKE_COMMENT:
     case APIEndpoints.UNLIKE_COMMENT:

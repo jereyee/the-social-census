@@ -1,8 +1,5 @@
-import {
-  Box, HStack, Stack,
-  VStack
-} from "@chakra-ui/layout";
-import { Text } from "@chakra-ui/react";
+import { Box, HStack, Stack, VStack } from "@chakra-ui/layout";
+import { Text, Wrap, WrapItem } from "@chakra-ui/react";
 import React from "react";
 import { Doughnut } from "react-chartjs-2";
 import { themeColors } from "styles/colors";
@@ -86,30 +83,25 @@ const DoughnutChart = ({
       mt="12px !important"
       spacing={6}
     >
-      <Stack
-        columns={3}
-        spacing={4}
-        direction="row"
-        flexWrap="wrap"
-        alignItems="center"
-        justifyContent="center"
-      >
+      <Wrap spacing={4} justify="center" maxW="300px">
         {/* this is the legend */}
         {transformedStatistics.labels.map((label, index) => (
-          <HStack mt="4px !important" key={index}>
-            <Box
-              bg={colors[index]}
-              height="15px"
-              w="20px"
-              key={index}
-              border="1px solid white"
-            ></Box>
-            <Text variant="overline" color="grayscale.gray.100">
-              {label}
-            </Text>
-          </HStack>
+          <WrapItem key={index}>
+            <HStack mt="4px !important">
+              <Box
+                bg={colors[index]}
+                height="20px"
+                w="25px"
+                key={index}
+                border="1px solid white"
+              ></Box>
+              <Text variant="overline" color="grayscale.gray.100">
+                {label}
+              </Text>
+            </HStack>
+          </WrapItem>
         ))}
-      </Stack>
+      </Wrap>
       <Doughnut
         data={chartConfig.data}
         options={{

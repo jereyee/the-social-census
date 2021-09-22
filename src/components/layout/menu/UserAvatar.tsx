@@ -1,4 +1,4 @@
-import { Avatar } from "@chakra-ui/react";
+import { Avatar, SkeletonCircle } from "@chakra-ui/react";
 import React from "react";
 import { useAuth } from "utils/auth/AuthProvider";
 
@@ -20,14 +20,16 @@ const UserAvatar = ({
   const { user } = useAuth();
 
   return currentUser ? (
-    <Avatar
-      name={user?.displayName ?? undefined}
-      src={user?.photoURL ?? undefined}
-      w={width}
-      h={height}
-      mx={marginX}
-      p={padding}
-    />
+    <SkeletonCircle size={width} isLoaded={!!user}>
+      <Avatar
+        name={user?.displayName ?? undefined}
+        src={user?.photoURL ?? undefined}
+        w={width}
+        h={height}
+        mx={marginX}
+        p={padding}
+      />
+    </SkeletonCircle>
   ) : (
     <Avatar
       name={otherUser?.displayName ?? undefined}

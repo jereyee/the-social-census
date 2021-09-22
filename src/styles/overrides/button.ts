@@ -14,6 +14,9 @@ export const buttonStyles = {
         border: `1px solid ${themeColors.grayscale.white[60]}`,
         color: `${themeColors.grayscale.white[60]}`,
       },
+      _hover: {
+        bg: `${themeColors.grayscale.white[60]}`,
+      },
     },
     secondary: {
       border: `1px solid ${themeColors.grayscale.white[60]}`,

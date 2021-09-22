@@ -9,12 +9,14 @@ const WebShare = ({
   buttonProps,
   title,
   body,
+  url,
 }: {
   questionId: number;
   buttonVariant: string;
   buttonProps?: ButtonProps;
   title: string;
   body: string;
+  url: string;
 }) => {
   const handleShareButton = () => {
     // Check if navigator.share is supported by the browser
@@ -23,7 +25,7 @@ const WebShare = ({
         .share({
           title: title,
           text: body,
-          url: `https://google.com/${questionId}`,
+          url: `${url}`,
         })
         .then(() => {
           console.log("Sharing successfull");

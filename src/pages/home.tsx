@@ -1,24 +1,21 @@
 import { Box, Center, Heading, Spinner } from "@chakra-ui/react";
+import Header from "components/layout/menu/Header";
 import Questions, { QuestionType } from "components/questions/Questions";
 import { useRouter } from "next/dist/client/router";
-import React, { useContext, useEffect, useState } from "react";
-import QuestionsContext from "utils/questionsContext";
 import nookies from "nookies";
-
-import { GetServerSideProps } from "next";
-import axios from "axios";
-import { getAuth } from "@firebase/auth";
-import { useAuth } from "utils/auth/AuthProvider";
-import { useQuestionsFetcher } from "utils/api/hooks";
+import React, { useContext, useEffect, useState } from "react";
+import useSWR from "swr";
+import { APIEndpoints, getEndpoint } from "utils/api/functions";
+import { fetcher } from "utils/api/GET";
 import { submitQuestion } from "utils/api/POST";
+import QuestionsContext from "utils/questionsContext";
 
 const Home = () => {
   const token = nookies.get(undefined, "token");
-  const { user } = useAuth();
-  console.log(user?.displayName);
-
-  const { fetchSuccess, fetchedQuestions: questionsList } =
-    useQuestionsFetcher();
+  const { data: questionsList, error } = useSWR<IQuestion[], string>(
+    [getEndpoint(APIEndpoints.LIST_QUESTIONS), token.token],
+    fetcher
+  );
 
   const router = useRouter();
 
@@ -26,15 +23,32 @@ const Home = () => {
 
   const [questionIndex, setQuestionIndex] = useState(questionState.lastIndex);
 
+  useEffect(() => {
+    /* update the global question the moment the questions list */
+    /* has been retrieved from the api */
+    updateQuestionState({
+      ...questionState,
+      shared: false,
+      ...(questionsList && questionsList[questionIndex]),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [questionsList]);
+
   if (
+    !error &&
+    questionsList &&
     questionIndex === questionsList.length &&
-    fetchSuccess &&
     questionIndex !== 0
   )
     setQuestionIndex(0);
 
   const changeQuestion = (index: number) => {
-    updateQuestionState({ ...questionState, lastIndex: index });
+    updateQuestionState({
+      ...questionState,
+      lastIndex: index,
+      shared: false,
+      ...(questionsList && questionsList[index]),
+    });
     setQuestionIndex(index);
   };
 
@@ -43,7 +57,8 @@ const Home = () => {
       ...questionState,
       lastIndex: questionIndex + 1,
       response: response,
-      ...questionsList[questionIndex],
+      shared: false,
+      ...(questionsList && questionsList[questionIndex]),
     });
 
     submitQuestion({
@@ -66,11 +81,11 @@ const Home = () => {
       });
   };
 
-  const questionsComponents = fetchSuccess
+  const questionsComponents = questionsList
     ? questionsList.map((question, index) => (
         <Questions
           key={index}
-          questionIndex={index}
+          questionIndex={questionState.shared ? index + 1 : index}
           questionData={question}
           changeQuestion={changeQuestion}
           answerQuestion={answerQuestion}
@@ -78,21 +93,38 @@ const Home = () => {
       ))
     : [];
 
-  return fetchSuccess ? (
-    questionsList.length > 0 ? (
-      <Box w="full">{questionsComponents[questionIndex]}</Box>
-    ) : (
-      <Center h="80vh">
-        <Heading as="h3" variant="heading3">
-          {" "}
-          No questions to show ☹
-        </Heading>
-      </Center>
-    )
-  ) : (
-    <Center w="100%" h="80vh">
-      <Spinner />
-    </Center>
+  /* put the shared question as the first of the list */
+  if (questionState.shared)
+    questionsComponents.unshift(
+      <Questions
+        questionIndex={0}
+        questionData={questionState}
+        changeQuestion={changeQuestion}
+        answerQuestion={answerQuestion}
+      />
+    );
+
+  return (
+    <Box>
+      <Header headerText="The Social Census" />
+
+      {questionsList ? (
+        questionsList.length > 0 ? (
+          <Box w="full">{questionsComponents[questionIndex]}</Box>
+        ) : (
+          <Center h="80vh">
+            <Heading as="h3" variant="heading3">
+              {" "}
+              No questions to show ☹
+            </Heading>
+          </Center>
+        )
+      ) : (
+        <Center w="100%" h="80vh">
+          <Spinner />
+        </Center>
+      )}
+    </Box>
   );
 };
 

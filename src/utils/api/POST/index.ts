@@ -96,6 +96,49 @@ export const likeOrUnlikeComment = ({
   return submitUserLike(token);
 };
 
+export const excludeOrUnexcludeQuestions = ({
+  questionId,
+  token,
+  exclude,
+}: {
+  questionId: number;
+  token: string;
+  exclude: boolean;
+}) => {
+  const submitUserExclusion = async (token: string) => {
+    const endpoint = getEndpoint(
+      exclude
+        ? APIEndpoints.SET_MATCH_EXCLUSIONS
+        : APIEndpoints.DELETE_MATCH_EXCLUSIONS
+    );
+    const headers = getHeaders(token);
+    const res = exclude
+      ? await axios.post(
+          `${endpoint}`,
+          {
+            value: {
+              questionId: questionId,
+            },
+          },
+          {
+            headers: headers,
+          }
+        )
+      : await axios.delete(`${endpoint}`, {
+          headers: headers,
+          data: {
+            value: {
+              questionId: questionId,
+            },
+          },
+        });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
+    return res.data.value;
+  };
+
+  return submitUserExclusion(token);
+};
+
 export const reportComment = ({
   questionId,
   commentId,
@@ -130,4 +173,29 @@ export const reportComment = ({
   };
 
   return submitUserReport(token);
+};
+
+export const matchWithFriendCode = ({
+  matchCode,
+  token,
+}: {
+  matchCode: string;
+  token: string;
+}) => {
+  const payload = { matchCode: matchCode };
+  const submitMatchCode = async (token: string) => {
+    const res = await axios.post(
+      `${getEndpoint(APIEndpoints.MATCH_WITH_CODE)}`,
+      {
+        value: payload,
+      },
+      {
+        headers: getHeaders(token),
+      }
+    );
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
+    return res.data.value;
+  };
+
+  return submitMatchCode(token);
 };

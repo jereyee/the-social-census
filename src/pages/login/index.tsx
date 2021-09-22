@@ -1,22 +1,18 @@
-import { Button } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
-import { Box, Heading, VStack, Text, Center } from "@chakra-ui/layout";
+import { Box, Center, Heading, Text, VStack } from "@chakra-ui/layout";
 import { EmailPopup } from "components/sign-in/EmailPopup";
 import SignInButtons from "components/sign-in/SignInButtons";
-import { getAnalytics } from "firebase/analytics";
-import { FirebaseError, initializeApp } from "firebase/app";
+import { FirebaseError } from "firebase/app";
 import {
   getAuth,
   GoogleAuthProvider,
   isSignInWithEmailLink,
   onAuthStateChanged,
   signInWithEmailLink,
-  signInWithPopup,
-  signOut,
+  signInWithPopup
 } from "firebase/auth";
 import { useRouter } from "next/dist/client/router";
 import React, { useEffect, useState } from "react";
-import { firebaseConfig } from "utils/auth/firebase-config";
 export interface SignInError extends FirebaseError {
   email: string;
 }

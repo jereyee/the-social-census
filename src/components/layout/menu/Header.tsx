@@ -1,10 +1,9 @@
 import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { Box, Flex, Heading, Stack } from "@chakra-ui/react";
-import { MotionBox } from "components/motion";
 import React, { useEffect, useState } from "react";
 import NavMenu from "./NavMenu";
 
-const Header = () => {
+const Header = ({ headerText }: { headerText: string }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -23,7 +22,7 @@ const Header = () => {
       <HamburgerIcon w={27} h={27} />
     );
 
-  const headerText = menuOpen ? "Your Account" : "The Social Census";
+  //const headerText = menuOpen ? "Your Account" : "The Social Census";
 
   return (
     <Stack
@@ -33,6 +32,7 @@ const Header = () => {
       /* dynamic properties based on menu */
       height={menuOpen ? "100vh" : "initial"}
       bg={menuOpen ? "grayscale.black" : "none"}
+      mb={6}
     >
       <Flex as="header" width="full" align="center" justify="space-between">
         <Box onClick={() => setMenuOpen(!menuOpen)}>

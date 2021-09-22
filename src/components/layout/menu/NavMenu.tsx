@@ -5,21 +5,22 @@ import {
   Divider,
   Heading,
   HStack,
+  Icon,
   IconProps,
   Text,
-  VStack,
+  VStack
 } from "@chakra-ui/react";
 import Card from "components/micro/Card";
 import { MotionVStack } from "components/motion";
 import { useRouter } from "next/dist/client/router";
 import React, { FC } from "react";
+import { RiHome3Line } from "react-icons/ri";
+import { themeColors } from "styles/colors";
 import { useAuth } from "utils/auth/AuthProvider";
 import { signOutUser } from "utils/auth/firebase-config";
 import {
   MatchResponses,
-  QuestionsAnswered,
-  Settings,
-  SuggestQuestion,
+  QuestionsAnswered, SuggestQuestion
 } from "./Icons";
 import UserAvatar from "./UserAvatar";
 
@@ -28,24 +29,33 @@ const NavMenu = () => {
   const { user } = useAuth();
   console.log({ user });
 
-  type menuItemsType = { icon: FC<IconProps>; text: string }[];
+  type menuItemsType = { icon: FC<IconProps>; text: string; href: string }[];
   const menuItems: menuItemsType = [
+    {
+      icon: () => <Icon width="22px" height="22px" as={RiHome3Line} />,
+      text: "Home",
+      href: "/home",
+    },
     {
       icon: () => <QuestionsAnswered />,
       text: "Questions answered",
+      href: "/responses",
     },
     {
       icon: () => <MatchResponses />,
       text: "Match responses",
+      href: "/match",
     },
     {
       icon: () => <SuggestQuestion />,
       text: "Suggest a question",
-    },
+      href: "",
+    } /* 
     {
       icon: () => <Settings />,
       text: "Settings",
-    },
+      href: "",
+    }, */,
   ];
 
   return (
@@ -64,7 +74,7 @@ const NavMenu = () => {
         opacity: 1,
       }}
       transition={{
-        duration: .2,
+        duration: 0.2,
       }}
     >
       {/* user card */}
@@ -92,11 +102,27 @@ const NavMenu = () => {
 
       {/* navigation card */}
       <Card w="100%" padding="10%">
-        <VStack w="100%" h="100%" align="flex-start" spacing={4}>
+        <VStack w="100%" h="100%" align="flex-start" spacing={0}>
           {menuItems.map((menuItem, index) => {
             const Icon = menuItem.icon;
             return (
-              <VStack w="100%" align="flex-start" spacing={4} key={index}>
+              <MotionVStack
+                w="100%"
+                align="flex-start"
+                pt={4}
+                spacing={4}
+                key={index}
+                onClick={() => void router.push(menuItem.href)}
+                _hover={
+                  menuItem.href === router.pathname
+                    ? {}
+                    : {
+                        bg: themeColors.grayscale.gray[300],
+                        cursor: "pointer",
+                      }
+                }
+                whileTap={{ scale: 0.9 }}
+              >
                 <HStack spacing={2} align="center">
                   <Box width="30px" height="30px">
                     <Icon />
@@ -105,7 +131,7 @@ const NavMenu = () => {
                 </HStack>
 
                 {index !== menuItems.length - 1 && <Divider w="100%" />}
-              </VStack>
+              </MotionVStack>
             );
           })}
         </VStack>

@@ -1,7 +1,7 @@
 /* Single option component */
 
 import { Button } from "@chakra-ui/button";
-import { Divider } from "@chakra-ui/layout";
+import { Divider, Text } from "@chakra-ui/layout";
 import { IOptionData } from "components/questions/Questions";
 
 const BinaryOption = ({
@@ -41,15 +41,17 @@ const BinaryOption = ({
           selectOption(optionData.id);
         }}
         isActive={isSelected}
+        whiteSpace="normal"
+        height="100%"
       >
-        <p>{optionData.body}</p>
+        <Text>{optionData.body}</Text>
       </Button>
 
       {index === 0 && (
         <Divider
           orientation="vertical"
           bg="white"
-          h="64px"
+          h="120%"
           w="0.91px"
           opacity={1}
         />

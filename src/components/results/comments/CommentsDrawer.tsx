@@ -1,6 +1,5 @@
 import { useDisclosure } from "@chakra-ui/hooks";
-import { ChevronRightIcon } from "@chakra-ui/icons";
-import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
+import { Input } from "@chakra-ui/input";
 import { Box, Divider, HStack, VStack } from "@chakra-ui/layout";
 import {
   Drawer,
@@ -46,6 +45,7 @@ import RepliesDrawer from "./replies/RepliesDrawer";
 export interface IComments {
   data: ICommentsList[];
   onClose: () => void;
+  refreshComments: () => void;
 }
 
 const ReportInput = ({
@@ -77,7 +77,7 @@ const ReportInput = ({
   );
 };
 
-const CommentsDrawer = ({ data, onClose }: IComments) => {
+const CommentsDrawer = ({ data, onClose, refreshComments }: IComments) => {
   const { user } = useAuth();
 
   const {
@@ -107,8 +107,6 @@ const CommentsDrawer = ({ data, onClose }: IComments) => {
   });
 
   const [commentsList, setCommentsList] = useState(data);
-
-  const [showReported, setShowReported] = useState(false);
   const toast = useToast();
 
   if (clickedComment && !isRepliesOpen) {
@@ -120,8 +118,15 @@ const CommentsDrawer = ({ data, onClose }: IComments) => {
 
   if (commentSubmitted.submit) {
     if (commentSubmitted.success) {
+      /* the reason you are fetching again is to avoid UI discrepancies due to the parent components */
+      /* not updating. I recommend working and trying to find a simpler solution if time permits */
       fetchQuestionComments(token.token, questionState.id)
         .then((v) => {
+          if (isRepliesOpen && clickedComment)
+            /* if the replies drawer is open need to update the UI */
+            setClickedComment(
+              v.find((value) => value.id === clickedComment.id)
+            );
           setCommentsList(v);
         })
         .catch((err) => console.log(err));
@@ -141,6 +146,7 @@ const CommentsDrawer = ({ data, onClose }: IComments) => {
       })
         .then((data) => {
           console.log(data);
+          refreshComments();
           setCommentSubmitted({ submit: true, success: true });
         })
         .catch((error) => {
@@ -153,6 +159,16 @@ const CommentsDrawer = ({ data, onClose }: IComments) => {
     }
   };
 
+  const userReplySubmitted = ({
+    submit,
+    success,
+  }: {
+    submit: boolean;
+    success: boolean;
+  }) => {
+    setCommentSubmitted({ submit: submit, success: success });
+  };
+
   const deleteUserComment = (comment: ICommentsList) => {
     deleteComment({
       comment: comment,
@@ -163,6 +179,7 @@ const CommentsDrawer = ({ data, onClose }: IComments) => {
         console.log(data);
         fetchQuestionComments(token.token, questionState.id)
           .then((v) => {
+            refreshComments();
             setCommentsList(v);
           })
           .catch((err) => console.log(err));
@@ -208,7 +225,7 @@ const CommentsDrawer = ({ data, onClose }: IComments) => {
   };
 
   return (
-    <DrawerContent height="80vh" borderTopRadius="25px" bg="grayscale.gray.300">
+    <DrawerContent height="90vh" borderTopRadius="25px" bg="grayscale.gray.300">
       <DrawerCloseButton />
       <DrawerHeader>Comments</DrawerHeader>
 
@@ -228,7 +245,7 @@ const CommentsDrawer = ({ data, onClose }: IComments) => {
           />
         </HStack>
         <Divider />
-        {commentsList.reverse().map((comment, index) => {
+        {commentsList.map((comment, index) => {
           const modalButtonStyles = {
             variant: "naked",
             width: "100%",
@@ -312,24 +329,6 @@ const CommentsDrawer = ({ data, onClose }: IComments) => {
                           }
                           // message={`Are you sure you want to report ${comment.user.displayName}?`}
                         />
-                        {showReported && (
-                          <Alert status="success">
-                            <AlertIcon />
-                            <Box flex="1">
-                              <AlertTitle>Reported!</AlertTitle>
-                              <AlertDescription display="block">
-                                We have received your report of this user. Our
-                                moderators will handle the rest. <br />
-                                Thank you for notifying us.
-                              </AlertDescription>
-                            </Box>
-                            <CloseButton
-                              position="absolute"
-                              right="8px"
-                              top="8px"
-                            />
-                          </Alert>
-                        )}
                       </MenuItem>
                       {user && comment.user.uid === user.uid && (
                         <MenuItem>
@@ -373,6 +372,7 @@ const CommentsDrawer = ({ data, onClose }: IComments) => {
             setClickedComment(undefined);
             onRepliesClose();
           }}
+          onUserReplySubmitted={userReplySubmitted}
         />
       </Drawer>
     </DrawerContent>

@@ -5,11 +5,13 @@ type UpdateType = Dispatch<SetStateAction<IQuestionState>>;
 
 interface IQuestionState extends IQuestionData {
   lastIndex: number;
+  shared: boolean;
   response: number[];
 }
 
 export const defaultState: IQuestionState = {
   lastIndex: 0,
+  shared: false,
   id: 1,
   body: "Would you marry someone from a different race?",
   category: "race",
