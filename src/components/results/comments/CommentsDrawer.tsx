@@ -166,6 +166,7 @@ const CommentsDrawer = ({
     submit: boolean;
     success: boolean;
   }) => {
+    refreshComments();
     setCommentSubmitted({ submit: submit, success: success });
   };
 

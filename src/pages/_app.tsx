@@ -37,7 +37,7 @@ const MyApp = ({
 
   useEffect(() => {
     const analytics = getAnalytics(app);
-  });
+  }, []);
 
   return (
     <CacheProvider value={emotionCache}>

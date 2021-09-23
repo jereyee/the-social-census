@@ -117,11 +117,16 @@ const Sections = ({
         >
           <Divider borderWidth="1px" />
           <HStack justifyContent="space-between" w="98%">
-            <VStack alignItems="flex-start" px="2%">
+            <VStack alignItems="flex-start" px="2%" w="90%">
               <Heading as="h5" variant="headline">
                 {section[1].title}
               </Heading>
-              <Text variant="caption" color="grayscale.gray.100">
+              <Text
+                variant="caption"
+                color="grayscale.gray.100"
+                isTruncated
+                maxWidth="90%"
+              >
                 {section[1].preview}
               </Text>
             </VStack>
@@ -139,10 +144,7 @@ const Sections = ({
         autoFocus={false}
       >
         <DrawerOverlay />
-        <KnowMoreDrawer
-          data={sectionData.knowMore.data}
-          onClose={closeKnowMore}
-        />
+        <KnowMoreDrawer data={knowMoreData} onClose={closeKnowMore} />
       </Drawer>
 
       {sectionData.comments.data && (

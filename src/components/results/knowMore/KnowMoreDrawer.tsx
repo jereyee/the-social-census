@@ -7,11 +7,12 @@ import {
   DrawerFooter,
 } from "@chakra-ui/modal";
 import { Button, Text } from "@chakra-ui/react";
+import Link from "next/link";
 import React from "react";
 
 export interface IKnowMore {
   data: {
-    didYouKnow: string;
+    body: string;
     sources: {
       url: string;
       title: string;
@@ -27,11 +28,17 @@ const KnowMoreDrawer = ({ data, onClose }: IKnowMore) => {
       <DrawerHeader>Did you know?</DrawerHeader>
 
       <DrawerBody>
-        <Text variant="body">{data.didYouKnow}</Text>
+        <Text variant="body">{data.body}</Text>
         <Heading as="h6" variant="headline" mt={6} mb={4}>
           Sources
         </Heading>
-        <Text variant="body">{data.sources}</Text>
+        {data.sources.map((source, index) => (
+          <Text key={index} variant="body">
+            <Link href={source.url}>
+              {source.title}
+            </Link>
+          </Text>
+        ))}
       </DrawerBody>
 
       <DrawerFooter>
