@@ -18,7 +18,6 @@ const UserAvatar = ({
   padding?: string;
 }) => {
   const { user } = useAuth();
-
   return currentUser ? (
     <SkeletonCircle size={width} isLoaded={!!user}>
       <Avatar

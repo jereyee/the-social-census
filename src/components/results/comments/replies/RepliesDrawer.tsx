@@ -15,6 +15,7 @@ import nookies from "nookies";
 import { ICommentsList } from "pages/result";
 import React, { useRef } from "react";
 import { submitComment } from "utils/api/POST";
+import { useAuth } from "utils/auth/AuthProvider";
 import { timeOfCommentChecker } from "utils/dateParser";
 import Likes from "../CommentLikes";
 
@@ -40,6 +41,8 @@ const RepliesDrawer = ({
   const token = nookies.get(undefined, "token");
 
   const inputRef = useRef() as React.MutableRefObject<HTMLTextAreaElement>;
+
+  const { user } = useAuth();
 
   const submitUserReply = (body: string) => {
     if (token) {
@@ -73,9 +76,7 @@ const RepliesDrawer = ({
       bg="grayscale.gray.300"
     >
       <DrawerCloseButton size="lg" mr={2} mt={2} onClick={onClose} />
-      <DrawerHeader 
-          mt={2}
-          >
+      <DrawerHeader mt={2}>
         <ChevronLeftIcon
           w={6}
           h={6}
@@ -131,42 +132,43 @@ const RepliesDrawer = ({
         {data.children
           .slice()
           .reverse()
-          .map((comment, index) => (
-            <React.Fragment key={index}>
-              <VStack alignItems="flex-start" py={4}>
-                <HStack alignItems="flex-start">
-                  <UserAvatar
-                    currentUser={false}
-                    otherUser={{
-                      displayName: data.user.displayName,
-                      photoURL: data.user.photoURL,
-                    }}
-                  />
-                  <VStack alignItems="flex-start">
+          .map((comment, index) => {
+            return (
+              <React.Fragment key={index}>
+                <VStack alignItems="flex-start" py={4}>
+                  <HStack alignItems="flex-start">
+                    <UserAvatar
+                      currentUser={false}
+                      otherUser={{
+                        displayName: comment.user.displayName,
+                        photoURL: comment.user.photoURL,
+                      }}
+                    />
                     <VStack alignItems="flex-start">
-                      <Text variant="overline">
-                        {data.user.displayName} -{" "}
-                        {`${timeOfCommentChecker(data.createdAt).number} ${
-                          timeOfCommentChecker(data.createdAt).metric
-                        } ago`}
-                      </Text>
-                      <Text variant="body">{comment.body}</Text>
-                      <Likes
-                        commentId={comment.id}
-                        likes={comment.likes}
-                        questionId={comment.questionId}
-                      />
+                      <VStack alignItems="flex-start">
+                        <Text variant="overline">
+                          {comment.user.displayName} -{" "}
+                          {`${timeOfCommentChecker(data.createdAt).number} ${
+                            timeOfCommentChecker(data.createdAt).metric
+                          } ago`}
+                        </Text>
+                        <Text variant="body">{comment.body}</Text>
+                        <Likes
+                          commentId={comment.id}
+                          likes={comment.likes}
+                          questionId={comment.questionId}
+                        />
+                      </VStack>
                     </VStack>
-                  </VStack>
-                </HStack>
-              </VStack>
-              <Divider />
-            </React.Fragment>
-          ))}
+                  </HStack>
+                </VStack>
+                <Divider />
+              </React.Fragment>
+            );
+          })}
       </DrawerBody>
 
-      <DrawerFooter>
-      </DrawerFooter>
+      <DrawerFooter></DrawerFooter>
     </DrawerContent>
   );
 };
