@@ -208,8 +208,16 @@ const Match = () => {
                 }\r\n`}
                 url={origin}
               />
-              <Button variant="primary">
-                <Link href="/responses">Edit exclusions</Link>
+              <Button
+                variant="primary"
+                onClick={() =>
+                  void router.push(
+                    { pathname: "/responses", query: { from: "match" } },
+                    "/responses"
+                  )
+                }
+              >
+                Edit exclusions
               </Button>
             </HStack>
           </VStack>

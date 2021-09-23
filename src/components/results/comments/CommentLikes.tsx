@@ -19,21 +19,21 @@ const Likes = ({
   questionId: number;
 }) => {
   const token = nookies.get(undefined, "token");
-  const myLikes: string[] = localStorage.getItem("likes")
+  let myLikes: string[] = localStorage.getItem("likes")
     ? (JSON.parse(localStorage.getItem("likes") as string) as [])
     : [];
 
   /* sync local storage with the API */
-  /* const { data: fetchMyLikes, error } = useSWR<number[], string>(
+  const { data: fetchMyLikes, error } = useSWR<number[], string>(
     [
       getEndpoint(APIEndpoints.GET_USER_LIKED_COMMENTS, questionId),
       token.token,
     ],
     fetcher
-  ); */
-  /* 
+  );
+
   if (!error && fetchMyLikes)
-    myLikes = fetchMyLikes.map((like) => like.toString()); */
+    myLikes = fetchMyLikes.map((like) => like.toString());
 
   const [liked, setLiked] = useState(myLikes.includes(commentId.toString()));
 

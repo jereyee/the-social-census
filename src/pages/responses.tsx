@@ -39,10 +39,7 @@ const Question = ({ question }: { question: IQuestionInList }) => {
 
   const { data: questionData, error } = useSWR<IQuestion, string>(
     [getEndpoint(APIEndpoints.GET_QUESTION, question.questionId), token.token],
-    fetcher,
-    {
-      dedupingInterval: 5000,
-    }
+    fetcher
   );
   // const { fetchedQuestion, fetchSuccess } = useQuestion(response.questionId);
 
@@ -149,7 +146,6 @@ const Responses = () => {
     v.excluded = !!exclusionList?.find((i) => i.questionId === v.questionId);
   });
 
-  console.log(exclusionList);
   return exclusionList && !exclusionError ? (
     <Box>
       {/* match responses header */}
