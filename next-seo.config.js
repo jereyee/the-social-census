@@ -1,17 +1,17 @@
 /** @type {import('next-seo').DefaultSeoProps} */
 const defaultSEOConfig = {
   title: "The Social Census",
-  titleTemplate: "%s | The Social Census",
+  titleTemplate: "%s | Discover new perspectives",
   defaultTitle: "The Social Census",
   description: "Discover new perspectives.",
-  canonical: "https://social-census.vercel.app",
+  canonical: "https://social-census.com",
   openGraph: {
-    url: "https://social-census.vercel.app",
+    url: "https://social-census.com",
     title: "The Social Census",
     description: "Discover new perspectives.",
     images: [
       {
-        url: "https://og-image.sznm.dev/**nextchakra-starter**.sznm.dev.png?theme=dark&md=1&fontSize=125px&images=https%3A%2F%2Fsznm.dev%2Favataaars.svg&widths=250",
+        url: "https://social-census.com/og-image.png",
         alt: "The Social Census og-image",
       },
     ],
