@@ -54,7 +54,7 @@ const PollOption = ({
       <VStack spacing={1}>
         <Text textAlign="center">{optionData.body}</Text>
         <Text fontSize="20px" textAlign="center">
-          {optionData.percent}%
+          {Math.floor(optionData.percent ?? 50)}%
         </Text>
       </VStack>
     </Button>

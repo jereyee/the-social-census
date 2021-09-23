@@ -1,10 +1,9 @@
 import { HStack } from "@chakra-ui/layout";
 import { Icon, Text } from "@chakra-ui/react";
-import React, { useContext, useState } from "react";
+import nookies from "nookies";
+import React, { useState } from "react";
 import { AiOutlineLike } from "react-icons/ai";
 import { likeOrUnlikeComment } from "utils/api/POST";
-import QuestionsContext from "utils/questionsContext";
-import nookies from "nookies";
 
 const Likes = ({
   likes,
