@@ -19,7 +19,7 @@ export interface IKnowMore {
 
 const KnowMoreDrawer = ({ data, onClose }: IKnowMore) => {
   return (
-    <DrawerContent height="80vh" borderTopRadius="25px">
+    <DrawerContent height="80vh" borderTopRadius="25px" bg="grayscale.gray.300">
       <DrawerCloseButton />
       <DrawerHeader>Did you know?</DrawerHeader>
 
