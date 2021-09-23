@@ -19,9 +19,10 @@ const Likes = ({
   questionId: number;
 }) => {
   const token = nookies.get(undefined, "token");
+  /* 
   let myLikes: string[] = localStorage.getItem("likes")
     ? (JSON.parse(localStorage.getItem("likes") as string) as [])
-    : [];
+    : []; */
 
   /* sync local storage with the API */
   const { data: fetchMyLikes, error } = useSWR<number[], string>(
@@ -32,12 +33,13 @@ const Likes = ({
     fetcher
   );
 
+  const [liked, setLiked] = useState(false);
+  const [likesNumber, setLikesNumber] = useState(likes);
+
   if (!error && fetchMyLikes)
-    myLikes = fetchMyLikes.map((like) => like.toString());
+    if (fetchMyLikes.includes(commentId)) setLiked(true);
 
-  const [liked, setLiked] = useState(myLikes.includes(commentId.toString()));
-
-  if (liked && !myLikes.includes(commentId.toString())) setLiked(false);
+  //if (liked && !myLikes.includes(commentId.toString())) setLiked(false);
 
   return (
     <HStack>
@@ -56,13 +58,17 @@ const Likes = ({
           })
             .then((data) => {
               if (!liked) {
+                setLikesNumber(likesNumber + 1);
+                /* 
                 myLikes.push(commentId.toString());
-                localStorage.setItem("likes", JSON.stringify(myLikes));
+                localStorage.setItem("likes", JSON.stringify(myLikes)); */
               } else {
+                setLikesNumber(likesNumber - 1);
+                /* 
                 const newLikes = myLikes.filter(
                   (like) => like !== commentId.toString()
                 );
-                localStorage.setItem("likes", JSON.stringify(newLikes));
+                localStorage.setItem("likes", JSON.stringify(newLikes)); */
               }
               console.log(data);
               setLiked(!liked);
@@ -72,7 +78,7 @@ const Likes = ({
             });
         }}
       />
-      <Text variant="caption">{liked ? likes + 1 : likes}</Text>
+      <Text variant="caption">{likesNumber}</Text>
     </HStack>
   );
 };
