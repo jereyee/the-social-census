@@ -73,14 +73,13 @@ class MyDocument extends Document {
           <meta name="format-detection" content="telephone=no" />
           <meta name="mobile-web-app-capable" content="yes" />
           <meta name="theme-color" content="#FFFFFF" />
-
           {/* add your own app-icon */}
-          {/* <link
+          <link
             rel="apple-touch-icon"
             sizes="180x180"
-            href="/icons/apple-touch-icon.png"
+            href="/pwa-icons/android/android-launchericon-192-192.png"
           />
-          <link rel="shortcut icon" href="/app-icon.png" /> */}
+          <link rel="shortcut icon" href="/pwa-icons/android/android-launchericon-144-144.png" />/
           <link rel="manifest" href="/manifest.json" />
         </Head>
         <body>
