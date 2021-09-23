@@ -38,7 +38,10 @@ const Question = ({ question }: { question: IQuestionInList }) => {
 
   const { data: questionData, error } = useSWR<IQuestion, string>(
     [getEndpoint(APIEndpoints.GET_QUESTION, question.questionId), token.token],
-    fetcher
+    fetcher,
+    {
+      dedupingInterval: 5000,
+    }
   );
   // const { fetchedQuestion, fetchSuccess } = useQuestion(response.questionId);
 
@@ -77,6 +80,7 @@ const Question = ({ question }: { question: IQuestionInList }) => {
               colorScheme="purple"
               className="exclude"
               size="lg"
+              defaultChecked={question.excluded}
               onChange={(ev) => {
                 const exclude = ev.target.checked;
                 excludeOrUnexcludeQuestions({

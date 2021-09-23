@@ -137,7 +137,7 @@ const MatchCard = ({
             </Text>
             <Spacer />
             {!sameResponse && (
-              <Text variant="caption" color="brand.pink">
+              <Text variant="caption" color="brand.orange">
                 {optionBodies[1].map(
                   (body, index) =>
                     `${body ?? ""}${
@@ -193,8 +193,8 @@ const Report = () => {
     matchPercentage < 33
       ? "A diverse friendship could be waiting to blossom!"
       : matchPercentage < 67
-      ? "There’s still a lot to know about anotheruser!"
-      : "Are you and anotheruser close friends already?";
+      ? "There’s still a lot to know about them!"
+      : "Are both of you close friends already?";
 
   /* combine the two different responses */
   const differentResponses =
