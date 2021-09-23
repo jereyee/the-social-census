@@ -148,11 +148,11 @@ const Responses = () => {
 
   const router = useRouter();
 
-  /* useEffect(() => {
-    if(router.query.)
-  }, []); */
+  useEffect(() => {
+    if (router.query.from === "match") router.reload();
+  }, []);
 
-  return exclusionList && !exclusionError ? (
+  return exclusionList && !exclusionError && !router.query.from ? (
     <Box>
       {/* match responses header */}
       <Header headerText="Questions You've Answered" />
