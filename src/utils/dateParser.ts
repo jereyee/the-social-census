@@ -7,7 +7,7 @@ export const timeOfCommentChecker = (date: string) => {
   const days = hours * 24;
   const y = {
     metric: "minute",
-    number: Math.round(d / minutes),
+    number: Math.round(d / minutes) !== 0 ? Math.round(d / minutes) : 1,
   };
   if (d / hours >= 1) {
     y.metric = "hour";

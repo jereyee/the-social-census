@@ -48,10 +48,13 @@ const Question = ({ question }: { question: IQuestionInList }) => {
   const router = useRouter();
   const redirectToResult = () => {
     questionData &&
-      void router.push({
-        pathname: "/result",
-        query: { qid: questionData.id },
-      });
+      void router.push(
+        {
+          pathname: "/result",
+          query: { qid: questionData.id },
+        },
+        "/result"
+      );
   };
 
   const toast = useToast();

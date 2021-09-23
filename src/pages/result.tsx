@@ -36,8 +36,6 @@ const Result = () => {
 
   const token = nookies.get(undefined, "token");
 
-  console.log(questionId);
-
   const { data: questionData, error } = useSWR<IQuestion, string>(
     [getEndpoint(APIEndpoints.GET_QUESTION, questionId), token.token],
     fetcher
@@ -117,7 +115,7 @@ const Result = () => {
             commentsList={commentsList ?? undefined}
             knowMore={questionData.knowMore}
             refreshComments={refreshComments}
-            questionId={questionId}
+            questionData={questionData}
           />
         </Box>
       ) : (
@@ -158,64 +156,12 @@ export interface ICommentsList {
     displayName: string;
     photoURL: string;
   };
-  responses: number[];
+  userResponses: number[];
 }
 
 export interface IUserComment {
   body: string;
   parentId: null | number;
 }
-
-/* const commentsList = [
-  {
-    id: 1,
-    questionId: 3,
-    uid: "KJXmu4CSW7ThOkwU5MRVPCC3xww2",
-    parentId: null,
-    body: "Hi everyone",
-    createdAt: "2021-09-14T11:10:03.542Z",
-    likes: 0,
-    children: [
-      {
-        id: 11,
-        questionId: 3,
-        uid: "KJXmu4CSW7ThOkwU5MRVPCC3xww2",
-        parentId: 1,
-        body: "Hi everyone",
-        createdAt: "2021-09-14T11:36:31.916Z",
-        likes: 0,
-      },
-    ],
-  },
-  {
-    id: 3,
-    questionId: 3,
-    uid: "KJXmu4CSW7ThOkwU5MRVPCC3xww2",
-    parentId: null,
-    body: "Hi everyone",
-    createdAt: "2021-09-14T11:17:13.361Z",
-    likes: 1,
-    children: [
-      {
-        id: 6,
-        questionId: 3,
-        uid: "KJXmu4CSW7ThOkwU5MRVPCC3xww2",
-        parentId: 3,
-        body: "Hi everyone",
-        createdAt: "2021-09-14T11:29:22.571Z",
-        likes: 0,
-      },
-      {
-        id: 7,
-        questionId: 3,
-        uid: "KJXmu4CSW7ThOkwU5MRVPCC3xww2",
-        parentId: 3,
-        body: "Hi everyone",
-        createdAt: "2021-09-14T11:29:26.660Z",
-        likes: 1,
-      },
-    ],
-  },
-]; */
 
 export default Result;

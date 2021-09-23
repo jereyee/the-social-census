@@ -39,7 +39,7 @@ const RepliesDrawer = ({
 }: IReplies) => {
   const token = nookies.get(undefined, "token");
 
-  const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
+  const inputRef = useRef() as React.MutableRefObject<HTMLTextAreaElement>;
 
   const submitUserReply = (body: string) => {
     if (token) {
@@ -72,8 +72,10 @@ const RepliesDrawer = ({
       maxW="100vw !important"
       bg="grayscale.gray.300"
     >
-      <DrawerCloseButton onClick={onClose} />
-      <DrawerHeader>
+      <DrawerCloseButton size="lg" mr={2} mt={2} onClick={onClose} />
+      <DrawerHeader 
+          mt={2}
+          >
         <ChevronLeftIcon
           w={6}
           h={6}
@@ -164,10 +166,6 @@ const RepliesDrawer = ({
       </DrawerBody>
 
       <DrawerFooter>
-        <Box />
-        <Button variant="outline" mr={3} onClick={onClose}>
-          Cancel
-        </Button>
       </DrawerFooter>
     </DrawerContent>
   );

@@ -10,6 +10,7 @@ import {
   HStack,
   Box,
 } from "@chakra-ui/react";
+import { IQuestion } from "pages/home";
 import { ICommentsList } from "pages/result";
 import React, { useRef, useState } from "react";
 import CommentsDrawer from "./comments/CommentsDrawer";
@@ -19,12 +20,12 @@ const Sections = ({
   commentsList,
   knowMore,
   refreshComments,
-  questionId,
+  questionData,
 }: {
   commentsList: ICommentsList[] | undefined;
   knowMore: Record<string, unknown>;
   refreshComments: () => void;
-  questionId: number;
+  questionData: IQuestion;
 }) => {
   const {
     isOpen: isKnowMoreOpen,
@@ -137,7 +138,7 @@ const Sections = ({
             data={sectionData.comments.data}
             onClose={closeComments}
             refreshComments={refreshComments}
-            questionId={questionId}
+            questionData={questionData}
           />
         </Drawer>
       )}

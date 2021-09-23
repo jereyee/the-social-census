@@ -44,7 +44,7 @@ const Scale = ({ selectedOptions, selectResponse }: ISCale) => {
         step={1}
         w="100%"
         onChange={(val) => setCurrentValue(val)}
-        onChangeEnd={(val) => selectOption(val)}
+        onChangeEnd={(val) => selectOption(val - 1)}
         id="scale-slider"
       >
         <SliderTrack bg="brand.orange">

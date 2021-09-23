@@ -94,7 +94,7 @@ const Match = () => {
   const { hasCopied, onCopy } = useClipboard(fetchedMatchCode?.matchCode ?? "");
   const toast = useToast();
 
-  const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
+  const inputRef = useRef() as React.MutableRefObject<HTMLTextAreaElement>;
   const matchIdRef = useRef(1);
   const router = useRouter();
 
