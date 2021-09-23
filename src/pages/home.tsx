@@ -24,10 +24,6 @@ const Home = () => {
   const { questionState, updateQuestionState } = useContext(QuestionsContext);
   const [questionIndex, setQuestionIndex] = useState(questionState.lastIndex);
 
-  if (process.env.NODE_ENV === "production") {
-    const analytics = getAnalytics();
-  }
-
   useEffect(() => {
     /* if it's a shared question, dont need to update */
     if (questionState.shared) return;
@@ -40,6 +36,13 @@ const Home = () => {
       /* add the current indexed question to the questionState */
       ...(questionsList && questionsList[questionIndex]),
     });
+
+    if (
+      process.env.NODE_ENV === "production" &&
+      typeof window !== "undefined"
+    ) {
+      const analytics = getAnalytics();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionsList]);
 
