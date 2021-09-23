@@ -79,7 +79,7 @@ class MyDocument extends Document {
             sizes="180x180"
             href="/pwa-icons/android/android-launchericon-192-192.png"
           />
-          <link rel="shortcut icon" href="/pwa-icons/android/android-launchericon-144-144.png" />/
+          <link rel="shortcut icon" href="/pwa-icons/android/android-launchericon-144-144.png" />
           <link rel="manifest" href="/manifest.json" />
         </Head>
         <body>
