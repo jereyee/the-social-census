@@ -6,7 +6,9 @@ import {
   Flex,
   Heading,
   HStack,
-  Spacer, Text, VStack
+  Spacer,
+  Text,
+  VStack,
 } from "@chakra-ui/layout";
 import {
   Popover,
@@ -16,8 +18,9 @@ import {
   PopoverHeader,
   PopoverTrigger,
   Skeleton,
+  Spinner,
   Switch,
-  useToast
+  useToast,
 } from "@chakra-ui/react";
 import Header from "components/layout/menu/Header";
 import { MotionVStack } from "components/motion";
@@ -146,7 +149,8 @@ const Responses = () => {
     v.excluded = !!exclusionList?.find((i) => i.questionId === v.questionId);
   });
 
-  return (
+  console.log(exclusionList);
+  return exclusionList && !exclusionError ? (
     <Box>
       {/* match responses header */}
       <Header headerText="Questions You've Answered" />
@@ -182,6 +186,10 @@ const Responses = () => {
           <Question key={index} question={response} />
         ))}
     </Box>
+  ) : (
+    <Center w="100%" h="80vh">
+      <Spinner />
+    </Center>
   );
 };
 

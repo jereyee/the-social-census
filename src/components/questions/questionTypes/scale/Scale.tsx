@@ -16,7 +16,7 @@ export interface ISCale {
 }
 
 const Scale = ({ selectedOptions, selectResponse }: ISCale) => {
-  const defaultValue = selectedOptions.length > 0 ? selectedOptions[0] : 3;
+  const defaultValue = selectedOptions.length > 0 ? selectedOptions[0] + 1 : 3;
   const [currentValue, setCurrentValue] = useState(defaultValue);
   const selectOption = (optionValue: number) => {
     if (selectedOptions?.length > 0) selectedOptions.length = 0;
