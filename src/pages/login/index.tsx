@@ -48,6 +48,7 @@ const Login = () => {
           window.localStorage.setItem("auth", "true");
           if (getAdditionalUserInfo(result)?.isNewUser)
             window.localStorage.setItem("isNewUser", "true");
+            void router.push("/login/update");
         })
         .catch((error) => {
           // Some error occurred, you can inspect the code: error.code
@@ -85,6 +86,7 @@ const Login = () => {
         window.localStorage.setItem("auth", "true");
         if (getAdditionalUserInfo(result)?.isNewUser) {
           window.localStorage.setItem("isNewUser", "true");
+          void router.push("/login/update");
         }
         // ...
       })
@@ -126,8 +128,7 @@ const Login = () => {
 
   if (isAuth) {
     const isNewUser = window.localStorage.getItem("isNewUser");
-    if (isNewUser && isNewUser === "true") void router.push("/login/update");
-    else void router.push("/home");
+    void router.push("/home");
   }
 
   return (
