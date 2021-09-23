@@ -25,7 +25,10 @@ const Update = () => {
   };
 
   const router = useRouter();
-  const successCallback = () => void router.push("/home");
+  const successCallback = () => {
+    window.localStorage.removeItem("isNewUser");
+    void router.push("/home");
+  };
 
   switch (currentScreen) {
     case UpdateScreens.displayName:

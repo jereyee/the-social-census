@@ -4,12 +4,13 @@ import { EmailPopup } from "components/sign-in/EmailPopup";
 import SignInButtons from "components/sign-in/SignInButtons";
 import { FirebaseError } from "firebase/app";
 import {
+  getAdditionalUserInfo,
   getAuth,
   GoogleAuthProvider,
   isSignInWithEmailLink,
   onAuthStateChanged,
   signInWithEmailLink,
-  signInWithPopup
+  signInWithPopup,
 } from "firebase/auth";
 import { useRouter } from "next/dist/client/router";
 import React, { useEffect, useState } from "react";
@@ -44,11 +45,9 @@ const Login = () => {
         .then((result) => {
           // Clear email from storage.
           window.localStorage.removeItem("emailForSignIn");
-          // You can access the new user via result.user
-          // Additional user info profile not available via:
-          // result.additionalUserInfo.profile == null
-          // You can check if the user is new or existing:
-          // result.additionalUserInfo.isNewUser
+          window.localStorage.setItem("auth", "true");
+          if (getAdditionalUserInfo(result)?.isNewUser)
+            window.localStorage.setItem("isNewUser", "true");
         })
         .catch((error) => {
           // Some error occurred, you can inspect the code: error.code
@@ -84,7 +83,9 @@ const Login = () => {
         // The signed-in user info.
         const user = result.user;
         window.localStorage.setItem("auth", "true");
-        console.log(user);
+        if (getAdditionalUserInfo(result)?.isNewUser) {
+          window.localStorage.setItem("isNewUser", "true");
+        }
         // ...
       })
       .catch((error: SignInError) => {
@@ -123,7 +124,11 @@ const Login = () => {
     },
   ];
 
-  if (isAuth) void router.push("/home");
+  if (isAuth) {
+    const isNewUser = window.localStorage.getItem("isNewUser");
+    if (isNewUser && isNewUser === "true") void router.push("/login/update");
+    else void router.push("/home");
+  }
 
   return (
     <Box>
