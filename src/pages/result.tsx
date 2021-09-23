@@ -6,7 +6,7 @@ import {
   HStack,
   Spinner,
   useToast,
-  VStack
+  VStack,
 } from "@chakra-ui/react";
 import Header from "components/layout/menu/Header";
 import { QuestionType } from "components/questions/Questions";
@@ -25,6 +25,7 @@ import { fetcher } from "utils/api/GET";
 import QuestionsContext from "utils/questionsContext";
 import WebShare from "utils/web-share/WebShare";
 import { IQuestion } from "./home";
+import { useNetworkState } from "react-use";
 
 const Result = () => {
   const { questionState } = useContext(QuestionsContext);
@@ -82,6 +83,21 @@ const Result = () => {
 
   const toast = useToast();
 
+  const networkState = useNetworkState();
+
+  if (!networkState.online && connectionOnline) {
+    setConnectionOnline(false);
+  } else if (!connectionOnline && networkState.online) {
+    toast.closeAll();
+    toast({
+      title: `Connection seems to be back 😄`,
+      status: "success",
+      position: "top-right",
+      isClosable: true,
+    });
+    setConnectionOnline(true);
+  }
+
   if (!connectionOnline) {
     toast.closeAll();
     toast({
@@ -93,7 +109,7 @@ const Result = () => {
     });
   }
 
-  if (typeof window !== "undefined") {
+  /* if (typeof window !== "undefined") {
     if (!window.navigator.onLine) {
       setConnectionOnline(false);
     } else if (!connectionOnline && window.navigator.onLine) {
@@ -105,7 +121,7 @@ const Result = () => {
         isClosable: true,
       });
     }
-  }
+  } */
 
   return (
     <Box>

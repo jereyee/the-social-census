@@ -19,16 +19,20 @@ const Home = () => {
 
   const router = useRouter();
 
+  /* set and check the last index that was answered */
   const { questionState, updateQuestionState } = useContext(QuestionsContext);
-
   const [questionIndex, setQuestionIndex] = useState(questionState.lastIndex);
 
   useEffect(() => {
+    /* if it's a shared question, dont need to update */
+    if (questionState.shared) return;
+
     /* update the global question the moment the questions list */
     /* has been retrieved from the api */
     updateQuestionState({
       ...questionState,
       shared: false,
+      /* add the current indexed question to the questionState */
       ...(questionsList && questionsList[questionIndex]),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -41,6 +45,8 @@ const Home = () => {
     questionIndex !== 0
   )
     setQuestionIndex(0);
+
+  // console.log({questionState});
 
   const changeQuestion = (index: number) => {
     updateQuestionState({
@@ -94,7 +100,7 @@ const Home = () => {
     : [];
 
   /* put the shared question as the first of the list */
-  if (questionState.shared)
+  if (questionState.shared) {
     questionsComponents.unshift(
       <Questions
         questionIndex={0}
@@ -103,6 +109,7 @@ const Home = () => {
         answerQuestion={answerQuestion}
       />
     );
+  }
 
   return (
     <Box>
@@ -143,142 +150,3 @@ export interface IQuestion {
     body: string;
   }[];
 }
-
-/* const questionList = [
-  {
-    id: 1,
-    body: "Would you marry someone from a different race?",
-    category: "race",
-    type: QuestionType.BINARY,
-    knowMore: {},
-    createdAt: "2021-09-12T12:53:54.937Z",
-    options: [
-      {
-        id: 0,
-        questionId: 1,
-        body: "Yes",
-      },
-      {
-        id: 1,
-        questionId: 1,
-        body: "No",
-      },
-    ],
-  },
-  {
-    id: 2,
-    body: "My personal aspirations are held back by my financial situation.",
-    category: "finance",
-    type: QuestionType.SCALE,
-    knowMore: {},
-    createdAt: "2021-09-12T12:53:54.991Z",
-    options: [
-      {
-        id: 0,
-        questionId: 2,
-        body: "1",
-      },
-      {
-        id: 1,
-        questionId: 2,
-        body: "2",
-      },
-      {
-        id: 2,
-        questionId: 2,
-        body: "3",
-      },
-      {
-        id: 3,
-        questionId: 2,
-        body: "4",
-      },
-      {
-        id: 4,
-        questionId: 2,
-        body: "5",
-      },
-    ],
-  },
-  {
-    id: 3,
-    body: "Have you ever felt discriminated for any of these areas?",
-    category: "discrimination",
-    type: QuestionType.MULTIPLE_RESPONSE,
-    knowMore: {},
-    createdAt: "2021-09-12T12:53:54.991Z",
-    options: [
-      {
-        id: 0,
-        questionId: 2,
-        body: "Race",
-      },
-      {
-        id: 1,
-        questionId: 2,
-        body: "Religion",
-      },
-      {
-        id: 2,
-        questionId: 2,
-        body: "Gender",
-      },
-      {
-        id: 3,
-        questionId: 2,
-        body: "Sexuality",
-      },
-      {
-        id: 4,
-        questionId: 2,
-        body: "Disability",
-      },
-      {
-        id: 5,
-        questionId: 2,
-        body: "None",
-      },
-    ],
-  },
-  {
-    id: 4,
-    body: "HAVE YOU EVER FELT DISCRIMINATED FOR ANY OF THESE AREAS??",
-    category: "discrimination",
-    type: QuestionType.MULTIPLE_CHOICE,
-    knowMore: {},
-    createdAt: "2021-09-12T12:53:54.991Z",
-    options: [
-      {
-        id: 0,
-        questionId: 2,
-        body: "Race",
-      },
-      {
-        id: 1,
-        questionId: 2,
-        body: "Religion",
-      },
-      {
-        id: 2,
-        questionId: 2,
-        body: "Gender",
-      },
-      {
-        id: 3,
-        questionId: 2,
-        body: "Sexuality",
-      },
-      {
-        id: 4,
-        questionId: 2,
-        body: "Disability",
-      },
-      {
-        id: 5,
-        questionId: 2,
-        body: "None",
-      },
-    ],
-  },
-];
- */

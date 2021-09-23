@@ -9,6 +9,7 @@ import useSWR from "swr";
 import { getEndpoint, APIEndpoints } from "utils/api/functions";
 import { fetcher } from "utils/api/GET";
 import { IQuestion } from "./home";
+import { IQuestionData } from "components/questions/Questions";
 
 const Question = () => {
   const { user } = useAuth();
@@ -25,7 +26,7 @@ const Question = () => {
 
   const toast = useToast();
 
-  const { data: questionData, error } = useSWR<IQuestion[], Error>(
+  const { data: questionData, error } = useSWR<IQuestionData, Error>(
     [
       getEndpoint(APIEndpoints.GET_QUESTION, parseInt(query.id as string)),
       token.token,
@@ -67,8 +68,17 @@ const Question = () => {
   }, [user, questionData]);
 
   if (redirectToHome) {
-    void router.push({ pathname: "/home", query: { shared: "yes" } }, "/home");
+    /* double check to make sure that the questions are the same */
+    if (questionData && questionState.id === questionData.id) {
+      void router.push(
+        { pathname: "/home", query: { shared: "yes" } },
+        "/home"
+      );
+    } else {
+      setRedirectToLogin(true);
+    }
   }
+
   if (redirectToLogin) {
     toast.closeAll();
     toast({
