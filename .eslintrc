@@ -9,6 +9,7 @@
     "prettier",
     "next"
   ],
+  "ignorePatterns": ["next.config.js"],
   "rules": {
     "@typescript-eslint/explicit-module-boundary-types": "off"
   }
