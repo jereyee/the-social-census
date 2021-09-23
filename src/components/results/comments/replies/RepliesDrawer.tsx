@@ -1,7 +1,11 @@
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { Box, Divider, HStack, VStack } from "@chakra-ui/layout";
 import {
-  DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
 } from "@chakra-ui/modal";
 import { Button, Text } from "@chakra-ui/react";
 import InputWithIcon from "components/InputWithIcon";
@@ -103,7 +107,11 @@ const RepliesDrawer = ({
                   } ago`}
                 </Text>
                 <Text variant="body">{data.body}</Text>
-                <Likes id={data.id} likes={data.likes} />
+                <Likes
+                  commentId={data.id}
+                  likes={data.likes}
+                  questionId={data.questionId}
+                />
               </VStack>
             </VStack>
           </HStack>
@@ -141,7 +149,11 @@ const RepliesDrawer = ({
                         } ago`}
                       </Text>
                       <Text variant="body">{comment.body}</Text>
-                      <Likes id={comment.id} likes={comment.likes} />
+                      <Likes
+                        commentId={comment.id}
+                        likes={comment.likes}
+                        questionId={comment.questionId}
+                      />
                     </VStack>
                   </VStack>
                 </HStack>

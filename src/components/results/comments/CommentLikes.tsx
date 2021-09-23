@@ -6,15 +6,22 @@ import { likeOrUnlikeComment } from "utils/api/POST";
 import QuestionsContext from "utils/questionsContext";
 import nookies from "nookies";
 
-const Likes = ({ likes, id }: { likes: number; id: number }) => {
+const Likes = ({
+  likes,
+  commentId,
+  questionId,
+}: {
+  likes: number;
+  commentId: number;
+  questionId: number;
+}) => {
   const myLikes: string[] = localStorage.getItem("likes")
     ? (JSON.parse(localStorage.getItem("likes") as string) as [])
     : [];
 
-  const [liked, setLiked] = useState(myLikes.includes(id.toString()));
-  const { questionState } = useContext(QuestionsContext);
+  const [liked, setLiked] = useState(myLikes.includes(commentId.toString()));
 
-  if (liked && !myLikes.includes(id.toString())) setLiked(false);
+  if (liked && !myLikes.includes(commentId.toString())) setLiked(false);
   const token = nookies.get(undefined, "token");
 
   return (
@@ -28,17 +35,17 @@ const Likes = ({ likes, id }: { likes: number; id: number }) => {
         onClick={() => {
           likeOrUnlikeComment({
             like: !liked,
-            questionId: questionState.id,
+            questionId: questionId,
             token: token.token,
-            commentId: id,
+            commentId: commentId,
           })
             .then((data) => {
               if (!liked) {
-                myLikes.push(id.toString());
+                myLikes.push(commentId.toString());
                 localStorage.setItem("likes", JSON.stringify(myLikes));
               } else {
                 const newLikes = myLikes.filter(
-                  (like) => like !== id.toString()
+                  (like) => like !== commentId.toString()
                 );
                 localStorage.setItem("likes", JSON.stringify(newLikes));
               }

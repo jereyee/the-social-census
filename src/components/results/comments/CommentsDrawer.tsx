@@ -282,7 +282,11 @@ const CommentsDrawer = ({
                           } ago`}
                         </Text>
                         <Text variant="body">{comment.body}</Text>
-                        <Likes likes={comment.likes} id={comment.id} />
+                        <Likes
+                          likes={comment.likes}
+                          commentId={comment.id}
+                          questionId={questionId}
+                        />
                       </VStack>
                       <Text
                         variant="headline"
