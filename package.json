@@ -57,6 +57,7 @@
     "eslint-config-sznm": "^0.1.5",
     "husky": "^7.0.2",
     "lint-staged": "^11.1.2",
+    "next-secure-headers": "^2.2.0",
     "next-sitemap": "^1.6.164",
     "prettier": "^2.3.2",
     "standard-version": "^9.3.1",
