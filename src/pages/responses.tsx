@@ -26,7 +26,7 @@ import Header from "components/layout/menu/Header";
 import { MotionVStack } from "components/motion";
 import { useRouter } from "next/dist/client/router";
 import nookies from "nookies";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { themeColors } from "styles/colors";
 import useSWR from "swr";
 import { APIEndpoints, getEndpoint } from "utils/api/functions";
@@ -145,6 +145,12 @@ const Responses = () => {
   responsesWithoutDuplicates?.forEach((v) => {
     v.excluded = !!exclusionList?.find((i) => i.questionId === v.questionId);
   });
+
+  const router = useRouter();
+
+  /* useEffect(() => {
+    if(router.query.)
+  }, []); */
 
   return exclusionList && !exclusionError ? (
     <Box>

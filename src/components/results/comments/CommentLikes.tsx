@@ -37,7 +37,7 @@ const Likes = ({
   const [likesNumber, setLikesNumber] = useState(likes);
 
   if (!error && fetchMyLikes)
-    if (fetchMyLikes.includes(commentId)) setLiked(true);
+    if (fetchMyLikes.includes(commentId) && !liked) setLiked(true);
 
   //if (liked && !myLikes.includes(commentId.toString())) setLiked(false);
 
