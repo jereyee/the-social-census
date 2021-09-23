@@ -1,4 +1,5 @@
 import { Box, Center, Heading, Spinner } from "@chakra-ui/react";
+import { getAnalytics } from "@firebase/analytics";
 import Header from "components/layout/menu/Header";
 import Questions, { QuestionType } from "components/questions/Questions";
 import { useRouter } from "next/dist/client/router";
@@ -22,6 +23,10 @@ const Home = () => {
   /* set and check the last index that was answered */
   const { questionState, updateQuestionState } = useContext(QuestionsContext);
   const [questionIndex, setQuestionIndex] = useState(questionState.lastIndex);
+
+  if (process.env.NODE_ENV === "production") {
+    const analytics = getAnalytics();
+  }
 
   useEffect(() => {
     /* if it's a shared question, dont need to update */

@@ -18,15 +18,12 @@ const Likes = ({
   commentId: number;
   questionId: number;
 }) => {
-  const myLikes: string[] = localStorage.getItem("likes")
+  const token = nookies.get(undefined, "token");
+  let myLikes: string[] = localStorage.getItem("likes")
     ? (JSON.parse(localStorage.getItem("likes") as string) as [])
     : [];
 
-  const [liked, setLiked] = useState(myLikes.includes(commentId.toString()));
-
-  if (liked && !myLikes.includes(commentId.toString())) setLiked(false);
-  const token = nookies.get(undefined, "token");
-
+  /* sync local storage with the API */
   const { data: fetchMyLikes, error } = useSWR<number[], string>(
     [
       getEndpoint(APIEndpoints.GET_USER_LIKED_COMMENTS, questionId),
@@ -35,11 +32,12 @@ const Likes = ({
     fetcher
   );
 
-  /* sync local storage with the API */
-  if (!error && fetchMyLikes) {
-    if (!liked && fetchMyLikes.includes(commentId)) setLiked(true);
-    if (liked && !fetchMyLikes.includes(commentId)) setLiked(false);
-  }
+  if (!error && fetchMyLikes)
+    myLikes = fetchMyLikes.map((like) => like.toString());
+
+  const [liked, setLiked] = useState(myLikes.includes(commentId.toString()));
+
+  if (liked && !myLikes.includes(commentId.toString())) setLiked(false);
 
   return (
     <HStack>
