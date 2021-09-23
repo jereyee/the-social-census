@@ -33,7 +33,7 @@ const UserAvatar = ({
   ) : (
     <Avatar
       name={otherUser?.displayName ?? undefined}
-      src={user?.photoURL ?? undefined}
+      src={otherUser?.photoURL ?? undefined}
       w={width}
       h={height}
       mx={marginX}

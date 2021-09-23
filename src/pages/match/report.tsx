@@ -1,5 +1,13 @@
-import { Box, Flex, Heading, HStack, Spacer, VStack } from "@chakra-ui/layout";
-import { Skeleton, Text, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Flex,
+  Heading,
+  HStack,
+  Spacer,
+  VStack,
+} from "@chakra-ui/layout";
+import { Skeleton, Spinner, Text, useToast } from "@chakra-ui/react";
 import Header from "components/layout/menu/Header";
 import UserAvatar from "components/layout/menu/UserAvatar";
 import Card from "components/micro/Card";
@@ -147,16 +155,24 @@ const MatchCard = ({
 
 const Report = () => {
   const token = nookies.get(undefined, "token");
+  const router = useRouter();
 
   const { data: fetchedMatchReport, error: fetchError } = useSWR<
     IReport,
     Error
   >(
-    [getEndpoint(APIEndpoints.GET_MATCH_REPORT, 0, 0, 1), token.token],
+    [
+      getEndpoint(
+        APIEndpoints.GET_MATCH_REPORT,
+        0,
+        0,
+        parseInt((router.query.matchId as string) ?? 1)
+      ),
+      token.token,
+    ],
     fetcher
   );
 
-  const router = useRouter();
   const toast = useToast();
 
   if (fetchError) {
@@ -187,7 +203,7 @@ const Report = () => {
       matchReport?.differentResponses2[index],
     ]) ?? [];
 
-  return (
+  return !fetchError && matchReport ? (
     <Box>
       {/* match responses header */}
       <Header headerText="Match Responses" />
@@ -197,19 +213,25 @@ const Report = () => {
         <VStack spacing={8}>
           <VStack spacing={4}>
             <HStack justifyContent="space-evenly" w="70%">
-              <UserAvatar currentUser={true} width="112px" height="112px" />
+              <UserAvatar
+                currentUser={false}
+                width="112px"
+                height="112px"
+                otherUser={{
+                  displayName: matchReport.user.displayName,
+                  photoURL: matchReport.user.photoURL,
+                }}
+              />
               <Box />
-              {matchReport && (
-                <UserAvatar
-                  currentUser={false}
-                  width="112px"
-                  height="112px"
-                  otherUser={{
-                    displayName: matchReport?.otherUser.displayName,
-                    photoURL: matchReport?.otherUser.photoURL,
-                  }}
-                />
-              )}
+              <UserAvatar
+                currentUser={false}
+                width="112px"
+                height="112px"
+                otherUser={{
+                  displayName: matchReport.otherUser.displayName,
+                  photoURL: matchReport.otherUser.photoURL,
+                }}
+              />
             </HStack>
             <VStack w="100%">
               <HStack justifyContent="space-evenly" w="70%">
@@ -218,7 +240,7 @@ const Report = () => {
                 </Heading>
                 <Text>X</Text>
                 <Heading as="h3" variant="body" textAlign="center">
-                  {matchReport?.user.displayName}
+                  {matchReport?.otherUser.displayName}
                 </Heading>
               </HStack>
               <Heading
@@ -273,6 +295,10 @@ const Report = () => {
         </VStack>
       }
     </Box>
+  ) : (
+    <Center w="100%" h="80vh">
+      <Spinner />
+    </Center>
   );
 };
 

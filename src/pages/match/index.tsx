@@ -1,5 +1,14 @@
 import { CopyIcon } from "@chakra-ui/icons";
-import { Box, Circle, Heading, HStack, VStack } from "@chakra-ui/layout";
+import {
+  Box,
+  Circle,
+  Container,
+  Heading,
+  HStack,
+  VStack,
+  Wrap,
+  WrapItem,
+} from "@chakra-ui/layout";
 import {
   Button,
   Text,
@@ -23,6 +32,7 @@ import WebShare from "utils/web-share/WebShare";
 import Lottie from "react-lottie";
 import * as animationData from "../../../public/lottie/loading_spinner_with_tick.json";
 import { UserObject } from "./report";
+import { useAuth } from "utils/auth/AuthProvider";
 
 export const MatchingScreen = ({
   successLottieCallback,
@@ -79,14 +89,16 @@ const Match = () => {
     string
   >([getEndpoint(APIEndpoints.GET_MATCH_HISTORY), token.token], fetcher);
 
+  const { user } = useAuth();
+
   const { hasCopied, onCopy } = useClipboard(fetchedMatchCode?.matchCode ?? "");
   const toast = useToast();
 
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
+  const matchIdRef = useRef(1);
   const router = useRouter();
 
   const [matchSuccess, setMatchSuccess] = useState(false);
-  const [matchId, setMatchId] = useState(undefined);
 
   if (hasCopied) {
     toast.closeAll();
@@ -107,10 +119,11 @@ const Match = () => {
       .then((res) => {
         console.log(res);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        const data = res.data as { value: Match };
-        if (data.value.id) {
+        const data = res as Match;
+        if (data.id) {
           /* match success */
           setMatchSuccess(true);
+          matchIdRef.current = data.id;
         }
       })
       .catch((err: Error) => {
@@ -138,7 +151,7 @@ const Match = () => {
     void router.push(
       {
         pathname: "/match/report",
-        query: { matchId: matchId },
+        query: { matchId: matchIdRef.current },
       },
       "/match/report"
     );
@@ -190,7 +203,9 @@ const Match = () => {
                 buttonVariant="primary"
                 buttonProps={{ bg: "brand.purple" }}
                 title="Match with me on Social Census!"
-                body={`Match with me on The Social Census! \r\n My match code is: \r\n ${fetchedMatchCode?.matchCode ?? ""}`}
+                body={`Match with me on The Social Census! \r\n My match code is: \r\n ${
+                  fetchedMatchCode?.matchCode ?? ""
+                }`}
                 url={origin}
               />
               <Button variant="primary">
@@ -218,31 +233,57 @@ const Match = () => {
             <Text variant="caption" alignSelf="flex-start">
               History ({fetchedMatchHistory?.matches.length}):
             </Text>
-            <Card w="100%" h="44px" px={4}>
+            <Card w="100%" h="auto" p={4}>
               <Skeleton
                 isLoaded={!!(!error && fetchedMatchHistory)}
                 speed={1.2}
                 w="100%"
+                h="100%"
               >
                 {fetchedMatchHistory?.matches.length === 0 ? (
                   <Text variant="caption">
                     Nobody here yet &#128129; Start matching!
                   </Text>
                 ) : (
-                  <HStack spacing={4} w="100%" h="100%">
-                    {fetchedMatchHistory &&
-                      fetchedMatchHistory.matches.map((match, index) => (
-                        <UserAvatar
-                          key={index}
-                          currentUser={false}
-                          width="24px"
-                          height="24px"
-                          otherUser={{
-                            displayName: match.otherUser.displayName,
-                            photoURL: match.otherUser.photoURL,
-                          }}
-                        />
-                      ))}
+                  <HStack spacing={4} w="100%" h="100%" alignItems="center">
+                    <Wrap>
+                      {fetchedMatchHistory &&
+                        fetchedMatchHistory.matches.map((match, index) => {
+                          const displayName =
+                            match.user.displayName !== user?.displayName
+                              ? match.user.displayName
+                              : match.otherUser.displayName;
+                          const photoURL =
+                            match.user.photoURL !== user?.photoURL
+                              ? match.user.photoURL
+                              : match.otherUser.photoURL;
+                          return (
+                            <WrapItem key={index}>
+                              <Box
+                                onClick={() =>
+                                  void router.push(
+                                    {
+                                      pathname: "/match/report",
+                                      query: { matchId: match.id },
+                                    },
+                                    "/match/report"
+                                  )
+                                }
+                              >
+                                <UserAvatar
+                                  currentUser={false}
+                                  width="24px"
+                                  height="24px"
+                                  otherUser={{
+                                    displayName: displayName,
+                                    photoURL: photoURL,
+                                  }}
+                                />
+                              </Box>
+                            </WrapItem>
+                          );
+                        })}
+                    </Wrap>
                   </HStack>
                 )}
               </Skeleton>
