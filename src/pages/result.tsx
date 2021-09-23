@@ -117,6 +117,7 @@ const Result = () => {
             commentsList={commentsList ?? undefined}
             knowMore={questionData.knowMore}
             refreshComments={refreshComments}
+            questionId={questionId}
           />
         </Box>
       ) : (

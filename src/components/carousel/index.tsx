@@ -4,19 +4,24 @@ import Image from "next/image";
 import React, { useCallback, useEffect, useState } from "react";
 
 import styles from "../../styles/modules/carousel.module.css";
-import { MotionBox } from "components/motion";
+import { MotionBox, MotionVStack } from "components/motion";
 
 import { DotButton } from "./Buttons";
+
+import Screenshot1 from "../../../public/homepage/screenshot1.png";
+import Screenshot2 from "../../../public/homepage/screenshot2.png";
 
 export const Carousel = () => {
   const slides = [
     {
       img: (
         <Image
-          src="/homepage/screenshot1.png"
+          src={Screenshot1}
           layout="fill"
           objectFit="contain"
           alt="App Screenshot 1"
+          placeholder="blur"
+          priority
         />
       ),
       heading: "Answer simple, yet <br/> thought-provoking questions.",
@@ -25,10 +30,12 @@ export const Carousel = () => {
     {
       img: (
         <Image
-          src="/homepage/screenshot2.png"
+          src={Screenshot2}
           layout="fill"
           objectFit="contain"
           alt="App Screenshot 2"
+          placeholder="blur"
+          priority
         />
       ),
       heading: "See the results, <br/> join the conversation.",
@@ -63,7 +70,12 @@ export const Carousel = () => {
   }, [embla, setScrollSnaps, onSelect]);
 
   return (
-    <VStack spacing={6}>
+    <MotionVStack
+      spacing={6}
+      animate={{ opacity: 1 }}
+      initial={{ opacity: 0 }}
+      transition={{ duration: 1.5 }}
+    >
       <div className={styles.embla} ref={viewportRef}>
         <div className={styles.embla__container}>
           {slides.map((slide, index) => (
@@ -111,6 +123,6 @@ export const Carousel = () => {
           />
         ))}
       </HStack>
-    </VStack>
+    </MotionVStack>
   );
 };

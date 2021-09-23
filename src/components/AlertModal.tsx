@@ -46,7 +46,7 @@ const AlertModal = ({
         isCentered
       >
         <AlertDialogOverlay>
-          <AlertDialogContent w="80%">
+          <AlertDialogContent w="80%" bg="grayscale.gray.300">
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
               {header}
             </AlertDialogHeader>

@@ -19,10 +19,12 @@ const Sections = ({
   commentsList,
   knowMore,
   refreshComments,
+  questionId,
 }: {
   commentsList: ICommentsList[] | undefined;
   knowMore: Record<string, unknown>;
   refreshComments: () => void;
+  questionId: number;
 }) => {
   const {
     isOpen: isKnowMoreOpen,
@@ -135,6 +137,7 @@ const Sections = ({
             data={sectionData.comments.data}
             onClose={closeComments}
             refreshComments={refreshComments}
+            questionId={questionId}
           />
         </Drawer>
       )}

@@ -60,7 +60,7 @@ const RepliesDrawer = ({
 
   return (
     <DrawerContent
-      height="90vh"
+      height="70vh"
       top="unset !important"
       right="unset !important"
       borderTopRadius="25px"

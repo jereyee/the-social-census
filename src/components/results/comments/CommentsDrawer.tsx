@@ -8,21 +8,15 @@ import {
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
+  DrawerOverlay
 } from "@chakra-ui/modal";
 import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
-  Button,
-  CloseButton,
-  Menu,
+  Button, Menu,
   MenuButton,
   MenuItem,
   MenuList,
   Text,
-  useToast,
+  useToast
 } from "@chakra-ui/react";
 import AlertModal from "components/AlertModal";
 import ErrorModal from "components/ErrorModal";
@@ -31,14 +25,13 @@ import UserAvatar from "components/layout/menu/UserAvatar";
 import { useRouter } from "next/dist/client/router";
 import nookies from "nookies";
 import { ICommentsList } from "pages/result";
-import React, { useContext, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { AiOutlineMore } from "react-icons/ai";
 import { deleteComment } from "utils/api/DELETE";
 import { fetchQuestionComments } from "utils/api/GET";
 import { reportComment, submitComment } from "utils/api/POST";
 import { useAuth } from "utils/auth/AuthProvider";
 import { timeOfCommentChecker } from "utils/dateParser";
-import QuestionsContext from "utils/questionsContext";
 import Likes from "./CommentLikes";
 import RepliesDrawer from "./replies/RepliesDrawer";
 
@@ -46,6 +39,7 @@ export interface IComments {
   data: ICommentsList[];
   onClose: () => void;
   refreshComments: () => void;
+  questionId: number;
 }
 
 const ReportInput = ({
@@ -77,7 +71,12 @@ const ReportInput = ({
   );
 };
 
-const CommentsDrawer = ({ data, onClose, refreshComments }: IComments) => {
+const CommentsDrawer = ({
+  data,
+  onClose,
+  refreshComments,
+  questionId,
+}: IComments) => {
   const { user } = useAuth();
 
   const {
@@ -113,14 +112,13 @@ const CommentsDrawer = ({ data, onClose, refreshComments }: IComments) => {
     onRepliesOpen();
   }
 
-  const { questionState } = useContext(QuestionsContext);
   const token = nookies.get(undefined, "token");
 
   if (commentSubmitted.submit) {
     if (commentSubmitted.success) {
       /* the reason you are fetching again is to avoid UI discrepancies due to the parent components */
       /* not updating. I recommend working and trying to find a simpler solution if time permits */
-      fetchQuestionComments(token.token, questionState.id)
+      fetchQuestionComments(token.token, questionId)
         .then((v) => {
           if (isRepliesOpen && clickedComment)
             /* if the replies drawer is open need to update the UI */
@@ -141,7 +139,7 @@ const CommentsDrawer = ({ data, onClose, refreshComments }: IComments) => {
     if (token) {
       submitComment({
         comment: { body: body, parentId: null },
-        questionId: questionState.id,
+        questionId: questionId,
         token: token.token,
       })
         .then((data) => {
@@ -172,12 +170,12 @@ const CommentsDrawer = ({ data, onClose, refreshComments }: IComments) => {
   const deleteUserComment = (comment: ICommentsList) => {
     deleteComment({
       comment: comment,
-      questionId: questionState.id,
+      questionId: questionId,
       token: token.token,
     })
       .then((data) => {
         console.log(data);
-        fetchQuestionComments(token.token, questionState.id)
+        fetchQuestionComments(token.token, questionId)
           .then((v) => {
             refreshComments();
             setCommentsList(v);
@@ -198,7 +196,7 @@ const CommentsDrawer = ({ data, onClose, refreshComments }: IComments) => {
   const reportUserComment = (comment: ICommentsList) => {
     reportComment({
       commentId: comment.id,
-      questionId: questionState.id,
+      questionId: questionId,
       token: token.token,
       reason: reportRef.current.value,
     })
@@ -225,7 +223,7 @@ const CommentsDrawer = ({ data, onClose, refreshComments }: IComments) => {
   };
 
   return (
-    <DrawerContent height="90vh" borderTopRadius="25px" bg="grayscale.gray.300">
+    <DrawerContent height="70vh" borderTopRadius="25px" bg="grayscale.gray.300">
       <DrawerCloseButton />
       <DrawerHeader>Comments</DrawerHeader>
 

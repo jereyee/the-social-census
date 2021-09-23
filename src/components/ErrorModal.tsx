@@ -31,7 +31,7 @@ const ErrorModal = ({
           initialFocusRef={initialFocusRef}
         >
           <ModalOverlay />
-          <ModalContent w="80%">
+          <ModalContent w="80%" bg="grayscale.gray.300">
             <ModalHeader>
               <HStack spacing={3}>
                 <WarningIcon w="20px" height="20px" color="red" />

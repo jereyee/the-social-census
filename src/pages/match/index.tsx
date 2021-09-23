@@ -190,7 +190,7 @@ const Match = () => {
                 buttonVariant="primary"
                 buttonProps={{ bg: "brand.purple" }}
                 title="Match with me on Social Census!"
-                body={`My match code is: ${fetchedMatchCode?.matchCode ?? ""}`}
+                body={`Match with me on The Social Census! \r\n My match code is: \r\n ${fetchedMatchCode?.matchCode ?? ""}`}
                 url={origin}
               />
               <Button variant="primary">
