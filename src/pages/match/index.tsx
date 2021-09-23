@@ -23,7 +23,7 @@ import nookies from "nookies";
 import React, { useRef, useState } from "react";
 import Lottie from "react-lottie";
 import useSWR from "swr";
-import { Match, MatchHistory } from "types/shared";
+import { Match as IMatch, MatchHistory } from "types/shared";
 import { APIEndpoints, getEndpoint } from "utils/api/functions";
 import { fetcher } from "utils/api/GET";
 import { matchWithFriendCode } from "utils/api/POST";
@@ -116,7 +116,7 @@ const Match = () => {
       .then((res) => {
         console.log(res);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        const data = res as Match;
+        const data = res as IMatch;
         if (data.id) {
           /* match success */
           setMatchSuccess(true);
@@ -196,7 +196,6 @@ const Match = () => {
 
             <HStack alignSelf="flex-start" pt={2} spacing={4}>
               <WebShare
-                questionId={0}
                 buttonVariant="primary"
                 buttonProps={{ bg: "brand.purple" }}
                 title="Match with me on Social Census!"

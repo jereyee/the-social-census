@@ -93,6 +93,7 @@ const Sections = ({
 
   const closeComments = () => {
     setSelected(undefined);
+    refreshComments();
     onCommentsClose();
   };
 

@@ -1,5 +1,4 @@
 import { getAuth } from "@firebase/auth";
-import { initializeApp } from "firebase/app";
 import { signOut } from "firebase/auth";
 
 export const firebaseConfig = {

@@ -12,10 +12,12 @@ import {
 } from "@chakra-ui/modal";
 import {
   Button,
+  CircularProgress,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
+  Skeleton,
   Text,
   useToast,
 } from "@chakra-ui/react";
@@ -25,11 +27,13 @@ import InputWithIcon from "components/InputWithIcon";
 import UserAvatar from "components/layout/menu/UserAvatar";
 import { useRouter } from "next/dist/client/router";
 import nookies from "nookies";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import { AiOutlineMore } from "react-icons/ai";
+import useSWR from "swr";
 import { IComments, ICommentsList, IQuestion } from "types/shared";
 import { deleteComment } from "utils/api/DELETE";
-import { fetchQuestionComments } from "utils/api/GET";
+import { getEndpoint, APIEndpoints } from "utils/api/functions";
+import { fetcher, fetchQuestionComments } from "utils/api/GET";
 import { reportComment, submitComment } from "utils/api/POST";
 import { useAuth } from "utils/auth/AuthProvider";
 import { timeOfCommentChecker } from "utils/dateParser";
@@ -42,15 +46,27 @@ interface ICommentSubmitted {
   submit: boolean;
 }
 
-const CommentsDrawer = ({
-  data,
-  onClose,
-  refreshComments,
-  questionData,
-}: IComments) => {
+const CommentsDrawer = ({ onClose, questionData }: IComments) => {
   /* user related hooks */
   const { user } = useAuth();
   const token = nookies.get(undefined, "token");
+
+  /* fetch all comments for this question */
+  const {
+    data: commentsData,
+    isValidating,
+    mutate: refetchCommentsAPI,
+  } = useSWR<ICommentsList[], string>(
+    [
+      getEndpoint(APIEndpoints.GET_QUESTION_COMMENTS, questionData.id),
+      token.token,
+    ],
+    fetcher
+  );
+  const refetchComments = () => {
+    void refetchCommentsAPI();
+  };
+  const commentsList = commentsData?.slice().reverse();
 
   /* disclosure hook for replies drawer */
   const {
@@ -58,6 +74,7 @@ const CommentsDrawer = ({
     onOpen: onRepliesOpen,
     onClose: onRepliesClose,
   } = useDisclosure();
+  const [closeReplies, setCloseReplies] = useState(false);
 
   /* disclosure hook for error modal */
   const {
@@ -72,16 +89,18 @@ const CommentsDrawer = ({
 
   const router = useRouter();
 
+  /* state for if the user clicked on a comment */
   const [clickedComment, setClickedComment] = useState<
     ICommentsList | undefined
   >(undefined);
 
+  /* state for when the user tries submitting a comment */
   const [commentSubmitted, setCommentSubmitted] = useState<ICommentSubmitted>({
     submit: false,
     success: false,
   });
 
-  const [commentsList, setCommentsList] = useState(data);
+  //const [commentsList, setCommentsList] = useState(data);
   const toast = useToast();
 
   if (clickedComment && !isRepliesOpen) {
@@ -90,7 +109,9 @@ const CommentsDrawer = ({
   }
 
   if (commentSubmitted.submit) {
+    /* comment tried to submit */
     if (commentSubmitted.success) {
+      /* comment was successful in submitting */
       /* the reason you are fetching again is to avoid UI discrepancies due to the parent components */
       /* not updating. I recommend working and trying to find a simpler solution if time permits */
       fetchQuestionComments(token.token, questionData.id)
@@ -100,7 +121,8 @@ const CommentsDrawer = ({
             setClickedComment(
               v.find((value) => value.id === clickedComment.id)
             );
-          setCommentsList(v);
+          refetchComments();
+          //setCommentsList(v);
         })
         .catch((err) => console.log(err));
     } else if (!commentSubmitted.success) {
@@ -110,6 +132,7 @@ const CommentsDrawer = ({
     setCommentSubmitted({ submit: false, success: false });
   }
 
+  /* callback for submitting a user comment */
   const submitUserComment = (body: string) => {
     if (token) {
       submitComment({
@@ -119,7 +142,6 @@ const CommentsDrawer = ({
       })
         .then((data) => {
           console.log(data);
-          refreshComments();
           setCommentSubmitted({ submit: true, success: true });
         })
         .catch((error) => {
@@ -131,12 +153,14 @@ const CommentsDrawer = ({
       void router.push("/login");
     }
   };
+  /* end of callback */
 
+  /* callback for when a user has replied */
   const userReplySubmitted = ({ submit, success }: ICommentSubmitted) => {
-    refreshComments();
     setCommentSubmitted({ submit: submit, success: success });
   };
 
+  /* callback for deleting a user comment */
   const deleteUserComment = (comment: ICommentsList) => {
     deleteComment({
       comment: comment,
@@ -147,8 +171,8 @@ const CommentsDrawer = ({
         console.log(data);
         fetchQuestionComments(token.token, questionData.id)
           .then((v) => {
-            refreshComments();
-            setCommentsList(v);
+            refetchComments();
+            //setCommentsList(v);
           })
           .catch((err) => console.log(err));
       })
@@ -162,7 +186,9 @@ const CommentsDrawer = ({
         });
       });
   };
+  /* end of callback */
 
+  /* callback for reporting a user comment */
   const reportUserComment = (comment: ICommentsList) => {
     reportComment({
       commentId: comment.id,
@@ -191,6 +217,7 @@ const CommentsDrawer = ({
         });
       });
   };
+  /* end of callback */
 
   return (
     <DrawerContent height="70vh" borderTopRadius="25px" bg="grayscale.gray.300">
@@ -215,7 +242,7 @@ const CommentsDrawer = ({
           />
         </HStack>
         <Divider />
-        {commentsList.map((comment, index) => {
+        {commentsList?.map((comment, index) => {
           const modalButtonStyles = {
             variant: "naked",
             width: "100%",
@@ -227,6 +254,7 @@ const CommentsDrawer = ({
             color: "white",
             py: 0,
           };
+
           return (
             <React.Fragment key={index}>
               <VStack alignItems="flex-start" py={4}>
@@ -276,23 +304,28 @@ const CommentsDrawer = ({
                           likes={comment.likes}
                           commentId={comment.id}
                           questionId={questionData.id}
+                          refetchComments={refetchComments}
                         />
                       </VStack>
-                      <Text
-                        variant="headline"
-                        color="brand.pink"
-                        ref={repliesRef}
-                        onClick={() => setClickedComment(comment)}
-                        data-question-index={index}
-                        _hover={{
-                          cursor: "pointer",
-                          color: "brand.magenta",
-                          backgroundColor: "grayscale.white.60",
-                        }}
-                      >
-                        {comment.children.length}{" "}
-                        {comment.children.length === 1 ? "REPLY" : "REPLIES"}
-                      </Text>
+                      {isValidating ? (
+                        <CircularProgress isIndeterminate size="20px" />
+                      ) : (
+                        <Text
+                          variant="headline"
+                          color="brand.pink"
+                          ref={repliesRef}
+                          onClick={() => setClickedComment(comment)}
+                          data-question-index={index}
+                          _hover={{
+                            cursor: "pointer",
+                            color: "brand.magenta",
+                            backgroundColor: "grayscale.white.60",
+                          }}
+                        >
+                          {comment.children.length}{" "}
+                          {comment.children.length === 1 ? "REPLY" : "REPLIES"}
+                        </Text>
+                      )}
                     </VStack>
                   </HStack>
                   {/* more button */}
@@ -348,12 +381,16 @@ const CommentsDrawer = ({
       <Drawer
         isOpen={isRepliesOpen}
         placement="right"
-        onClose={onRepliesClose}
+        onClose={() => {
+          setClickedComment(undefined);
+          onRepliesClose();
+        }}
         finalFocusRef={repliesRef}
         autoFocus={false}
       >
         <DrawerOverlay />
         <RepliesDrawer
+          refreshComments={refetchComments}
           data={clickedComment!}
           onClose={onClose}
           onRepliesClose={() => {

@@ -12,7 +12,7 @@ import InputWithIcon from "components/InputWithIcon";
 import UserAvatar from "components/layout/menu/UserAvatar";
 import router from "next/dist/client/router";
 import nookies from "nookies";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ICommentsList } from "types/shared";
 import { submitComment } from "utils/api/POST";
 import { timeOfCommentChecker } from "utils/dateParser";
@@ -22,6 +22,7 @@ interface IReplies {
   data: ICommentsList;
   onClose: () => void;
   onRepliesClose: () => void;
+  refreshComments: () => void;
   onUserReplySubmitted: ({
     submit,
     success,
@@ -32,14 +33,21 @@ interface IReplies {
 }
 
 const RepliesDrawer = ({
-  data,
+  data : hello,
   onClose,
   onRepliesClose,
   onUserReplySubmitted,
+  refreshComments,
 }: IReplies) => {
   const token = nookies.get(undefined, "token");
 
   const inputRef = useRef() as React.MutableRefObject<HTMLTextAreaElement>;
+
+  const [data, setData] = useState(hello);
+
+  useEffect(() => {
+    setData(hello)
+  }, [hello])
 
   const submitUserReply = (body: string) => {
     if (token) {
@@ -111,6 +119,7 @@ const RepliesDrawer = ({
                   commentId={data.id}
                   likes={data.likes}
                   questionId={data.questionId}
+                  refetchComments={refreshComments}
                 />
               </VStack>
             </VStack>
@@ -154,6 +163,7 @@ const RepliesDrawer = ({
                           commentId={comment.id}
                           likes={comment.likes}
                           questionId={comment.questionId}
+                          refetchComments={refreshComments}
                         />
                       </VStack>
                     </VStack>

@@ -119,7 +119,6 @@ export interface IKnowMore {
 }
 
 export interface IComments {
-  data: ICommentsList[];
   onClose: () => void;
   refreshComments: () => void;
   questionData: IQuestion;

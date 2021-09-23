@@ -1,17 +1,14 @@
 import { Button, ButtonProps } from "@chakra-ui/button";
 import { Box } from "@chakra-ui/layout";
 import React from "react";
-import { buttonStyles } from "styles/overrides/button";
 
 const WebShare = ({
-  questionId,
   buttonVariant,
   buttonProps,
   title,
   body,
   url,
 }: {
-  questionId: number;
   buttonVariant: string;
   buttonProps?: ButtonProps;
   title: string;

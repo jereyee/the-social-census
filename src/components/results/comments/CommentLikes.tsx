@@ -1,7 +1,7 @@
 import { HStack } from "@chakra-ui/layout";
 import { Icon, Text } from "@chakra-ui/react";
 import nookies from "nookies";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AiOutlineLike } from "react-icons/ai";
 import useSWR, { useSWRConfig } from "swr";
 import { getEndpoint, APIEndpoints } from "utils/api/functions";
@@ -12,10 +12,12 @@ const Likes = ({
   likes,
   commentId,
   questionId,
+  refetchComments,
 }: {
   likes: number;
   commentId: number;
   questionId: number;
+  refetchComments: () => void;
 }) => {
   const token = nookies.get(undefined, "token");
   /* 
@@ -36,7 +38,7 @@ const Likes = ({
     fetcher
   );
 
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState<boolean | undefined>(undefined);
   const [likesNumber, setLikesNumber] = useState(likes);
 
   useEffect(() => {
@@ -45,6 +47,10 @@ const Likes = ({
       else if (!fetchMyLikes.includes(commentId) && liked) setLiked(false);
     }
   }, [fetchMyLikes]);
+
+  useEffect(() => {
+    setLikesNumber(likes);
+  }, [likes]);
 
   const { mutate } = useSWRConfig();
 
@@ -67,11 +73,13 @@ const Likes = ({
           })
             .then((data) => {
               if (!liked) {
+                refetchComments();
                 setLikesNumber(likesNumber + 1);
                 /* 
                 myLikes.push(commentId.toString());
                 localStorage.setItem("likes", JSON.stringify(myLikes)); */
               } else {
+                refetchComments();
                 setLikesNumber(likesNumber - 1);
                 /* 
                 const newLikes = myLikes.filter(
