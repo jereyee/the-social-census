@@ -41,25 +41,44 @@ const Sections = ({
 
   const sectionRef = useRef() as React.MutableRefObject<HTMLDivElement>;
 
+  const topComment =
+    commentsList &&
+    commentsList.length > 0 &&
+    commentsList.sort(function (a, b) {
+      return b.likes - a.likes;
+    })[0].body;
+
+  const knowMoreData = questionData.knowMore as unknown as IKnowMore;
+  const knowMoreSection = Object.keys(knowMoreData).length !== 0 && {
+    title: "Did you know?",
+    preview: knowMoreData.body,
+    data: {
+      didYouKnow: knowMoreData.body,
+      sources: knowMoreData.sources,
+    },
+  };
+
   const sectionData = {
     knowMore: {
-      title: "Did you know?",
-      preview: "aaaa",
+      title: "",
+      preview: "",
       data: {
-        didYouKnow: "abcdefg?",
-        sources: "wikipedia",
+        didYouKnow: "",
+        sources: [{ url: "", title: "" }],
       },
     },
     comments: {
       title: "Comments",
       preview: commentsList
-        ? commentsList.length > 0
-          ? commentsList[0].body
+        ? topComment
+          ? topComment
           : "No one has commented. Be the first."
         : "☹ Couldn't load comments",
       data: commentsList,
     },
   };
+
+  if (knowMoreSection) sectionData.knowMore = knowMoreSection;
 
   const [selected, setSelected] = useState<
     typeof sectionData.knowMore | typeof sectionData.comments | undefined
@@ -147,3 +166,11 @@ const Sections = ({
 };
 
 export default Sections;
+
+interface IKnowMore {
+  body: string;
+  sources: {
+    url: string;
+    title: string;
+  }[];
+}

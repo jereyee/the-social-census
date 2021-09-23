@@ -12,7 +12,10 @@ import React from "react";
 export interface IKnowMore {
   data: {
     didYouKnow: string;
-    sources: string;
+    sources: {
+      url: string;
+      title: string;
+    }[];
   };
   onClose: () => void;
 }
