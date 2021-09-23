@@ -113,6 +113,7 @@ const Sections = ({
             cursor: "pointer",
             backgroundColor: "grayscale.white.60",
           }}
+          display={section[1].title === "" ? "none" : "flex"}
         >
           <Divider borderWidth="1px" />
           <HStack justifyContent="space-between" w="98%">
