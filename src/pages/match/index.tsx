@@ -1,8 +1,6 @@
 import { CopyIcon } from "@chakra-ui/icons";
 import {
   Box,
-  Circle,
-  Container,
   Heading,
   HStack,
   VStack,
@@ -11,28 +9,27 @@ import {
 } from "@chakra-ui/layout";
 import {
   Button,
+  Skeleton,
   Text,
   useClipboard,
   useToast,
-  Skeleton,
 } from "@chakra-ui/react";
 import InputWithIcon from "components/InputWithIcon";
 import Header from "components/layout/menu/Header";
 import UserAvatar from "components/layout/menu/UserAvatar";
 import Card from "components/micro/Card";
 import { useRouter } from "next/dist/client/router";
-import Link from "next/link";
 import nookies from "nookies";
 import React, { useRef, useState } from "react";
+import Lottie from "react-lottie";
 import useSWR from "swr";
+import { Match, MatchHistory } from "types/shared";
 import { APIEndpoints, getEndpoint } from "utils/api/functions";
 import { fetcher } from "utils/api/GET";
 import { matchWithFriendCode } from "utils/api/POST";
-import WebShare from "utils/web-share/WebShare";
-import Lottie from "react-lottie";
-import * as animationData from "../../../public/lottie/loading_spinner_with_tick.json";
-import { UserObject } from "./report";
 import { useAuth } from "utils/auth/AuthProvider";
+import WebShare from "utils/web-share/WebShare";
+import * as animationData from "../../../public/lottie/loading_spinner_with_tick.json";
 
 export const MatchingScreen = ({
   successLottieCallback,
@@ -305,17 +302,3 @@ const Match = () => {
 };
 
 export default Match;
-
-export interface MatchHistory {
-  matches: Match[];
-}
-
-export interface Match {
-  id: number;
-  uid: string;
-  otherUid: string;
-  createdAt: string;
-  matchedAt: string;
-  user: UserObject;
-  otherUser: UserObject;
-}

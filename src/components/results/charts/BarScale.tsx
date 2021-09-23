@@ -3,40 +3,7 @@ import ScaleEnds from "components/questions/questionTypes/scale/ScaleEnds";
 import React from "react";
 import { Bar } from "react-chartjs-2";
 import { themeColors } from "styles/colors";
-import { IOptionStats } from "./poll/PollOption";
-
-const stats = [
-  {
-    id: 0,
-    questionId: 3,
-    body: "1",
-    responses: 1,
-  },
-  {
-    id: 1,
-    questionId: 3,
-    body: "2",
-    responses: 3,
-  },
-  {
-    id: 2,
-    questionId: 3,
-    body: "3",
-    responses: 1,
-  },
-  {
-    id: 3,
-    questionId: 3,
-    body: "4",
-    responses: 2,
-  },
-  {
-    id: 4,
-    questionId: 3,
-    body: "5",
-    responses: 3,
-  },
-];
+import { IOptionStats } from "types/shared";
 
 const colors = Object.values(themeColors.brand);
 

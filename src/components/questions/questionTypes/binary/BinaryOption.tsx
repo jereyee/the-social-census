@@ -2,7 +2,7 @@
 
 import { Button } from "@chakra-ui/button";
 import { Divider, Text } from "@chakra-ui/layout";
-import { IOptionData } from "components/questions/Questions";
+import { IOptionData } from "types/shared";
 
 const BinaryOption = ({
   selectOption,

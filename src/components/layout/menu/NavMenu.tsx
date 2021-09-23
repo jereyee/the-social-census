@@ -18,7 +18,7 @@ import { RiHome3Line } from "react-icons/ri";
 import { themeColors } from "styles/colors";
 import { useAuth } from "utils/auth/AuthProvider";
 import { signOutUser } from "utils/auth/firebase-config";
-import { MatchResponses, QuestionsAnswered, SuggestQuestion } from "./Icons";
+import { MatchResponses, QuestionsAnswered } from "./Icons";
 import UserAvatar from "./UserAvatar";
 
 const NavMenu = () => {
@@ -52,8 +52,7 @@ const NavMenu = () => {
       icon: () => <Settings />,
       text: "Settings",
       href: "",
-    },  */
-    ,
+    },  */,
   ];
 
   return (

@@ -1,9 +1,9 @@
-import { Box, HStack, Stack, VStack } from "@chakra-ui/layout";
+import { Box, HStack, VStack } from "@chakra-ui/layout";
 import { Text, Wrap, WrapItem } from "@chakra-ui/react";
 import React from "react";
 import { Doughnut } from "react-chartjs-2";
 import { themeColors } from "styles/colors";
-import { IOptionStats } from "./poll/PollOption";
+import { IOptionStats } from "types/shared";
 
 const stats = [
   {

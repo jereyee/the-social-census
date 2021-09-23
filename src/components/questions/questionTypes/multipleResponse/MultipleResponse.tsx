@@ -1,11 +1,9 @@
-import { Button } from "@chakra-ui/button";
-import { Divider, HStack, SimpleGrid } from "@chakra-ui/layout";
-import { IOptionData } from "components/questions/Questions";
+import { SimpleGrid } from "@chakra-ui/layout";
 import React from "react";
-import { themeColors } from "styles/colors";
+import { IOptionData } from "types/shared";
 import MultipleOption from "./MultipleOption";
 
-export interface IMultipleResponse {
+interface IMultipleResponse {
   options: IOptionData[];
   selectResponse: (selectedOptions: number) => void;
   removeResponse: (selectedOptions: number) => void;

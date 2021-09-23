@@ -1,15 +1,5 @@
 import { QuestionOutlineIcon } from "@chakra-ui/icons";
-import {
-  Box,
-  Center,
-  Divider,
-  Flex,
-  Heading,
-  HStack,
-  Spacer,
-  Text,
-  VStack,
-} from "@chakra-ui/layout";
+import { Box, Center, Flex, Heading, HStack, Spacer } from "@chakra-ui/layout";
 import {
   Popover,
   PopoverArrow,
@@ -17,113 +7,21 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
-  Skeleton,
   Spinner,
-  Switch,
-  useToast,
 } from "@chakra-ui/react";
 import Header from "components/layout/menu/Header";
-import { MotionVStack } from "components/motion";
+import QuestionInList from "components/questions/QuestionInList";
 import { useRouter } from "next/dist/client/router";
 import nookies from "nookies";
-import React, { useEffect, useState } from "react";
-import { themeColors } from "styles/colors";
+import React, { useEffect } from "react";
 import useSWR from "swr";
+import { IResponse, IExclusion } from "types/shared";
 import { APIEndpoints, getEndpoint } from "utils/api/functions";
-import { fetcher, IExclusion, IResponse } from "utils/api/GET";
-import { excludeOrUnexcludeQuestions } from "utils/api/POST";
-import { IQuestion } from "./home";
+import { fetcher } from "utils/api/GET";
 
-const Question = ({ question }: { question: IQuestionInList }) => {
-  const token = nookies.get(undefined, "token");
-
-  const { data: questionData, error } = useSWR<IQuestion, string>(
-    [getEndpoint(APIEndpoints.GET_QUESTION, question.questionId), token.token],
-    fetcher
-  );
-  // const { fetchedQuestion, fetchSuccess } = useQuestion(response.questionId);
-
-  const router = useRouter();
-  const redirectToResult = () => {
-    questionData &&
-      void router.push(
-        {
-          pathname: "/result",
-          query: { qid: questionData.id },
-        },
-        "/result"
-      );
-  };
-
-  const toast = useToast();
-
-  return (
-    <Skeleton isLoaded={!!(!error && questionData)} speed={1.2} w="100%">
-      <VStack width="100%" spacing={4} mt={4}>
-        <Flex h="48px" alignItems="center" w="100%">
-          <MotionVStack
-            alignItems="flex-start"
-            onClick={redirectToResult}
-            _hover={{
-              bg: themeColors.grayscale.gray[300],
-              cursor: "pointer",
-            }}
-            whileTap={{ scale: 1.05 }}
-            whileHover={{ scale: 1.05 }}
-          >
-            <Text as="p" variant="body" maxWidth="30ch" noOfLines={2}>
-              {questionData?.body}
-            </Text>
-          </MotionVStack>
-          <Spacer />
-          <Center width="90px">
-            <Switch
-              colorScheme="purple"
-              className="exclude"
-              size="lg"
-              defaultChecked={question.excluded}
-              onChange={(ev) => {
-                const exclude = ev.target.checked;
-                excludeOrUnexcludeQuestions({
-                  exclude: exclude,
-                  questionId: question.questionId,
-                  token: token.token,
-                })
-                  .then((data) => {
-                    console.log(data);
-                    toast({
-                      title: `Exclusion ${exclude ? "added" : "removed"}!`,
-                      status: "success",
-                      duration: 3000,
-                      isClosable: true,
-                    });
-                    ev.target.checked = !ev.target.checked;
-                  })
-                  .catch((error) => {
-                    console.log(error);
-                    toast({
-                      title: `Failed to ${
-                        exclude ? "add" : "remove"
-                      } exclusion.`,
-                      status: "error",
-                      duration: 3000,
-                      isClosable: true,
-                    });
-                  });
-              }}
-            />
-          </Center>
-        </Flex>
-        <Divider />
-      </VStack>
-    </Skeleton>
-  );
-};
-
-interface IQuestionInList extends IResponse {
+export interface IQuestionInList extends IResponse {
   excluded?: boolean;
 }
-
 const Responses = () => {
   //const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   const token = nookies.get(undefined, "token");
@@ -149,7 +47,13 @@ const Responses = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (router.query.from === "match") router.reload();
+    /* if (router.query.from === "match") router.reload(); */
+    if (window.localStorage) {
+      if (!localStorage.getItem("firstLoad")) {
+        localStorage["firstLoad"] = true;
+        window.location.reload();
+      } else localStorage.removeItem("firstLoad");
+    }
   }, []);
 
   return exclusionList && !exclusionError && !router.query.from ? (
@@ -185,7 +89,7 @@ const Responses = () => {
       </Flex>
       {responsesWithoutDuplicates &&
         responsesWithoutDuplicates.map((response, index) => (
-          <Question key={index} question={response} />
+          <QuestionInList key={index} question={response} />
         ))}
     </Box>
   ) : (

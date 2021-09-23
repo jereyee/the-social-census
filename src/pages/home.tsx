@@ -1,11 +1,12 @@
 import { Box, Center, Heading, Spinner } from "@chakra-ui/react";
 import { getAnalytics } from "@firebase/analytics";
 import Header from "components/layout/menu/Header";
-import Questions, { QuestionType } from "components/questions/Questions";
+import Questions from "components/questions/Questions";
 import { useRouter } from "next/dist/client/router";
 import nookies from "nookies";
 import React, { useContext, useEffect, useState } from "react";
 import useSWR from "swr";
+import { IQuestion } from "types/shared";
 import { APIEndpoints, getEndpoint } from "utils/api/functions";
 import { fetcher } from "utils/api/GET";
 import { submitQuestion } from "utils/api/POST";
@@ -144,17 +145,3 @@ const Home = () => {
 };
 
 export default Home;
-
-export interface IQuestion {
-  id: number;
-  body: string;
-  category: string;
-  type: QuestionType;
-  knowMore: Record<string, unknown>;
-  createdAt: string;
-  options: {
-    id: number;
-    questionId: number;
-    body: string;
-  }[];
-}

@@ -1,10 +1,9 @@
 import { HStack } from "@chakra-ui/layout";
 import { Icon, Text } from "@chakra-ui/react";
 import nookies from "nookies";
-import { IQuestion } from "pages/home";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineLike } from "react-icons/ai";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { getEndpoint, APIEndpoints } from "utils/api/functions";
 import { fetcher } from "utils/api/GET";
 import { likeOrUnlikeComment } from "utils/api/POST";
@@ -25,7 +24,11 @@ const Likes = ({
     : []; */
 
   /* sync local storage with the API */
-  const { data: fetchMyLikes, error } = useSWR<number[], string>(
+  const {
+    data: fetchMyLikes,
+    error,
+    mutate: refreshMyLikes,
+  } = useSWR<number[], string>(
     [
       getEndpoint(APIEndpoints.GET_USER_LIKED_COMMENTS, questionId),
       token.token,
@@ -36,8 +39,14 @@ const Likes = ({
   const [liked, setLiked] = useState(false);
   const [likesNumber, setLikesNumber] = useState(likes);
 
-  if (!error && fetchMyLikes)
-    if (fetchMyLikes.includes(commentId) && !liked) setLiked(true);
+  useEffect(() => {
+    if (!error && fetchMyLikes) {
+      if (fetchMyLikes.includes(commentId) && !liked) setLiked(true);
+      else if (!fetchMyLikes.includes(commentId) && liked) setLiked(false);
+    }
+  }, [fetchMyLikes]);
+
+  const { mutate } = useSWRConfig();
 
   //if (liked && !myLikes.includes(commentId.toString())) setLiked(false);
 
@@ -70,6 +79,10 @@ const Likes = ({
                 );
                 localStorage.setItem("likes", JSON.stringify(newLikes)); */
               }
+              void mutate([
+                getEndpoint(APIEndpoints.GET_USER_LIKED_COMMENTS, questionId),
+                token.token,
+              ]);
               console.log(data);
               setLiked(!liked);
             })

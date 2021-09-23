@@ -1,5 +1,5 @@
 import { ChevronLeftIcon } from "@chakra-ui/icons";
-import { Box, Divider, HStack, VStack } from "@chakra-ui/layout";
+import { Divider, HStack, VStack } from "@chakra-ui/layout";
 import {
   DrawerBody,
   DrawerCloseButton,
@@ -7,15 +7,14 @@ import {
   DrawerFooter,
   DrawerHeader,
 } from "@chakra-ui/modal";
-import { Button, Text } from "@chakra-ui/react";
+import { Text } from "@chakra-ui/react";
 import InputWithIcon from "components/InputWithIcon";
 import UserAvatar from "components/layout/menu/UserAvatar";
 import router from "next/dist/client/router";
 import nookies from "nookies";
-import { ICommentsList } from "pages/result";
 import React, { useRef } from "react";
+import { ICommentsList } from "types/shared";
 import { submitComment } from "utils/api/POST";
-import { useAuth } from "utils/auth/AuthProvider";
 import { timeOfCommentChecker } from "utils/dateParser";
 import Likes from "../CommentLikes";
 
@@ -41,8 +40,6 @@ const RepliesDrawer = ({
   const token = nookies.get(undefined, "token");
 
   const inputRef = useRef() as React.MutableRefObject<HTMLTextAreaElement>;
-
-  const { user } = useAuth();
 
   const submitUserReply = (body: string) => {
     if (token) {

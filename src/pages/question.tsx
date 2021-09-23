@@ -8,8 +8,7 @@ import nookies from "nookies";
 import useSWR from "swr";
 import { getEndpoint, APIEndpoints } from "utils/api/functions";
 import { fetcher } from "utils/api/GET";
-import { IQuestion } from "./home";
-import { IQuestionData } from "components/questions/Questions";
+import { IQuestionData } from "types/shared";
 
 const Question = () => {
   const { user } = useAuth();

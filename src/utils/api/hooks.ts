@@ -1,9 +1,7 @@
 import nookies from "nookies";
-import { IQuestion } from "pages/home";
 import { useEffect, useState } from "react";
-import {
-    fetchOneQuestion
-} from "./GET";
+import { IQuestion } from "types/shared";
+import { fetchOneQuestion } from "./GET";
 
 export const useQuestion = (questionId: number) => {
   const token = nookies.get(undefined, "token");

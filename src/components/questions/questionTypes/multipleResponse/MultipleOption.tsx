@@ -2,8 +2,8 @@
 
 import { Text } from "@chakra-ui/layout";
 import Card from "components/micro/Card";
-import { IOptionData } from "components/questions/Questions";
 import React from "react";
+import { IOptionData } from "types/shared";
 
 const MultipleOption = ({
   selectOption,
@@ -27,7 +27,9 @@ const MultipleOption = ({
         selectOption(optionData.id);
       }}
     >
-      <Text maxW="90%" margin="0 auto">{optionData.body}</Text>
+      <Text maxW="90%" margin="0 auto">
+        {optionData.body}
+      </Text>
     </Card>
   );
 };

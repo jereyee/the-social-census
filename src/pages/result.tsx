@@ -9,11 +9,9 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import Header from "components/layout/menu/Header";
-import { QuestionType } from "components/questions/Questions";
 import BarScale from "components/results/charts/BarScale";
 import DoughnutChart from "components/results/charts/Doughnut";
 import Poll from "components/results/charts/poll/Poll";
-import { IOptionStats } from "components/results/charts/poll/PollOption";
 import Sections from "components/results/Sections";
 import { useRouter } from "next/dist/client/router";
 import Link from "next/link";
@@ -24,8 +22,13 @@ import { APIEndpoints, getEndpoint } from "utils/api/functions";
 import { fetcher } from "utils/api/GET";
 import QuestionsContext from "utils/questionsContext";
 import WebShare from "utils/web-share/WebShare";
-import { IQuestion } from "./home";
 import { useNetworkState } from "react-use";
+import {
+  ICommentsList,
+  IOptionStats,
+  IQuestion,
+  QuestionType,
+} from "types/shared";
 
 const Result = () => {
   const { questionState } = useContext(QuestionsContext);
@@ -83,6 +86,7 @@ const Result = () => {
 
   const toast = useToast();
 
+  /* check if the network is offline */
   const networkState = useNetworkState();
 
   if (!networkState.online && connectionOnline) {
@@ -108,20 +112,7 @@ const Result = () => {
       isClosable: true,
     });
   }
-
-  /* if (typeof window !== "undefined") {
-    if (!window.navigator.onLine) {
-      setConnectionOnline(false);
-    } else if (!connectionOnline && window.navigator.onLine) {
-      toast.closeAll();
-      toast({
-        title: `Connection seems to be back 😄`,
-        status: "success",
-        position: "top-right",
-        isClosable: true,
-      });
-    }
-  } */
+  /* end network check */
 
   return (
     <Box>
@@ -158,7 +149,6 @@ const Result = () => {
           <br />
           <Sections
             commentsList={commentsList ?? undefined}
-            knowMore={questionData.knowMore}
             refreshComments={refreshComments}
             questionData={questionData}
           />
@@ -171,42 +161,5 @@ const Result = () => {
     </Box>
   );
 };
-
-export interface IReply {
-  id: number;
-  questionId: number;
-  uid: string;
-  parentId: number;
-  body: string;
-  createdAt: string;
-  likes: number;
-  user: {
-    uid: string;
-    displayName: string;
-    photoURL: string;
-  };
-  responses: number[];
-}
-
-export interface ICommentsList {
-  id: number;
-  questionId: number;
-  parentId: null;
-  body: string;
-  createdAt: string;
-  likes: number;
-  children: IReply[];
-  user: {
-    uid: string;
-    displayName: string;
-    photoURL: string;
-  };
-  userResponses: number[];
-}
-
-export interface IUserComment {
-  body: string;
-  parentId: null | number;
-}
 
 export default Result;

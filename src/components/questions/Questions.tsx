@@ -3,32 +3,10 @@ import { Center, Heading, VStack } from "@chakra-ui/layout";
 import Card from "components/micro/Card";
 import React, { useEffect, useRef, useState } from "react";
 import { themeColors } from "styles/colors";
+import { IQuestionData } from "types/shared";
 import Binary from "./questionTypes/binary/Binary";
 import MultipleResponse from "./questionTypes/multipleResponse/MultipleResponse";
 import Scale from "./questionTypes/scale/Scale";
-
-export enum QuestionType {
-  BINARY = "BINARY",
-  MULTIPLE_CHOICE = "MULTIPLE_CHOICE",
-  MULTIPLE_RESPONSE = "MULTIPLE_RESPONSE",
-  SCALE = "SCALE",
-}
-
-export interface IOptionData {
-  id: number;
-  questionId: number;
-  body: string;
-}
-
-export interface IQuestionData {
-  id: number;
-  body: string;
-  category: string;
-  type: QuestionType;
-  knowMore: Record<string, unknown>;
-  createdAt: string;
-  options: IOptionData[];
-}
 
 const Questions = ({
   questionData,

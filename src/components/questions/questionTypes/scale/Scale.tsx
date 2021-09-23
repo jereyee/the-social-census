@@ -1,16 +1,15 @@
-import { Center, HStack, VStack } from "@chakra-ui/layout";
+import { Center, VStack } from "@chakra-ui/layout";
 import {
   Slider,
-  SliderTrack,
   SliderFilledTrack,
   SliderThumb,
-  Text,
+  SliderTrack,
 } from "@chakra-ui/react";
 import { MotionBox } from "components/motion";
 import React, { useState } from "react";
 import ScaleEnds from "./ScaleEnds";
 
-export interface ISCale {
+interface ISCale {
   selectResponse: (selectedOptions: number) => void;
   selectedOptions: number[];
 }

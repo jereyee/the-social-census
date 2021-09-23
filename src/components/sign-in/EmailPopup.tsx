@@ -40,7 +40,7 @@ export const EmailPopup = ({
       .catch((error: SignInError) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log({ error });
+        console.log(errorCode, errorMessage);
       });
   };
 

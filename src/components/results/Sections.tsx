@@ -4,26 +4,22 @@ import {
   Drawer,
   DrawerOverlay,
   Heading,
+  HStack,
+  Text,
   useDisclosure,
   VStack,
-  Text,
-  HStack,
-  Box,
 } from "@chakra-ui/react";
-import { IQuestion } from "pages/home";
-import { ICommentsList } from "pages/result";
 import React, { useRef, useState } from "react";
+import { ICommentsList, IKnowMore, IQuestion } from "types/shared";
 import CommentsDrawer from "./comments/CommentsDrawer";
 import KnowMoreDrawer from "./knowMore/KnowMoreDrawer";
 
 const Sections = ({
   commentsList,
-  knowMore,
   refreshComments,
   questionData,
 }: {
   commentsList: ICommentsList[] | undefined;
-  knowMore: Record<string, unknown>;
   refreshComments: () => void;
   questionData: IQuestion;
 }) => {
@@ -169,11 +165,3 @@ const Sections = ({
 };
 
 export default Sections;
-
-interface IKnowMore {
-  body: string;
-  sources: {
-    url: string;
-    title: string;
-  }[];
-}

@@ -13,68 +13,11 @@ import UserAvatar from "components/layout/menu/UserAvatar";
 import Card from "components/micro/Card";
 import { useRouter } from "next/dist/client/router";
 import nookies from "nookies";
-import { IQuestion } from "../home";
 import React from "react";
 import useSWR from "swr";
 import { APIEndpoints, getEndpoint } from "utils/api/functions";
 import { fetcher } from "utils/api/GET";
-
-/* const reportData: IReport = {
-  matchReport: {
-    matchPercentage: "100.00",
-    sameResponses: [
-      // array of arrays
-      [
-        {
-          uid: "KJXmu4CSW7ThOkwU5MRVPCC3xww2",
-          optionId: 0,
-          questionId: 3,
-          createdAt: "2021-09-18T14:22:30.337Z",
-        },
-        {
-          uid: "KJXmu4CSW7ThOkwU5MRVPCC3xww2",
-          optionId: 2,
-          questionId: 4,
-          createdAt: "2021-09-18T14:22:30.337Z",
-        },
-      ],
-    ],
-    differentResponses1: [
-      // array of arrays
-      [
-        {
-          uid: "KJXmu4CSW7ThOkwU5MRVPCC3xww2",
-          optionId: 1,
-          questionId: 3,
-          createdAt: "2021-09-18T14:22:30.337Z",
-        },
-        {
-          uid: "KJXmu4CSW7ThOkwU5MRVPCC3xww2",
-          optionId: 4,
-          questionId: 3,
-          createdAt: "2021-09-18T14:22:30.337Z",
-        },
-      ],
-    ],
-    differentResponses2: [
-      // array of arrays
-      [
-        {
-          uid: "KJXmu4CSW7ThOkwU5MRVPCC3xww2",
-          optionId: 0,
-          questionId: 3,
-          createdAt: "2021-09-18T14:22:30.337Z",
-        },
-        {
-          uid: "KJXmu4CSW7ThOkwU5MRVPCC3xww2",
-          optionId: 2,
-          questionId: 3,
-          createdAt: "2021-09-18T14:22:30.337Z",
-        },
-      ],
-    ],
-  },
-}; */
+import { IReportResponse, IReport, IQuestion } from "types/shared";
 
 const MatchCard = ({
   responseData,
@@ -303,35 +246,3 @@ const Report = () => {
 };
 
 export default Report;
-
-export interface MatchCardData {
-  user1: Array<IReportResponse[]>;
-  user2: Array<IReportResponse[]>;
-}
-
-export interface IReport {
-  matchReport: MatchReport;
-}
-
-export interface MatchReport {
-  matchPercentage: string;
-  sameResponses: Array<IReportResponse[]>;
-  differentResponses1: Array<IReportResponse[]>;
-  differentResponses2: Array<IReportResponse[]>;
-  user: UserObject;
-  otherUser: UserObject;
-}
-
-export interface UserObject {
-  uid: string;
-  email: string;
-  displayName: string;
-  photoURL: string;
-}
-
-export interface IReportResponse {
-  uid: string;
-  optionId: number;
-  questionId: number;
-  createdAt: string;
-}

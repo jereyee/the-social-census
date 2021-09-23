@@ -1,17 +1,10 @@
 /* Single option component */
 
 import { Button, ButtonProps } from "@chakra-ui/button";
-import { Divider, VStack } from "@chakra-ui/layout";
+import { VStack } from "@chakra-ui/layout";
 import { Text } from "@chakra-ui/react";
 import React from "react";
-
-export interface IOptionStats {
-  id: number;
-  questionId?: number;
-  body: string;
-  responses: number;
-  percent?: number;
-}
+import { IOptionStats } from "types/shared";
 
 const PollOption = ({
   optionData,

@@ -24,8 +24,6 @@ const Login = () => {
 
   const router = useRouter();
 
-  // Initialize Firebase
-  //const app = initializeApp(firebaseConfig);
   const auth = getAuth();
 
   useEffect(() => {

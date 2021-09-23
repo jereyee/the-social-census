@@ -1,6 +1,6 @@
 import { useDisclosure } from "@chakra-ui/hooks";
 import { Input } from "@chakra-ui/input";
-import { Box, Divider, HStack, VStack } from "@chakra-ui/layout";
+import { Divider, HStack, VStack } from "@chakra-ui/layout";
 import {
   Drawer,
   DrawerBody,
@@ -25,53 +25,22 @@ import InputWithIcon from "components/InputWithIcon";
 import UserAvatar from "components/layout/menu/UserAvatar";
 import { useRouter } from "next/dist/client/router";
 import nookies from "nookies";
-import { IQuestion } from "pages/home";
-import { ICommentsList } from "pages/result";
 import React, { useRef, useState } from "react";
 import { AiOutlineMore } from "react-icons/ai";
+import { IComments, ICommentsList, IQuestion } from "types/shared";
 import { deleteComment } from "utils/api/DELETE";
 import { fetchQuestionComments } from "utils/api/GET";
 import { reportComment, submitComment } from "utils/api/POST";
 import { useAuth } from "utils/auth/AuthProvider";
 import { timeOfCommentChecker } from "utils/dateParser";
 import Likes from "./CommentLikes";
+import ReportInput from "./helpers/ReportInput";
 import RepliesDrawer from "./replies/RepliesDrawer";
 
-export interface IComments {
-  data: ICommentsList[];
-  onClose: () => void;
-  refreshComments: () => void;
-  questionData: IQuestion;
+interface ICommentSubmitted {
+  success: boolean;
+  submit: boolean;
 }
-
-const ReportInput = ({
-  inputRef,
-  placeholder,
-  username,
-}: {
-  inputRef: React.MutableRefObject<HTMLInputElement>;
-  placeholder: string;
-  username: string;
-}) => {
-  const [value, setValue] = useState("");
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setValue(event.target.value);
-
-  return (
-    <VStack spacing={4}>
-      <Text textAlign="center">
-        Are you sure you want to report {username}? <br />
-        Help us know why.
-      </Text>
-      <Input
-        placeholder={placeholder}
-        onChange={handleChange}
-        value={value}
-        ref={inputRef}
-      />
-    </VStack>
-  );
-};
 
 const CommentsDrawer = ({
   data,
@@ -79,13 +48,18 @@ const CommentsDrawer = ({
   refreshComments,
   questionData,
 }: IComments) => {
+  /* user related hooks */
   const { user } = useAuth();
+  const token = nookies.get(undefined, "token");
 
+  /* disclosure hook for replies drawer */
   const {
     isOpen: isRepliesOpen,
     onOpen: onRepliesOpen,
     onClose: onRepliesClose,
   } = useDisclosure();
+
+  /* disclosure hook for error modal */
   const {
     isOpen: isErrorOpen,
     onOpen: onErrorOpen,
@@ -102,7 +76,7 @@ const CommentsDrawer = ({
     ICommentsList | undefined
   >(undefined);
 
-  const [commentSubmitted, setCommentSubmitted] = useState({
+  const [commentSubmitted, setCommentSubmitted] = useState<ICommentSubmitted>({
     submit: false,
     success: false,
   });
@@ -111,10 +85,9 @@ const CommentsDrawer = ({
   const toast = useToast();
 
   if (clickedComment && !isRepliesOpen) {
+    /* open the replies drawer if you click on a reply */
     onRepliesOpen();
   }
-
-  const token = nookies.get(undefined, "token");
 
   if (commentSubmitted.submit) {
     if (commentSubmitted.success) {
@@ -159,13 +132,7 @@ const CommentsDrawer = ({
     }
   };
 
-  const userReplySubmitted = ({
-    submit,
-    success,
-  }: {
-    submit: boolean;
-    success: boolean;
-  }) => {
+  const userReplySubmitted = ({ submit, success }: ICommentSubmitted) => {
     refreshComments();
     setCommentSubmitted({ submit: submit, success: success });
   };

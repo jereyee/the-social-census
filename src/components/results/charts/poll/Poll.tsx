@@ -1,19 +1,15 @@
 import { HStack, VStack } from "@chakra-ui/layout";
 import { Text } from "@chakra-ui/react";
-import { IOptionData } from "components/questions/Questions";
 import React from "react";
-import PollOption, { IOptionStats } from "./PollOption";
+import { IOptionStats } from "types/shared";
+import PollOption from "./PollOption";
 
-export interface IPollStatistics extends IOptionData {
-  responses: number;
-}
-
-export interface IBinary {
+interface IBinary {
   statistics: IOptionStats[];
   selectedOptions?: number[];
 }
 
-const Poll = ({ statistics, selectedOptions = [1] }: IBinary) => {
+const Poll = ({ statistics }: IBinary) => {
   const reducer = (previous: number, current: IOptionStats) =>
     previous + current.responses;
   const totalResponses = statistics.reduce(reducer, 0);

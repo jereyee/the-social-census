@@ -1,5 +1,5 @@
-import { IQuestionData, QuestionType } from "components/questions/Questions";
 import React, { Dispatch, SetStateAction } from "react";
+import { IQuestionData, QuestionType } from "types/shared";
 
 type UpdateType = Dispatch<SetStateAction<IQuestionState>>;
 
@@ -8,7 +8,6 @@ interface IQuestionState extends IQuestionData {
   shared: boolean;
   response: number[];
 }
-
 export const defaultState: IQuestionState = {
   lastIndex: 0,
   shared: false,

@@ -1,9 +1,11 @@
-import axios, { AxiosError } from "axios";
-import { IOptionStats } from "components/results/charts/poll/PollOption";
-import { getEndpoint, APIEndpoints, getHeaders } from "../functions";
-import nookies from "nookies";
-import { IQuestion } from "pages/home";
-import { ICommentsList } from "pages/result";
+import axios from "axios";
+import {
+  ICommentsList,
+  IMatchCode,
+  IOptionStats,
+  IQuestion,
+} from "types/shared";
+import { APIEndpoints, getEndpoint, getHeaders } from "../functions";
 
 export const fetchQuestionComments = async (token: string, id: number) => {
   const endpoint = getEndpoint(APIEndpoints.GET_QUESTION_COMMENTS, id);
@@ -47,10 +49,6 @@ export const fetchOneQuestion = async (token: string, questionId: number) => {
   return data.value;
 };
 
-export interface IMatchCode {
-  matchCode: string;
-}
-
 export const fetchMatchCode = async (token: string) => {
   const res = await axios.get(`${getEndpoint(APIEndpoints.GET_MATCH_CODE)}`, {
     headers: getHeaders(token),
@@ -58,21 +56,6 @@ export const fetchMatchCode = async (token: string) => {
   const data = res.data as { value: IMatchCode };
   return data.value;
 };
-
-export interface IResponse {
-  optionId: number;
-  questionId: number;
-  createdAt: string;
-}
-
-export interface IExclusion {
-  uid: string;
-  questionId: number;
-}
-
-interface ResponseError extends Error {
-  status?: number;
-}
 
 export const fetcher = <T>(url: string, token: string) =>
   axios.get(url, { headers: getHeaders(token) }).then((res) => {

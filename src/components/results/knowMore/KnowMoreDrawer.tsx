@@ -10,7 +10,7 @@ import { Button, Text } from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
 
-export interface IKnowMore {
+interface IKnowMoreDrawer {
   data: {
     body: string;
     sources: {
@@ -21,7 +21,7 @@ export interface IKnowMore {
   onClose: () => void;
 }
 
-const KnowMoreDrawer = ({ data, onClose }: IKnowMore) => {
+const KnowMoreDrawer = ({ data, onClose }: IKnowMoreDrawer) => {
   return (
     <DrawerContent height="80vh" borderTopRadius="25px" bg="grayscale.gray.300">
       <DrawerCloseButton />
@@ -34,9 +34,7 @@ const KnowMoreDrawer = ({ data, onClose }: IKnowMore) => {
         </Heading>
         {data.sources.map((source, index) => (
           <Text key={index} variant="body">
-            <Link href={source.url}>
-              {source.title}
-            </Link>
+            <Link href={source.url}>{source.title}</Link>
           </Text>
         ))}
       </DrawerBody>
