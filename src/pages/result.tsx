@@ -5,6 +5,7 @@ import {
   Heading,
   HStack,
   Spinner,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import Header from "components/layout/menu/Header";
@@ -14,12 +15,12 @@ import DoughnutChart from "components/results/charts/Doughnut";
 import Poll from "components/results/charts/poll/Poll";
 import { IOptionStats } from "components/results/charts/poll/PollOption";
 import Sections from "components/results/Sections";
-import { Router, useRouter } from "next/dist/client/router";
+import { useRouter } from "next/dist/client/router";
 import Link from "next/link";
 import nookies from "nookies";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import useSWR from "swr";
-import { APIEndpoints, baseURL, getEndpoint } from "utils/api/functions";
+import { APIEndpoints, getEndpoint } from "utils/api/functions";
 import { fetcher } from "utils/api/GET";
 import QuestionsContext from "utils/questionsContext";
 import WebShare from "utils/web-share/WebShare";
@@ -27,6 +28,7 @@ import { IQuestion } from "./home";
 
 const Result = () => {
   const { questionState } = useContext(QuestionsContext);
+  const [connectionOnline, setConnectionOnline] = useState(true);
 
   const router = useRouter();
 
@@ -77,6 +79,33 @@ const Result = () => {
     typeof window !== "undefined" && window.location.origin
       ? window.location.origin
       : "";
+
+  const toast = useToast();
+
+  if (!connectionOnline) {
+    toast.closeAll();
+    toast({
+      title: `Currently offline. The results here might not be the latest 😕`,
+      status: "error",
+      position: "top-right",
+      duration: 15000,
+      isClosable: true,
+    });
+  }
+
+  if (typeof window !== "undefined") {
+    if (!window.navigator.onLine) {
+      setConnectionOnline(false);
+    } else if (!connectionOnline && window.navigator.onLine) {
+      toast.closeAll();
+      toast({
+        title: `Connection seems to be back 😄`,
+        status: "success",
+        position: "top-right",
+        isClosable: true,
+      });
+    }
+  }
 
   return (
     <Box>

@@ -1,8 +1,12 @@
 import { HStack } from "@chakra-ui/layout";
 import { Icon, Text } from "@chakra-ui/react";
 import nookies from "nookies";
+import { IQuestion } from "pages/home";
 import React, { useState } from "react";
 import { AiOutlineLike } from "react-icons/ai";
+import useSWR from "swr";
+import { getEndpoint, APIEndpoints } from "utils/api/functions";
+import { fetcher } from "utils/api/GET";
 import { likeOrUnlikeComment } from "utils/api/POST";
 
 const Likes = ({
@@ -22,6 +26,20 @@ const Likes = ({
 
   if (liked && !myLikes.includes(commentId.toString())) setLiked(false);
   const token = nookies.get(undefined, "token");
+
+  const { data: fetchMyLikes, error } = useSWR<number[], string>(
+    [
+      getEndpoint(APIEndpoints.GET_USER_LIKED_COMMENTS, questionId),
+      token.token,
+    ],
+    fetcher
+  );
+
+  /* sync local storage with the API */
+  if (!error && fetchMyLikes) {
+    if (!liked && fetchMyLikes.includes(commentId)) setLiked(true);
+    if (liked && !fetchMyLikes.includes(commentId)) setLiked(false);
+  }
 
   return (
     <HStack>

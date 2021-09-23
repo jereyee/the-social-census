@@ -31,14 +31,16 @@ const securityHeaders = [
   },
 ];
 
-module.exports.headers = async () => {
-  return [
-    {
-      source: "/(.*)",
-      headers: securityHeaders,
-    },
-  ];
-};
+if (process.env.NODE_ENV === "production") {
+  module.exports.headers = async function () {
+    return [
+      {
+        source: "/(.*)",
+        headers: securityHeaders,
+      },
+    ];
+  };
+}
 
 /** @type {import('next').NextConfig} */
 module.exports = withPWA({
@@ -48,6 +50,7 @@ module.exports = withPWA({
     //register: true,
     //sw: "/sw.js",
     scope: "/app",
+    dynamicStartUrlRedirect: "/login",
   },
   reactStrictMode: true,
 });

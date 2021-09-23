@@ -28,6 +28,7 @@ export enum APIEndpoints {
   GET_QUESTION_COMMENTS,
   CREATE_QUESTION_COMMENT,
   DELETE_QUESTION_COMMENT,
+  GET_USER_LIKED_COMMENTS,
   LIKE_COMMENT,
   UNLIKE_COMMENT,
   REPORT_COMMENT,
@@ -77,6 +78,10 @@ export const getEndpoint = (
     case APIEndpoints.DELETE_QUESTION_COMMENT:
       if (questionId && commentId)
         endpoint = `${baseURL}/questions/${questionId}/comments/${commentId}`;
+      break;
+    case APIEndpoints.GET_USER_LIKED_COMMENTS:
+      if (questionId)
+        endpoint = `${baseURL}/questions/${questionId}/comments/liked`;
       break;
     case APIEndpoints.LIKE_COMMENT:
     case APIEndpoints.UNLIKE_COMMENT:
