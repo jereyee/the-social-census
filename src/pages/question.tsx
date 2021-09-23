@@ -67,7 +67,7 @@ const Question = () => {
   }, [user, questionData]);
 
   if (redirectToHome) {
-    void router.push("/home");
+    void router.push({ pathname: "/home", query: { shared: "yes" } }, "/home");
   }
   if (redirectToLogin) {
     toast.closeAll();

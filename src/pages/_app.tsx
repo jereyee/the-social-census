@@ -35,7 +35,7 @@ const MyApp = ({
 }: MyAppProps) => {
   const [questionsContext, setQuestionsContext] = useState(defaultState);
 
-  // const analytics = getAnalytics(app);
+  const analytics = getAnalytics(app);
 
   return (
     <CacheProvider value={emotionCache}>

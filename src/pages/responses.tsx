@@ -6,9 +6,7 @@ import {
   Flex,
   Heading,
   HStack,
-  Spacer,
-  VStack,
-  Text,
+  Spacer, Text, VStack
 } from "@chakra-ui/layout";
 import {
   Popover,
@@ -19,7 +17,7 @@ import {
   PopoverTrigger,
   Skeleton,
   Switch,
-  useToast,
+  useToast
 } from "@chakra-ui/react";
 import Header from "components/layout/menu/Header";
 import { MotionVStack } from "components/motion";
