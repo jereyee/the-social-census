@@ -20,7 +20,7 @@ const Scale = ({ selectedOptions, selectResponse }: ISCale) => {
   const [currentValue, setCurrentValue] = useState(defaultValue);
   const selectOption = (optionValue: number) => {
     if (selectedOptions?.length > 0) selectedOptions.length = 0;
-    selectResponse(optionValue);
+    selectResponse(optionValue - 1);
   };
 
   return (
@@ -44,7 +44,7 @@ const Scale = ({ selectedOptions, selectResponse }: ISCale) => {
         step={1}
         w="100%"
         onChange={(val) => setCurrentValue(val)}
-        onChangeEnd={(val) => selectOption(val - 1)}
+        onChangeEnd={(val) => selectOption(val)}
         id="scale-slider"
       >
         <SliderTrack bg="brand.orange">
