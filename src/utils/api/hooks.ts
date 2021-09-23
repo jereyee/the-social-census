@@ -1,17 +1,8 @@
-import { IOptionStats } from "components/results/charts/poll/PollOption";
 import nookies from "nookies";
 import { IQuestion } from "pages/home";
-import { ICommentsList } from "pages/result";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  fetchMatchCode,
-  fetchOneQuestion,
-  fetchQuestionComments,
-  fetchQuestions,
-  fetchQuestionStatistics,
-  IExclusion,
-  IMatchCode,
-  IResponse,
+    fetchOneQuestion
 } from "./GET";
 
 export const useQuestion = (questionId: number) => {

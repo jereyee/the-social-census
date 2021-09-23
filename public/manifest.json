@@ -3,7 +3,7 @@
   "name": "The Social Census",
   "lang": "en",
   "scope": "/",
-  "start_url": "/",
+  "start_url": "/login",
   "background_color": "#000000",
   "theme_color": "#000000",
   "dir": "ltr",

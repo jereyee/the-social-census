@@ -1,9 +1,9 @@
 import axios, { AxiosError } from "axios";
 import { IOptionStats } from "components/results/charts/poll/PollOption";
-import { IQuestion } from "pages/home";
-import { ICommentsList } from "pages/result";
 import { getEndpoint, APIEndpoints, getHeaders } from "../functions";
 import nookies from "nookies";
+import { IQuestion } from "pages/home";
+import { ICommentsList } from "pages/result";
 
 export const fetchQuestionComments = async (token: string, id: number) => {
   const endpoint = getEndpoint(APIEndpoints.GET_QUESTION_COMMENTS, id);
@@ -75,8 +75,6 @@ interface ResponseError extends Error {
 }
 
 export const fetcher = <T>(url: string, token: string) =>
-  axios
-    .get(url, { headers: getHeaders(token) })
-    .then((res) => {
-      return (res.data as { value: T }).value;
-    });
+  axios.get(url, { headers: getHeaders(token) }).then((res) => {
+    return (res.data as { value: T }).value;
+  });

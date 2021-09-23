@@ -13,7 +13,7 @@ import UserAvatar from "components/layout/menu/UserAvatar";
 import Card from "components/micro/Card";
 import { useRouter } from "next/dist/client/router";
 import nookies from "nookies";
-import { IQuestion } from "pages/home";
+import { IQuestion } from "../home";
 import React from "react";
 import useSWR from "swr";
 import { APIEndpoints, getEndpoint } from "utils/api/functions";

@@ -137,7 +137,6 @@ class MyDocument extends Document {
             rel="apple-touch-startup-image"
           />
           {/* end of apple splash screen */}
-
         </Head>
         <body>
           <Main />

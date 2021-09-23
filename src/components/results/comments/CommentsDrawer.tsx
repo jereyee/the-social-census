@@ -375,8 +375,7 @@ const CommentsDrawer = ({
         })}
       </DrawerBody>
 
-      <DrawerFooter>
-      </DrawerFooter>
+      <DrawerFooter></DrawerFooter>
 
       <Drawer
         isOpen={isRepliesOpen}
