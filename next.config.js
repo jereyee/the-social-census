@@ -9,6 +9,7 @@ module.exports = withPWA({
     register: true,
     sw: '/sw.js',
     scope: '/',
+    runtimeCaching,
   },
   reactStrictMode: true,
 });

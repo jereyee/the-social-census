@@ -2,6 +2,7 @@
   "short_name": "Social Census",
   "name": "The Social Census",
   "lang": "en",
+  "scope": "/",
   "start_url": "/",
   "background_color": "#000000",
   "theme_color": "#000000",
