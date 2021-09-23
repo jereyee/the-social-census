@@ -43,7 +43,7 @@ const AlertModal = ({
         isOpen={isOpen}
         leastDestructiveRef={cancelRef}
         onClose={onClose}
-        isCentered
+        isCentered 
       >
         <AlertDialogOverlay>
           <AlertDialogContent w="80%" bg="grayscale.gray.300">

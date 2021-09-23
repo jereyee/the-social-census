@@ -316,7 +316,7 @@ const CommentsDrawer = ({
                     >
                       <AiOutlineMore />
                     </MenuButton>
-                    <MenuList>
+                    <MenuList bg="grayscale.gray.300">
                       <MenuItem>
                         <AlertModal
                           header="Report comment"

@@ -161,7 +161,7 @@ const Responses = () => {
                 _hover={{ color: "brand.magenta" }}
               />
             </PopoverTrigger>
-            <PopoverContent>
+            <PopoverContent bg="grayscale.gray.300">
               <PopoverArrow />
               <PopoverCloseButton />
               <PopoverHeader>

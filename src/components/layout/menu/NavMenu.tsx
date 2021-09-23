@@ -8,7 +8,7 @@ import {
   Icon,
   IconProps,
   Text,
-  VStack
+  VStack,
 } from "@chakra-ui/react";
 import Card from "components/micro/Card";
 import { MotionVStack } from "components/motion";
@@ -18,10 +18,7 @@ import { RiHome3Line } from "react-icons/ri";
 import { themeColors } from "styles/colors";
 import { useAuth } from "utils/auth/AuthProvider";
 import { signOutUser } from "utils/auth/firebase-config";
-import {
-  MatchResponses,
-  QuestionsAnswered, SuggestQuestion
-} from "./Icons";
+import { MatchResponses, QuestionsAnswered, SuggestQuestion } from "./Icons";
 import UserAvatar from "./UserAvatar";
 
 const NavMenu = () => {
@@ -45,17 +42,18 @@ const NavMenu = () => {
       icon: () => <MatchResponses />,
       text: "Match responses",
       href: "/match",
-    },
+    } /* 
     {
       icon: () => <SuggestQuestion />,
       text: "Suggest a question",
       href: "",
-    } /* 
+    } 
     {
       icon: () => <Settings />,
       text: "Settings",
       href: "",
-    }, */,
+    },  */
+    ,
   ];
 
   return (
