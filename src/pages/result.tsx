@@ -42,11 +42,13 @@ const Result = () => {
 
   const token = nookies.get(undefined, "token");
 
+  /* fetch data about the question to display its body */
   const { data: questionData, error } = useSWR<IQuestion, string>(
     [getEndpoint(APIEndpoints.GET_QUESTION, questionId), token.token],
     fetcher
   );
 
+  /* fetch question statistics */
   const { data: fetchedStatistics } = useSWR<IOptionStats[], string>(
     [
       getEndpoint(APIEndpoints.GET_QUESTION_STATISTICS, questionId),
@@ -55,6 +57,7 @@ const Result = () => {
     fetcher
   );
 
+  /* fetch all comments for this question */
   const { data: commentsData, mutate: mutateCommentAPI } = useSWR<
     ICommentsList[],
     string
@@ -67,6 +70,7 @@ const Result = () => {
   };
   const commentsList = commentsData?.slice().reverse();
 
+  /* show the visualization */
   const VisualizationChart = () => {
     if (!fetchedStatistics || !questionData) return <></>;
 
@@ -79,6 +83,7 @@ const Result = () => {
     }
   };
 
+  /* for link sharing with the web share api */
   const origin =
     typeof window !== "undefined" && window.location.origin
       ? window.location.origin
@@ -88,7 +93,6 @@ const Result = () => {
 
   /* check if the network is offline */
   const networkState = useNetworkState();
-
   if (!networkState.online && connectionOnline) {
     setConnectionOnline(false);
   } else if (!connectionOnline && networkState.online) {
@@ -127,7 +131,6 @@ const Result = () => {
             <Box />
             <HStack>
               <WebShare
-                questionId={questionId}
                 buttonVariant="naked"
                 title="Check out this question on Social Census!"
                 body={`${questionData.body}`}
