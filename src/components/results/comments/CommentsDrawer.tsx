@@ -1,5 +1,4 @@
 import { useDisclosure } from "@chakra-ui/hooks";
-import { Input } from "@chakra-ui/input";
 import { Divider, HStack, VStack } from "@chakra-ui/layout";
 import {
   Drawer,
@@ -10,35 +9,23 @@ import {
   DrawerHeader,
   DrawerOverlay,
 } from "@chakra-ui/modal";
-import {
-  Button,
-  CircularProgress,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Skeleton,
-  Text,
-  useToast,
-} from "@chakra-ui/react";
-import AlertModal from "components/AlertModal";
+import { CircularProgress, Text, useToast } from "@chakra-ui/react";
 import ErrorModal from "components/ErrorModal";
 import InputWithIcon from "components/InputWithIcon";
 import UserAvatar from "components/layout/menu/UserAvatar";
 import { useRouter } from "next/dist/client/router";
 import nookies from "nookies";
-import React, { useEffect, useReducer, useRef, useState } from "react";
-import { AiOutlineMore } from "react-icons/ai";
+import React, { useRef, useState } from "react";
 import useSWR from "swr";
-import { IComments, ICommentsList, IQuestion } from "types/shared";
+import { IComments, ICommentsList, IReply } from "types/shared";
 import { deleteComment } from "utils/api/DELETE";
-import { getEndpoint, APIEndpoints } from "utils/api/functions";
+import { APIEndpoints, getEndpoint } from "utils/api/functions";
 import { fetcher, fetchQuestionComments } from "utils/api/GET";
 import { reportComment, submitComment } from "utils/api/POST";
 import { useAuth } from "utils/auth/AuthProvider";
 import { timeOfCommentChecker } from "utils/dateParser";
 import Likes from "./CommentLikes";
-import ReportInput from "./helpers/ReportInput";
+import MoreMenu from "./helpers/MoreMenu";
 import RepliesDrawer from "./replies/RepliesDrawer";
 
 interface ICommentSubmitted {
@@ -50,6 +37,8 @@ const CommentsDrawer = ({ onClose, questionData }: IComments) => {
   /* user related hooks */
   const { user } = useAuth();
   const token = nookies.get(undefined, "token");
+
+  const [hi, setHi] = useState(false);
 
   /* fetch all comments for this question */
   const {
@@ -114,15 +103,13 @@ const CommentsDrawer = ({ onClose, questionData }: IComments) => {
       /* comment was successful in submitting */
       /* the reason you are fetching again is to avoid UI discrepancies due to the parent components */
       /* not updating. I recommend working and trying to find a simpler solution if time permits */
-      fetchQuestionComments(token.token, questionData.id)
+      refetchCommentsAPI()
         .then((v) => {
           if (isRepliesOpen && clickedComment)
             /* if the replies drawer is open need to update the UI */
             setClickedComment(
-              v.find((value) => value.id === clickedComment.id)
+              v?.find((value) => value.id === clickedComment.id)
             );
-          refetchComments();
-          //setCommentsList(v);
         })
         .catch((err) => console.log(err));
     } else if (!commentSubmitted.success) {
@@ -161,18 +148,21 @@ const CommentsDrawer = ({ onClose, questionData }: IComments) => {
   };
 
   /* callback for deleting a user comment */
-  const deleteUserComment = (comment: ICommentsList) => {
+  const deleteUserComment = (comment: ICommentsList | IReply) => {
     deleteComment({
       comment: comment,
       questionId: questionData.id,
       token: token.token,
     })
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .then((data) => {
-        console.log(data);
-        fetchQuestionComments(token.token, questionData.id)
+        refetchCommentsAPI()
           .then((v) => {
-            refetchComments();
-            //setCommentsList(v);
+            if (isRepliesOpen && clickedComment && v)
+              /* if the replies drawer is open need to update the UI */
+              setClickedComment(
+                v.find((value) => value.id === clickedComment.id)
+              );
           })
           .catch((err) => console.log(err));
       })
@@ -189,7 +179,7 @@ const CommentsDrawer = ({ onClose, questionData }: IComments) => {
   /* end of callback */
 
   /* callback for reporting a user comment */
-  const reportUserComment = (comment: ICommentsList) => {
+  const reportUserComment = (comment: ICommentsList | IReply) => {
     reportComment({
       commentId: comment.id,
       questionId: questionData.id,
@@ -328,46 +318,13 @@ const CommentsDrawer = ({ onClose, questionData }: IComments) => {
                       )}
                     </VStack>
                   </HStack>
-                  {/* more button */}
-                  <Menu>
-                    <MenuButton
-                      as={Button}
-                      bg="none"
-                      _active={{ bg: "none" }}
-                      _focus={{ bg: "none" }}
-                      _hover={{ bg: "none" }}
-                    >
-                      <AiOutlineMore />
-                    </MenuButton>
-                    <MenuList bg="grayscale.gray.300">
-                      <MenuItem _focus={{ bg: "rgba(255,255,255,0.08)" }}>
-                        <AlertModal
-                          header="Report comment"
-                          buttonText="Report"
-                          buttonProps={{ ...modalButtonStyles }}
-                          onButtonClick={() => reportUserComment(comment)}
-                          alertBody={
-                            <ReportInput
-                              inputRef={reportRef}
-                              placeholder="Your reason"
-                              username={comment.user.displayName}
-                            />
-                          }
-                          // message={`Are you sure you want to report ${comment.user.displayName}?`}
-                        />
-                      </MenuItem>
-                      {user && comment.user.uid === user.uid && (
-                        <MenuItem>
-                          <AlertModal
-                            header="Delete comment"
-                            buttonText="Delete"
-                            buttonProps={{ ...modalButtonStyles }}
-                            onButtonClick={() => deleteUserComment(comment)}
-                          />
-                        </MenuItem>
-                      )}
-                    </MenuList>
-                  </Menu>
+                  {/* more button to like or report */}
+                  <MoreMenu
+                    reportUserComment={reportUserComment}
+                    deleteUserComment={deleteUserComment}
+                    comment={comment}
+                    reportRef={reportRef}
+                  />
                 </HStack>
               </VStack>
               <Divider />
@@ -398,6 +355,9 @@ const CommentsDrawer = ({ onClose, questionData }: IComments) => {
             onRepliesClose();
           }}
           onUserReplySubmitted={userReplySubmitted}
+          reportUserComment={reportUserComment}
+          deleteUserComment={deleteUserComment}
+          reportRef={reportRef}
         />
       </Drawer>
     </DrawerContent>

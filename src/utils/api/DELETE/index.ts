@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ICommentsList } from "types/shared";
+import { ICommentsList, IReply } from "types/shared";
 import { getEndpoint, APIEndpoints, getHeaders } from "../functions";
 
 export const deleteComment = ({
@@ -8,7 +8,7 @@ export const deleteComment = ({
   token,
 }: {
   questionId: number;
-  comment: ICommentsList;
+  comment: ICommentsList | IReply;
   token: string;
 }) => {
   const deleteUserComment = async (token: string) => {

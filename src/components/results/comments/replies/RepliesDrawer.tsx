@@ -7,7 +7,7 @@ import {
   DrawerFooter,
   DrawerHeader,
 } from "@chakra-ui/modal";
-import { Text } from "@chakra-ui/react";
+import { Spacer, Text } from "@chakra-ui/react";
 import InputWithIcon from "components/InputWithIcon";
 import UserAvatar from "components/layout/menu/UserAvatar";
 import router from "next/dist/client/router";
@@ -17,8 +17,9 @@ import { ICommentsList } from "types/shared";
 import { submitComment } from "utils/api/POST";
 import { timeOfCommentChecker } from "utils/dateParser";
 import Likes from "../CommentLikes";
+import MoreMenu, { IMoreMenu } from "../helpers/MoreMenu";
 
-interface IReplies {
+interface IReplies extends Omit<IMoreMenu, "comment"> {
   data: ICommentsList;
   onClose: () => void;
   onRepliesClose: () => void;
@@ -33,21 +34,23 @@ interface IReplies {
 }
 
 const RepliesDrawer = ({
-  data : hello,
+  data: hello,
   onClose,
   onRepliesClose,
   onUserReplySubmitted,
   refreshComments,
+  reportUserComment,
+  deleteUserComment,
+  reportRef,
 }: IReplies) => {
   const token = nookies.get(undefined, "token");
 
   const inputRef = useRef() as React.MutableRefObject<HTMLTextAreaElement>;
 
   const [data, setData] = useState(hello);
-
   useEffect(() => {
-    setData(hello)
-  }, [hello])
+    setData(hello);
+  }, [hello]);
 
   const submitUserReply = (body: string) => {
     if (token) {
@@ -141,8 +144,8 @@ const RepliesDrawer = ({
           .map((comment, index) => {
             return (
               <React.Fragment key={index}>
-                <VStack alignItems="flex-start" py={4}>
-                  <HStack alignItems="flex-start">
+                <VStack alignItems="flex-start" py={4} w="100%">
+                  <HStack alignItems="flex-start" w="100%">
                     <UserAvatar
                       currentUser={false}
                       otherUser={{
@@ -167,6 +170,14 @@ const RepliesDrawer = ({
                         />
                       </VStack>
                     </VStack>
+                    <Spacer />
+                    {/* more button to like or report */}
+                    <MoreMenu
+                      reportUserComment={reportUserComment}
+                      deleteUserComment={deleteUserComment}
+                      comment={comment}
+                      reportRef={reportRef}
+                    />
                   </HStack>
                 </VStack>
                 <Divider />
