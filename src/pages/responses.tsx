@@ -30,10 +30,15 @@ const Responses = () => {
     fetcher
   );
 
-  const { data: exclusionList, error: exclusionError } = useSWR<
-    IExclusion[],
-    string
-  >([getEndpoint(APIEndpoints.LIST_MATCH_EXCLUSIONS), token.token], fetcher);
+  const {
+    data: exclusionList,
+    error: exclusionError,
+    mutate: refreshExclusions,
+    isValidating,
+  } = useSWR<IExclusion[], string>(
+    [getEndpoint(APIEndpoints.LIST_MATCH_EXCLUSIONS), token.token],
+    fetcher
+  );
 
   const responsesWithoutDuplicates: IQuestionInList[] | undefined =
     responses?.filter((response) =>
@@ -55,7 +60,7 @@ const Responses = () => {
     }
   }, []); */
 
-  return exclusionList && !exclusionError && !router.query.from ? (
+  return exclusionList && !exclusionError ? (
     <Box>
       {/* match responses header */}
       <Header headerText="Questions You've Answered" />
@@ -88,7 +93,11 @@ const Responses = () => {
       </Flex>
       {responsesWithoutDuplicates &&
         responsesWithoutDuplicates.map((response, index) => (
-          <QuestionInList key={index} question={response} />
+          <QuestionInList
+            key={index}
+            question={response}
+            refreshExclusions={refreshExclusions}
+          />
         ))}
     </Box>
   ) : (

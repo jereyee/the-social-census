@@ -12,7 +12,7 @@ import {
 import { MotionVStack } from "components/motion";
 import { useRouter } from "next/dist/client/router";
 import { IQuestionInList } from "pages/responses";
-import React from "react";
+import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 import { themeColors } from "styles/colors";
 import useSWR from "swr";
 import { getEndpoint, APIEndpoints } from "utils/api/functions";
@@ -21,14 +21,21 @@ import { excludeOrUnexcludeQuestions } from "utils/api/POST";
 import nookies from "nookies";
 import { IQuestion } from "types/shared";
 
-const QuestionInList = ({ question }: { question: IQuestionInList }) => {
+const QuestionInList = ({
+  question,
+  refreshExclusions,
+}: {
+  question: IQuestionInList;
+  refreshExclusions: () => void;
+}) => {
   const token = nookies.get(undefined, "token");
 
   const { data: questionData, error } = useSWR<IQuestion, string>(
     [getEndpoint(APIEndpoints.GET_QUESTION, question.questionId), token.token],
     fetcher
   );
-  // const { fetchedQuestion, fetchSuccess } = useQuestion(response.questionId);
+
+  const toggleRef = useRef() as MutableRefObject<HTMLInputElement>;
 
   const router = useRouter();
   const redirectToResult = () => {
@@ -41,6 +48,17 @@ const QuestionInList = ({ question }: { question: IQuestionInList }) => {
         "/result"
       );
   };
+
+  const [checked, setChecked] = useState(false);
+  useEffect(() => {
+    if (question.excluded !== undefined) setChecked(question.excluded);
+    /* toggleRef.current.checked = question.excluded; */
+  }, [question]);
+
+  useEffect(() => {
+    refreshExclusions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [checked]);
 
   const toast = useToast();
 
@@ -65,11 +83,13 @@ const QuestionInList = ({ question }: { question: IQuestionInList }) => {
           <Spacer />
           <Center width="90px">
             <Switch
+              ref={toggleRef}
               colorScheme="purple"
               className="exclude"
               size="lg"
-              defaultChecked={question.excluded}
+              isChecked={checked}
               onChange={(ev) => {
+                refreshExclusions();
                 const exclude = ev.target.checked;
                 excludeOrUnexcludeQuestions({
                   exclude: exclude,
@@ -85,6 +105,7 @@ const QuestionInList = ({ question }: { question: IQuestionInList }) => {
                       isClosable: true,
                     });
                     ev.target.checked = !ev.target.checked;
+                    setChecked(exclude);
                   })
                   .catch((error) => {
                     console.log(error);
