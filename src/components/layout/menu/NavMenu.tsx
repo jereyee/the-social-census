@@ -3,13 +3,13 @@ import { EditIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
+  Center,
   Divider,
   Heading,
   HStack,
   Icon,
-  IconProps,
-  Text,
-  VStack,
+  IconProps, Text,
+  VStack
 } from "@chakra-ui/react";
 import Card from "components/micro/Card";
 import { MotionVStack } from "components/motion";
@@ -19,6 +19,7 @@ import { RiHome3Line } from "react-icons/ri";
 import { themeColors } from "styles/colors";
 import { useAuth } from "utils/auth/AuthProvider";
 import { signOutUser } from "utils/auth/firebase-config";
+import DeleteAccount from "./DeleteAccount";
 import { MatchResponses, QuestionsAnswered } from "./Icons";
 import UserAvatar from "./UserAvatar";
 
@@ -80,23 +81,25 @@ const NavMenu = () => {
       {/* user card */}
       <Card w="100%" h="111px" padding="10%">
         <HStack w="100%" h="100%" justify="flex-start" spacing={6}>
-          <UserAvatar currentUser={true} width="48px" height="48px" />
-          <VStack alignItems="flex-start">
-            <Heading as="h3" variant="heading3">
-              {user?.displayName}
-            </Heading>
+          <>
+            <UserAvatar currentUser={true} width="48px" height="48px" />
+            <VStack alignItems="flex-start">
+              <Heading as="h3" variant="heading3">
+                {user?.displayName}
+              </Heading>
 
-            <Button
-              onClick={() => {
-                signOutUser();
-                void router.push("/");
-              }}
-              variant="primary"
-              height="20px"
-            >
-              Sign out
-            </Button>
-          </VStack>
+              <Button
+                onClick={() => {
+                  signOutUser();
+                  void router.push("/");
+                }}
+                variant="primary"
+                height="20px"
+              >
+                Sign out
+              </Button>
+            </VStack>
+          </>
         </HStack>
       </Card>
 
@@ -143,6 +146,9 @@ const NavMenu = () => {
           })}
         </VStack>
       </Card>
+      <Center pt={4}>
+        <DeleteAccount />
+      </Center>
     </MotionVStack>
   );
 };

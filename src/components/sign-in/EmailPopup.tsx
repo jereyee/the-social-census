@@ -95,7 +95,7 @@ export const EmailPopup = ({
                 >
                   <Input
                     variant="outline"
-                    placeholder="wokeguy@gmail.com"
+                    placeholder="johncena@gmail.com"
                     type="email"
                     id="email"
                   />

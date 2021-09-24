@@ -1,6 +1,7 @@
 import { useDisclosure } from "@chakra-ui/hooks";
 import { Box, Center, Heading, Text, VStack } from "@chakra-ui/layout";
 import { EmailPopup } from "components/sign-in/EmailPopup";
+import PrivacyPolicy from "components/sign-in/PrivacyPolicy";
 import SignInButtons from "components/sign-in/SignInButtons";
 import { FirebaseError } from "firebase/app";
 import {
@@ -20,6 +21,7 @@ export interface SignInError extends FirebaseError {
 
 const Login = () => {
   const [isAuth, setIsAuth] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [token, setToken] = useState("");
 
   const router = useRouter();
@@ -30,12 +32,10 @@ const Login = () => {
     if (window.localStorage.getItem("auth") === "true") setIsAuth(true);
 
     if (isSignInWithEmailLink(auth, window.location.href)) {
-      // Get the email if available. This should be available if the user completes
-      // the flow on the same device where they started it.
+      // Get the email if available.
       let email = window.localStorage.getItem("emailForSignIn");
       if (!email) {
-        // User opened the link on a different device. To prevent session fixation
-        // attacks, ask the user to provide the associated email again. For example:
+        // To prevent session fixation attacks
         email = window.prompt("Please provide your email for confirmation");
       }
       // The client SDK will parse the code from the link for you.
@@ -49,8 +49,7 @@ const Login = () => {
           void router.push("/login/update");
         })
         .catch((error) => {
-          // Some error occurred, you can inspect the code: error.code
-          // Common errors could be invalid email and invalid or expired OTPs.
+          console.log(error);
         });
 
       return;
@@ -89,15 +88,7 @@ const Login = () => {
         // ...
       })
       .catch((error: SignInError) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
         console.log({ error });
-        // ...
       });
   };
 
@@ -143,11 +134,13 @@ const Login = () => {
             </VStack>
             <SignInButtons signInMethods={signInMethods} />
             <EmailPopup isOpen={isOpen} onClose={onClose} />
-
-            <Text variant="caption" color="grayscale.gray.100" maxW="36ch">
-              Your privacy matters to us. <br />
-              Find out more in our privacy policy.
-            </Text>
+            <Box maxW="36ch">
+              <Text variant="caption" color="grayscale.gray.100" maxW="36ch">
+                Your privacy matters to us. <br />
+                Find out more in our{" "}
+              </Text>
+              <PrivacyPolicy />
+            </Box>
           </VStack>
         </Center>
       ) : (

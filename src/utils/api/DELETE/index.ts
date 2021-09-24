@@ -26,3 +26,16 @@ export const deleteComment = ({
 
   return deleteUserComment(token);
 };
+
+export const deleteUserAccount = ({ token }: { token: string }) => {
+  const deleteUser = async (token: string) => {
+    const endpoint = getEndpoint(APIEndpoints.DELETE_ACCOUNT);
+    const res = await axios.delete(`${endpoint}`, {
+      headers: getHeaders(token),
+    });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
+    return res.data.value;
+  };
+
+  return deleteUser(token);
+};

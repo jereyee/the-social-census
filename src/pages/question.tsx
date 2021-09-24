@@ -1,15 +1,14 @@
 import { Button, Center, Text, useToast, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import Link from "next/link";
+import nookies from "nookies";
 import React, { useContext, useEffect, useState } from "react";
+import useSWR from "swr";
+import { IQuestionData, IResponse } from "types/shared";
+import { APIEndpoints, getEndpoint } from "utils/api/functions";
+import { fetcher } from "utils/api/GET";
 import { useAuth } from "utils/auth/AuthProvider";
 import QuestionsContext from "utils/questionsContext";
-import nookies from "nookies";
-import useSWR from "swr";
-import { getEndpoint, APIEndpoints } from "utils/api/functions";
-import { fetcher } from "utils/api/GET";
-import { IQuestionData, IResponse } from "types/shared";
-import { trackEvent } from "utils/analytics";
 
 const Question = () => {
   const { user } = useAuth();

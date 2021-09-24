@@ -7,7 +7,7 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
-  Spinner,
+  Spinner
 } from "@chakra-ui/react";
 import Header from "components/layout/menu/Header";
 import QuestionInList from "components/questions/QuestionInList";
@@ -24,7 +24,7 @@ export interface IQuestionInList extends IResponse {
 const Responses = () => {
   //const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   const token = nookies.get(undefined, "token");
-  const { data: responses, error } = useSWR<IResponse[], string>(
+  const { data: responses } = useSWR<IResponse[], string>(
     [getEndpoint(APIEndpoints.GET_USER_RESPONSES), token.token],
     fetcher
   );

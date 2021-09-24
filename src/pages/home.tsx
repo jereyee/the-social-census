@@ -5,7 +5,7 @@ import { useRouter } from "next/dist/client/router";
 import nookies from "nookies";
 import React, { useContext, useEffect, useState } from "react";
 import useSWR from "swr";
-import { IQuestion, IResponse } from "types/shared";
+import { IQuestion } from "types/shared";
 import { APIEndpoints, getEndpoint } from "utils/api/functions";
 import { fetcher } from "utils/api/GET";
 import { submitQuestion } from "utils/api/POST";
@@ -16,7 +16,6 @@ const Home = () => {
 
   const {
     data: fetchedQuestions,
-    error,
     mutate: refetchQuestions,
   } = useSWR<IQuestion[], string>(
     [getEndpoint(APIEndpoints.LIST_QUESTIONS), token.token],

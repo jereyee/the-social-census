@@ -199,8 +199,8 @@ const Match = () => {
               <WebShare
                 buttonVariant="primary"
                 buttonProps={{ bg: "brand.purple" }}
-                title="Match with me on Social Census!"
-                body={`Match with me on The Social Census! \r\nMy match code is: \r\n${
+                title="Find out how similar we are!"
+                body={`Find out how similar we are! \r\nMy match code is: \r\n${
                   fetchedMatchCode?.matchCode ?? ""
                 }\r\n`}
                 url={origin}

@@ -26,7 +26,7 @@ const Update = () => {
 
   const router = useRouter();
   const successCallback = () => {
-    window.localStorage.removeItem("isNewUser");
+    localStorage.removeItem("isNewUser");
     void router.push("/home");
   };
 
