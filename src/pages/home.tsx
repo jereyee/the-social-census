@@ -97,9 +97,14 @@ const Home = () => {
     if (questionsList && questionIndex === questionsList.length) {
       localStorage.removeItem("questions");
       refetchQuestions()
-        .then((res) => setQuestionsList(res))
-        .catch(() => setQuestionsList([]));
-      setQuestionIndex(0);
+        .then((res) => {
+          setQuestionsList(res);
+          setQuestionIndex(0);
+        })
+        .catch(() => {
+          setQuestionsList([]);
+          setQuestionIndex(0);
+        });
     }
   }, [questionIndex]);
 
