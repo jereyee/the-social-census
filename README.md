@@ -21,10 +21,15 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Directory Structure
 
 `/public` Static assets
+
 `/src/components` React components for carousel, menu, questions and results
+
 `/src/pages` Pages for the web app
+
 `/src/styles` Styles for typography, colours, components
+
 `/src/types` Custom types
+
 `/src/utils` Utils for API request, authentication etc
 
 ## References
