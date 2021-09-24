@@ -69,6 +69,7 @@ const Home = () => {
         : fetchedQuestions;
       localStorage.setItem("questions", JSON.stringify(questionsToSet));
       setQuestionsList(questionsToSet);
+      setQuestionIndex(0);
     }
 
     /* if it's a shared question, dont need to update */
@@ -94,18 +95,19 @@ const Home = () => {
     localStorage.setItem("questionIndex", questionIndex.toString());
 
     /* reach the end, move back to start */
-    if (questionsList && questionIndex === questionsList.length) {
+    /* if (questionsList && questionIndex === questionsList.length) {
       localStorage.removeItem("questions");
       refetchQuestions()
         .then((res) => {
-          setQuestionsList(res);
-          setQuestionIndex(0);
+          if (res) {
+            setQuestionsList(res);
+          }
         })
         .catch(() => {
           setQuestionsList([]);
           setQuestionIndex(0);
         });
-    }
+    } */
   }, [questionIndex]);
 
   const changeQuestion = (index: number) => {
@@ -173,6 +175,21 @@ const Home = () => {
         answerQuestion={answerQuestion}
       />
     );
+  }
+
+  /* reach the end, move back to start */
+  if (questionsList && questionIndex === questionsList.length) {
+    localStorage.removeItem("questions");
+    refetchQuestions()
+      .then((res) => {
+        if (res) {
+          setQuestionsList(res);
+        }
+      })
+      .catch(() => {
+        setQuestionsList([]);
+        setQuestionIndex(0);
+      });
   }
 
   return (
