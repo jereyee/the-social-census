@@ -23,9 +23,6 @@ const Home = () => {
       revalidateOnFocus: false,
       revalidateOnMount: true,
       revalidateOnReconnect: false,
-      onSuccess: () => {
-        localStorage.setItem("questions", JSON.stringify(fetchedQuestions));
-      },
     }
   );
 
@@ -38,7 +35,6 @@ const Home = () => {
   const [questionIndex, setQuestionIndex] = useState(questionState.lastIndex);
 
   useEffect(() => {
-    console.log('hi');
     /* if it's a shared question, dont need to update */
     if (questionState.shared) return;
     /* if questionlist is already in local storage, set these as the questions */
@@ -59,6 +55,9 @@ const Home = () => {
       )
         setQuestionIndex(parseInt(localStorageIndex));
       return;
+    }
+    if (!questions) {
+      localStorage.setItem("questions", JSON.stringify(fetchedQuestions));
     }
 
     /* update the global question the moment the questions list */
