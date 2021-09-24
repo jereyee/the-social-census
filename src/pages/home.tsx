@@ -5,7 +5,7 @@ import { useRouter } from "next/dist/client/router";
 import nookies from "nookies";
 import React, { useContext, useEffect, useState } from "react";
 import useSWR from "swr";
-import { IQuestion } from "types/shared";
+import { IQuestion, IResponse } from "types/shared";
 import { APIEndpoints, getEndpoint } from "utils/api/functions";
 import { fetcher } from "utils/api/GET";
 import { submitQuestion } from "utils/api/POST";
@@ -14,7 +14,11 @@ import QuestionsContext from "utils/questionsContext";
 const Home = () => {
   const token = nookies.get(undefined, "token");
 
-  const { data: fetchedQuestions, error } = useSWR<IQuestion[], string>(
+  const {
+    data: fetchedQuestions,
+    error,
+    mutate: refetchQuestions,
+  } = useSWR<IQuestion[], string>(
     [getEndpoint(APIEndpoints.LIST_QUESTIONS), token.token],
     fetcher,
     {
@@ -35,6 +39,7 @@ const Home = () => {
   const [questionIndex, setQuestionIndex] = useState(questionState.lastIndex);
 
   useEffect(() => {
+    console.log("hi");
     /* if questionlist is already in local storage, set these as the questions */
     const localStorageQuestions = localStorage.getItem("questions");
     const localStorageIndex = localStorage.getItem("questionIndex");
@@ -87,17 +92,16 @@ const Home = () => {
   useEffect(() => {
     /* update local storage index */
     localStorage.setItem("questionIndex", questionIndex.toString());
+
+    /* reach the end, move back to start */
+    if (questionsList && questionIndex === questionsList.length) {
+      localStorage.removeItem("questions");
+      refetchQuestions()
+        .then((res) => setQuestionsList(res))
+        .catch(() => setQuestionsList([]));
+      setQuestionIndex(0);
+    }
   }, [questionIndex]);
-
-  if (
-    !error &&
-    questionsList &&
-    questionIndex === questionsList.length &&
-    questionIndex !== 0
-  )
-    setQuestionIndex(0);
-
-  // console.log({questionState});
 
   const changeQuestion = (index: number) => {
     updateQuestionState({
