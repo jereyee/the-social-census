@@ -154,7 +154,6 @@ const Sections = ({
         >
           <DrawerOverlay />
           <CommentsDrawer
-            data={sectionData.comments.data}
             onClose={closeComments}
             refreshComments={refreshComments}
             questionData={questionData}
