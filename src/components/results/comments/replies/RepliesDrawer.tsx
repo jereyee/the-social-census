@@ -157,8 +157,8 @@ const RepliesDrawer = ({
                       <VStack alignItems="flex-start">
                         <Text variant="overline">
                           {comment.user.displayName} -{" "}
-                          {`${timeOfCommentChecker(data.createdAt).number} ${
-                            timeOfCommentChecker(data.createdAt).metric
+                          {`${timeOfCommentChecker(comment.createdAt).number} ${
+                            timeOfCommentChecker(comment.createdAt).metric
                           } ago`}
                         </Text>
                         <Text variant="body">{comment.body}</Text>
