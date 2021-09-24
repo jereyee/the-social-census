@@ -99,6 +99,7 @@ const Home = () => {
   };
 
   const answerQuestion = (response: number[]) => {
+    if (!questionsList) return;
     /* update local storage index to keep track */
     localStorage.setItem("questionIndex", (questionIndex + 1).toString());
 
@@ -111,7 +112,7 @@ const Home = () => {
     });
 
     submitQuestion({
-      questionId: questionState.id,
+      questionId: questionsList[questionIndex].id,
       responses: response,
       token: token.token,
     })

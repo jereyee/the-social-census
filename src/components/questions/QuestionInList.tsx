@@ -81,7 +81,7 @@ const QuestionInList = ({
             </Text>
           </MotionVStack>
           <Spacer />
-          <Center width="90px">
+          <Center width="90px" justifyContent="flex-end">
             <Switch
               ref={toggleRef}
               colorScheme="purple"
