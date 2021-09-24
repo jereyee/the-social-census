@@ -33,7 +33,12 @@ const KnowMoreDrawer = ({ data, onClose }: IKnowMoreDrawer) => {
           Sources
         </Heading>
         {data.sources.map((source, index) => (
-          <Text key={index} variant="body">
+          <Text
+            key={index}
+            variant="body"
+            color="brand.pink"
+            textDecoration="underline"
+          >
             <Link href={source.url}>{source.title}</Link>
           </Text>
         ))}

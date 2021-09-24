@@ -1,4 +1,5 @@
 /* eslint-disable react/display-name */
+import { EditIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -29,30 +30,32 @@ const NavMenu = () => {
   type menuItemsType = { icon: FC<IconProps>; text: string; href: string }[];
   const menuItems: menuItemsType = [
     {
-      icon: () => <Icon width="22px" height="22px" as={RiHome3Line} />,
+      icon: (props) => (
+        <Icon width="22px" height="22px" as={RiHome3Line} {...props} />
+      ),
       text: "Home",
       href: "/home",
     },
     {
-      icon: () => <QuestionsAnswered />,
+      icon: (props) => <QuestionsAnswered {...props} />,
       text: "Questions answered",
       href: "/responses",
     },
     {
-      icon: () => <MatchResponses />,
+      icon: (props) => <MatchResponses {...props} />,
       text: "Match responses",
       href: "/match",
-    } /* 
+    },
     {
-      icon: () => <SuggestQuestion />,
-      text: "Suggest a question",
-      href: "",
-    } 
+      icon: (props) => <EditIcon width="22px" height="22px" {...props} />,
+      text: "Edit profile",
+      href: "/login/update",
+    } /* 
     {
       icon: () => <Settings />,
       text: "Settings",
       href: "",
-    },  */,
+    },   */,
   ];
 
   return (
@@ -101,7 +104,12 @@ const NavMenu = () => {
       <Card w="100%" padding="10%">
         <VStack w="100%" h="100%" align="flex-start" spacing={0}>
           {menuItems.map((menuItem, index) => {
-            const Icon = menuItem.icon;
+            const isCurrentPath = router.pathname === menuItem.href;
+            const colorProps = {
+              color: isCurrentPath ? "brand.pink" : "white",
+            };
+            const Icon = menuItem.icon({});
+
             return (
               <MotionVStack
                 w="100%"
@@ -122,9 +130,11 @@ const NavMenu = () => {
               >
                 <HStack spacing={2} align="center">
                   <Box width="30px" height="30px">
-                    <Icon />
+                    {Icon}
                   </Box>
-                  <Text variant="caption">{menuItem.text}</Text>
+                  <Text variant="caption" {...colorProps}>
+                    {menuItem.text}
+                  </Text>
                 </HStack>
 
                 {index !== menuItems.length - 1 && <Divider w="100%" />}

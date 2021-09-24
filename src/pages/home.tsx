@@ -1,5 +1,4 @@
 import { Box, Center, Heading, Spinner } from "@chakra-ui/react";
-import { getAnalytics } from "@firebase/analytics";
 import Header from "components/layout/menu/Header";
 import Questions from "components/questions/Questions";
 import { useRouter } from "next/dist/client/router";
@@ -7,7 +6,6 @@ import nookies from "nookies";
 import React, { useContext, useEffect, useState } from "react";
 import useSWR from "swr";
 import { IQuestion } from "types/shared";
-import { trackEvent } from "utils/analytics";
 import { APIEndpoints, getEndpoint } from "utils/api/functions";
 import { fetcher } from "utils/api/GET";
 import { submitQuestion } from "utils/api/POST";
@@ -15,10 +13,23 @@ import QuestionsContext from "utils/questionsContext";
 
 const Home = () => {
   const token = nookies.get(undefined, "token");
-  const { data: questionsList, error } = useSWR<IQuestion[], string>(
+
+  const { data: fetchedQuestions, error } = useSWR<IQuestion[], string>(
     [getEndpoint(APIEndpoints.LIST_QUESTIONS), token.token],
-    fetcher
+    fetcher,
+    {
+      refreshWhenOffline: false,
+      refreshWhenHidden: false,
+      revalidateOnFocus: false,
+      revalidateOnMount: true,
+      revalidateOnReconnect: false,
+      onSuccess: () => {
+        localStorage.setItem("questions", JSON.stringify(questionsList));
+      },
+    }
   );
+
+  const [questionsList, setQuestionsList] = useState<IQuestion[]>();
 
   const router = useRouter();
 
@@ -30,6 +41,26 @@ const Home = () => {
     /* if it's a shared question, dont need to update */
     if (questionState.shared) return;
 
+    /* if questionlist is already in local storage, set these as the questions */
+    const localStorageQuestions = localStorage.getItem("questions");
+    const localStorageIndex = localStorage.getItem("questionIndex");
+    const questions: IQuestion[] | false =
+      localStorageQuestions !== "" &&
+      localStorageQuestions !== null &&
+      localStorageQuestions !== "undefined" &&
+      (JSON.parse(localStorageQuestions) as IQuestion[]);
+
+    if (questions) {
+      setQuestionsList(questions);
+      if (
+        localStorageIndex !== "" &&
+        localStorageIndex !== null &&
+        localStorageIndex !== "undefined"
+      )
+        setQuestionIndex(parseInt(localStorageIndex));
+      return;
+    }
+
     /* update the global question the moment the questions list */
     /* has been retrieved from the api */
     updateQuestionState({
@@ -39,14 +70,13 @@ const Home = () => {
       ...(questionsList && questionsList[questionIndex]),
     });
 
-    if (
-      process.env.NODE_ENV === "production" &&
-      typeof window !== "undefined"
-    ) {
-      const analytics = getAnalytics();
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [questionsList]);
+  }, [fetchedQuestions]);
+
+  useEffect(() => {
+    /* update local storage index */
+    localStorage.setItem("questionIndex", questionIndex.toString());
+  }, [questionIndex]);
 
   if (
     !error &&
@@ -69,6 +99,9 @@ const Home = () => {
   };
 
   const answerQuestion = (response: number[]) => {
+    /* update local storage index to keep track */
+    localStorage.setItem("questionIndex", (questionIndex + 1).toString());
+
     updateQuestionState({
       ...questionState,
       lastIndex: questionIndex + 1,

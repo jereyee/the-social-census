@@ -1,10 +1,10 @@
+import { Center } from "@chakra-ui/layout";
 import UpdateName from "components/sign-in/screens/UpdateName";
-import React, { useState } from "react";
-
-import * as animationData from "../../../public/lottie/loading_spinner_with_tick.json";
-import Lottie from "react-lottie";
-import { useRouter } from "next/dist/client/router";
 import UpdatePhoto from "components/sign-in/screens/UpdatePhoto";
+import { useRouter } from "next/dist/client/router";
+import React, { useState } from "react";
+import Lottie from "react-lottie";
+import * as animationData from "../../../public/lottie/loading_spinner_with_tick.json";
 
 enum UpdateScreens {
   displayName,
@@ -45,17 +45,19 @@ const Update = () => {
       );
     case UpdateScreens.home:
       return (
-        <Lottie
-          options={successLottieOptions}
-          height={200}
-          width={200}
-          eventListeners={[
-            {
-              eventName: "complete",
-              callback: () => successCallback(),
-            },
-          ]}
-        />
+        <Center w="100%" h="80vh">
+          <Lottie
+            options={successLottieOptions}
+            height={200}
+            width={200}
+            eventListeners={[
+              {
+                eventName: "complete",
+                callback: () => successCallback(),
+              },
+            ]}
+          />
+        </Center>
       );
   }
 };
