@@ -125,7 +125,6 @@ const Login = () => {
   ];
 
   if (isAuth) {
-    const isNewUser = window.localStorage.getItem("isNewUser");
     void router.push("/home");
   }
 

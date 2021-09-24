@@ -19,6 +19,8 @@ import { AuthProvider } from "utils/auth/AuthProvider";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "utils/auth/firebase-config";
 import { getAnalytics } from "firebase/analytics";
+import { trackEvent } from "utils/analytics";
+import { useRouter } from "next/dist/client/router";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -35,8 +37,11 @@ const MyApp = ({
 }: MyAppProps) => {
   const [questionsContext, setQuestionsContext] = useState(defaultState);
 
+  const router = useRouter();
+  /* track analytics */
   useEffect(() => {
-    const analytics = getAnalytics(app);
+    trackEvent("page_view", { page_location: router.pathname });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

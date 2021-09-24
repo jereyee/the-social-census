@@ -16,6 +16,7 @@ import nookies from "nookies";
 import React, { useEffect } from "react";
 import useSWR from "swr";
 import { IResponse, IExclusion } from "types/shared";
+import { trackEvent } from "utils/analytics";
 import { APIEndpoints, getEndpoint } from "utils/api/functions";
 import { fetcher } from "utils/api/GET";
 
@@ -48,18 +49,7 @@ const Responses = () => {
   responsesWithoutDuplicates?.forEach((v) => {
     v.excluded = !!exclusionList?.find((i) => i.questionId === v.questionId);
   });
-
-  const router = useRouter();
-  /* 
-  useEffect(() => {
-    if (window.localStorage) {
-      if (!localStorage.getItem("firstLoad")) {
-        localStorage["firstLoad"] = true;
-        window.location.reload();
-      } else localStorage.removeItem("firstLoad");
-    }
-  }, []); */
-
+  
   return exclusionList && !exclusionError ? (
     <Box>
       {/* match responses header */}

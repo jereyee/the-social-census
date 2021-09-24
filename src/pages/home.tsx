@@ -7,6 +7,7 @@ import nookies from "nookies";
 import React, { useContext, useEffect, useState } from "react";
 import useSWR from "swr";
 import { IQuestion } from "types/shared";
+import { trackEvent } from "utils/analytics";
 import { APIEndpoints, getEndpoint } from "utils/api/functions";
 import { fetcher } from "utils/api/GET";
 import { submitQuestion } from "utils/api/POST";

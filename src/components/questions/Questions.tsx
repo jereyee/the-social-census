@@ -4,6 +4,7 @@ import Card from "components/micro/Card";
 import React, { useEffect, useRef, useState } from "react";
 import { themeColors } from "styles/colors";
 import { IQuestionData } from "types/shared";
+import { trackEvent } from "utils/analytics";
 import Binary from "./questionTypes/binary/Binary";
 import MultipleResponse from "./questionTypes/multipleResponse/MultipleResponse";
 import Scale from "./questionTypes/scale/Scale";
@@ -28,6 +29,7 @@ const Questions = ({
   useEffect(() => {
     cardBgColor.current =
       brandColors[Math.floor(Math.random() * brandColors.length)];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   console.log(response);
 
@@ -100,13 +102,25 @@ const Questions = ({
         <Button
           variant="primary"
           isDisabled={response.length === 0}
-          onClick={() => answerQuestion(response)}
+          onClick={() => {
+            trackEvent("answer_question", {
+              id: questionData.id,
+              body: questionData.body,
+            });
+            answerQuestion(response);
+          }}
         >
           Submit Answer
         </Button>
         <Button
           variant="naked"
-          onClick={() => changeQuestion(questionIndex + 1)}
+          onClick={() => {
+            trackEvent("skip_question", {
+              id: questionData.id,
+              body: questionData.body,
+            });
+            changeQuestion(questionIndex + 1);
+          }}
         >
           skip question
         </Button>

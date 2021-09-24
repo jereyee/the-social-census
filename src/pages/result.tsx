@@ -16,7 +16,7 @@ import Sections from "components/results/Sections";
 import { useRouter } from "next/dist/client/router";
 import Link from "next/link";
 import nookies from "nookies";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import useSWR from "swr";
 import { APIEndpoints, getEndpoint } from "utils/api/functions";
 import { fetcher } from "utils/api/GET";
@@ -29,6 +29,7 @@ import {
   IQuestion,
   QuestionType,
 } from "types/shared";
+import { trackEvent } from "utils/analytics";
 
 const Result = () => {
   const { questionState } = useContext(QuestionsContext);

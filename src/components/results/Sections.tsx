@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useRef, useState } from "react";
 import { ICommentsList, IKnowMore, IQuestion } from "types/shared";
+import { trackEvent } from "utils/analytics";
 import CommentsDrawer from "./comments/CommentsDrawer";
 import KnowMoreDrawer from "./knowMore/KnowMoreDrawer";
 
@@ -80,9 +81,18 @@ const Sections = ({
     typeof sectionData.knowMore | typeof sectionData.comments | undefined
   >(undefined);
 
+  /* if the selected option is know more or comments */
   if (selected?.title == sectionData.knowMore.title && !isKnowMoreOpen) {
+    trackEvent("view_knowMore", {
+      id: questionData.id,
+      body: questionData.body,
+    });
     onKnowMoreOpen();
   } else if (selected?.title == sectionData.comments.title && !isCommentsOpen) {
+    trackEvent("view_comments", {
+      id: questionData.id,
+      body: questionData.body,
+    });
     onCommentsOpen();
   }
 

@@ -5,7 +5,7 @@ import {
   Heading,
   HStack,
   Spacer,
-  VStack,
+  VStack
 } from "@chakra-ui/layout";
 import { Skeleton, Spinner, Text, useToast } from "@chakra-ui/react";
 import Header from "components/layout/menu/Header";
@@ -13,11 +13,12 @@ import UserAvatar from "components/layout/menu/UserAvatar";
 import Card from "components/micro/Card";
 import { useRouter } from "next/dist/client/router";
 import nookies from "nookies";
-import React from "react";
+import React, { useEffect } from "react";
 import useSWR from "swr";
+import { IQuestion, IReport, IReportResponse } from "types/shared";
+import { trackEvent } from "utils/analytics";
 import { APIEndpoints, getEndpoint } from "utils/api/functions";
 import { fetcher } from "utils/api/GET";
-import { IReportResponse, IReport, IQuestion } from "types/shared";
 
 const MatchCard = ({
   responseData,
@@ -145,7 +146,7 @@ const Report = () => {
       response,
       matchReport?.differentResponses2[index],
     ]) ?? [];
-
+  
   return !fetchError && matchReport ? (
     <Box>
       {/* match responses header */}

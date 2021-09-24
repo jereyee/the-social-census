@@ -9,6 +9,7 @@ import useSWR from "swr";
 import { getEndpoint, APIEndpoints } from "utils/api/functions";
 import { fetcher } from "utils/api/GET";
 import { IQuestionData } from "types/shared";
+import { trackEvent } from "utils/analytics";
 
 const Question = () => {
   const { user } = useAuth();
