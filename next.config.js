@@ -2,10 +2,22 @@
 const withPWA = require("next-pwa");
 const { createSecureHeaders } = require("next-secure-headers");
 
-module.exports.poweredByHeader = false;
-
 if (process.env.NODE_ENV === "production") {
-  module.exports.headers = async function () {
+}
+
+/** @type {import('next').NextConfig} */
+module.exports = withPWA({
+  pwa: {
+    disable: process.env.NODE_ENV === "development",
+    dest: "public",
+    //register: true,
+    //sw: "/sw.js",
+    scope: "/app",
+    dynamicStartUrlRedirect: "/login",
+  },
+  reactStrictMode: true,
+  poweredByHeader: false,
+  headers: async function () {
     return [
       {
         source: "/(.*)",
@@ -22,18 +34,5 @@ if (process.env.NODE_ENV === "production") {
         }),
       },
     ];
-  };
-}
-
-/** @type {import('next').NextConfig} */
-module.exports = withPWA({
-  pwa: {
-    disable: process.env.NODE_ENV === "development",
-    dest: "public",
-    //register: true,
-    //sw: "/sw.js",
-    scope: "/app",
-    dynamicStartUrlRedirect: "/login",
   },
-  reactStrictMode: true,
 });
