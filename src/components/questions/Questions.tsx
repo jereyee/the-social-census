@@ -29,7 +29,7 @@ const Questions = ({
   useEffect(() => {
     cardBgColor.current =
       brandColors[Math.floor(Math.random() * brandColors.length)];
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   console.log(response);
 

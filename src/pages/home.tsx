@@ -111,6 +111,7 @@ const Home = () => {
   }, [questionIndex]);
 
   const changeQuestion = (index: number) => {
+    console.log("change");
     updateQuestionState({
       ...questionState,
       lastIndex: index,
