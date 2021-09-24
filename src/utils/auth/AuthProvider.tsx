@@ -10,6 +10,7 @@ export const useAuth = () => {
   return useContext(AuthContext);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function AuthProvider({ children }: any) {
   const [user, setUser] = useState<User | null>(null);
 

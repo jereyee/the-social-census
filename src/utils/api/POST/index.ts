@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IUserComment } from "pages/result";
+import { IUserComment } from "types/shared";
 import { getEndpoint, APIEndpoints, getHeaders } from "../functions";
 
 export const submitQuestion = ({

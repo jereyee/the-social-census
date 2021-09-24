@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ICommentsList } from "pages/result";
+import { ICommentsList } from "types/shared";
 import { getEndpoint, APIEndpoints, getHeaders } from "../functions";
 
 export const deleteComment = ({

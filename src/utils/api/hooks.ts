@@ -23,6 +23,7 @@ export const useQuestion = (questionId: number) => {
           setFetchSuccess(false);
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchSuccess, token]);
 
   return {
