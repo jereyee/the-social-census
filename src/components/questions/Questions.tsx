@@ -41,7 +41,7 @@ const Questions = ({
     setResponse((arr) => arr.filter((item) => item !== selectedOption));
   };
 
-  if (questionData.type === "SCALE" && response.length === 0) setResponse([3]);
+  if (questionData.type === "SCALE" && response.length === 0) setResponse([2]);
 
   const questionTypes = {
     BINARY: (

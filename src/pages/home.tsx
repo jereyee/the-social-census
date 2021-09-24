@@ -24,7 +24,7 @@ const Home = () => {
       revalidateOnMount: true,
       revalidateOnReconnect: false,
       onSuccess: () => {
-        localStorage.setItem("questions", JSON.stringify(questionsList));
+        localStorage.setItem("questions", JSON.stringify(fetchedQuestions));
       },
     }
   );
@@ -40,7 +40,6 @@ const Home = () => {
   useEffect(() => {
     /* if it's a shared question, dont need to update */
     if (questionState.shared) return;
-
     /* if questionlist is already in local storage, set these as the questions */
     const localStorageQuestions = localStorage.getItem("questions");
     const localStorageIndex = localStorage.getItem("questionIndex");
