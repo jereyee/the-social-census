@@ -7,6 +7,7 @@ import {
 export const trackEvent = (
   eventName: string,
   eventParams?: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any;
   },
   options?: AnalyticsCallOptions

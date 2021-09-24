@@ -12,7 +12,7 @@ module.exports = withPWA({
     dest: "public",
     //register: true,
     //sw: "/sw.js",
-    scope: "/app",
+    scope: "/",
     dynamicStartUrlRedirect: "/login",
   },
   reactStrictMode: true,
