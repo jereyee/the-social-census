@@ -35,8 +35,6 @@ const Home = () => {
   const [questionIndex, setQuestionIndex] = useState(questionState.lastIndex);
 
   useEffect(() => {
-    /* if it's a shared question, dont need to update */
-    if (questionState.shared) return;
     /* if questionlist is already in local storage, set these as the questions */
     const localStorageQuestions = localStorage.getItem("questions");
     const localStorageIndex = localStorage.getItem("questionIndex");
@@ -47,18 +45,31 @@ const Home = () => {
       (JSON.parse(localStorageQuestions) as IQuestion[]);
 
     if (questions) {
-      setQuestionsList(questions);
+      const questionsToSet = questionState.shared
+        ? [questionState, ...questions]
+        : questions;
+      setQuestionsList(questionsToSet);
       if (
         localStorageIndex !== "" &&
         localStorageIndex !== null &&
         localStorageIndex !== "undefined"
       )
         setQuestionIndex(parseInt(localStorageIndex));
+      if (questionState.shared) setQuestionIndex(0);
       return;
     }
-    if (!questions) {
-      localStorage.setItem("questions", JSON.stringify(fetchedQuestions));
-      setQuestionsList(fetchedQuestions);
+    if (!questions && fetchedQuestions) {
+      const questionsToSet = questionState.shared
+        ? [questionState, ...fetchedQuestions]
+        : fetchedQuestions;
+      localStorage.setItem("questions", JSON.stringify(questionsToSet));
+      setQuestionsList(questionsToSet);
+    }
+
+    /* if it's a shared question, dont need to update */
+    if (questionState.shared) {
+      setQuestionIndex(0);
+      return;
     }
 
     /* update the global question the moment the questions list */

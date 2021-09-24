@@ -1,6 +1,6 @@
 import { Box, HStack, VStack } from "@chakra-ui/layout";
 import { Text, Wrap, WrapItem } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { themeColors } from "styles/colors";
 import { IOptionStats } from "types/shared";
@@ -56,6 +56,7 @@ const DoughnutChart = ({
   statistics: IOptionStats[];
 }) => {
   const transformedStatistics = transformStatistics(statistics);
+  const [chartGenerated, setChartGenerated] = useState(false);
 
   const chartConfig = {
     data: {
@@ -68,6 +69,8 @@ const DoughnutChart = ({
       ],
     },
   };
+
+  useEffect(() => setChartGenerated(true), [statistics]);
 
   return (
     <VStack
@@ -105,6 +108,9 @@ const DoughnutChart = ({
       <Doughnut
         data={chartConfig.data}
         options={{
+          transitions: {
+            active: { animation: { duration: chartGenerated ? 0 : 300 } },
+          },
           indexAxis: "x",
           plugins: {
             title: {

@@ -6,7 +6,7 @@ import {
   HStack,
   Spinner,
   useToast,
-  VStack,
+  VStack
 } from "@chakra-ui/react";
 import Header from "components/layout/menu/Header";
 import BarScale from "components/results/charts/BarScale";
@@ -16,20 +16,19 @@ import Sections from "components/results/Sections";
 import { useRouter } from "next/dist/client/router";
 import Link from "next/link";
 import nookies from "nookies";
-import React, { useContext, useEffect, useState } from "react";
-import useSWR from "swr";
-import { APIEndpoints, getEndpoint } from "utils/api/functions";
-import { fetcher } from "utils/api/GET";
-import QuestionsContext from "utils/questionsContext";
-import WebShare from "utils/web-share/WebShare";
+import React, { useContext, useState } from "react";
 import { useNetworkState } from "react-use";
+import useSWR from "swr";
 import {
   ICommentsList,
   IOptionStats,
   IQuestion,
-  QuestionType,
+  QuestionType
 } from "types/shared";
-import { trackEvent } from "utils/analytics";
+import { APIEndpoints, getEndpoint } from "utils/api/functions";
+import { fetcher } from "utils/api/GET";
+import QuestionsContext from "utils/questionsContext";
+import WebShare from "utils/web-share/WebShare";
 
 const Result = () => {
   const { questionState } = useContext(QuestionsContext);

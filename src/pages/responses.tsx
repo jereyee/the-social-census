@@ -11,12 +11,10 @@ import {
 } from "@chakra-ui/react";
 import Header from "components/layout/menu/Header";
 import QuestionInList from "components/questions/QuestionInList";
-import { useRouter } from "next/dist/client/router";
 import nookies from "nookies";
-import React, { useEffect } from "react";
+import React from "react";
 import useSWR from "swr";
-import { IResponse, IExclusion } from "types/shared";
-import { trackEvent } from "utils/analytics";
+import { IExclusion, IResponse } from "types/shared";
 import { APIEndpoints, getEndpoint } from "utils/api/functions";
 import { fetcher } from "utils/api/GET";
 
@@ -35,7 +33,6 @@ const Responses = () => {
     data: exclusionList,
     error: exclusionError,
     mutate: refreshExclusions,
-    isValidating,
   } = useSWR<IExclusion[], string>(
     [getEndpoint(APIEndpoints.LIST_MATCH_EXCLUSIONS), token.token],
     fetcher
@@ -49,7 +46,7 @@ const Responses = () => {
   responsesWithoutDuplicates?.forEach((v) => {
     v.excluded = !!exclusionList?.find((i) => i.questionId === v.questionId);
   });
-  
+
   return exclusionList && !exclusionError ? (
     <Box>
       {/* match responses header */}

@@ -8,7 +8,7 @@ import nookies from "nookies";
 import useSWR from "swr";
 import { getEndpoint, APIEndpoints } from "utils/api/functions";
 import { fetcher } from "utils/api/GET";
-import { IQuestionData } from "types/shared";
+import { IQuestionData, IResponse } from "types/shared";
 import { trackEvent } from "utils/analytics";
 
 const Question = () => {
@@ -16,6 +16,7 @@ const Question = () => {
   const { questionState, updateQuestionState } = useContext(QuestionsContext);
   const [redirectToHome, setRedirectToHome] = useState(false);
   const [redirectToLogin, setRedirectToLogin] = useState(false);
+  const [redirectToResults, setRedirectToResults] = useState(false);
   const [textToShow, setTextToShow] = useState(<Text>Redirecting...</Text>);
 
   const router = useRouter();
@@ -34,11 +35,23 @@ const Question = () => {
     fetcher
   );
 
+  const { data: responses } = useSWR<IResponse[], string>(
+    [getEndpoint(APIEndpoints.GET_USER_RESPONSES), token.token],
+    fetcher
+  );
+
   useEffect(() => {
     console.log("user: ", user);
-    if (redirectToHome || redirectToLogin) return;
+    if (redirectToHome || redirectToLogin || !responses || redirectToResults)
+      return;
 
     if (questionData && user) {
+      /* check if user alr has answered the question */
+      const alreadyAnswered = !!responses.find(
+        (response) => response.questionId === questionData.id
+      );
+      if (alreadyAnswered) setRedirectToResults(true);
+
       updateQuestionState({
         ...questionState,
         lastIndex: 0,
@@ -65,7 +78,7 @@ const Question = () => {
       setRedirectToLogin(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, questionData]);
+  }, [user, questionData, responses]);
 
   if (redirectToHome) {
     /* double check to make sure that the questions are the same */
@@ -90,6 +103,27 @@ const Question = () => {
       isClosable: true,
     });
     void router.push("/login");
+  }
+
+  if (redirectToResults) {
+    toast.closeAll();
+    toast({
+      title: "You've answered this question already",
+      status: "warning",
+      position: "top",
+      duration: 3000,
+      isClosable: true,
+    });
+    if (questionData)
+      void router.push(
+        {
+          pathname: "/result",
+          query: {
+            qid: questionData.id.toString(),
+          },
+        },
+        "/result"
+      );
   }
 
   return (
