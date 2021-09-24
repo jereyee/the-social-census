@@ -20,11 +20,10 @@ import UserAvatar from "components/layout/menu/UserAvatar";
 import Card from "components/micro/Card";
 import { useRouter } from "next/dist/client/router";
 import nookies from "nookies";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import Lottie from "react-lottie";
 import useSWR from "swr";
 import { Match as IMatch, MatchHistory } from "types/shared";
-import { trackEvent } from "utils/analytics";
 import { APIEndpoints, getEndpoint } from "utils/api/functions";
 import { fetcher } from "utils/api/GET";
 import { matchWithFriendCode } from "utils/api/POST";
@@ -82,10 +81,10 @@ const Match = () => {
     string
   >([getEndpoint(APIEndpoints.GET_MATCH_CODE), token.token], fetcher);
 
-  const { data: fetchedMatchHistory, error: matchHistoryError } = useSWR<
-    MatchHistory,
-    string
-  >([getEndpoint(APIEndpoints.GET_MATCH_HISTORY), token.token], fetcher);
+  const { data: fetchedMatchHistory } = useSWR<MatchHistory, string>(
+    [getEndpoint(APIEndpoints.GET_MATCH_HISTORY), token.token],
+    fetcher
+  );
 
   const { user } = useAuth();
 

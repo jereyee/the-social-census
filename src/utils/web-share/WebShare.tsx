@@ -1,6 +1,7 @@
 import { Button, ButtonProps } from "@chakra-ui/button";
 import { Box } from "@chakra-ui/layout";
 import React from "react";
+import { trackEvent } from "utils/analytics";
 
 const WebShare = ({
   buttonVariant,
@@ -16,6 +17,9 @@ const WebShare = ({
   url: string;
 }) => {
   const handleShareButton = () => {
+    trackEvent("socialShare", {
+      body: body,
+    });
     // Check if navigator.share is supported by the browser
     if (navigator.share) {
       navigator
