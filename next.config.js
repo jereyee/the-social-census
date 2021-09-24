@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const withPWA = require("next-pwa");
+const { createSecureHeaders } = require("next-secure-headers");
 
 module.exports.poweredByHeader = false;
 

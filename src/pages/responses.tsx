@@ -45,16 +45,15 @@ const Responses = () => {
   });
 
   const router = useRouter();
-
+  /* 
   useEffect(() => {
-    /* if (router.query.from === "match") router.reload(); */
     if (window.localStorage) {
       if (!localStorage.getItem("firstLoad")) {
         localStorage["firstLoad"] = true;
         window.location.reload();
       } else localStorage.removeItem("firstLoad");
     }
-  }, []);
+  }, []); */
 
   return exclusionList && !exclusionError && !router.query.from ? (
     <Box>
