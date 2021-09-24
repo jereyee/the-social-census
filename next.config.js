@@ -3,40 +3,22 @@ const withPWA = require("next-pwa");
 
 module.exports.poweredByHeader = false;
 
-const securityHeaders = [
-  {
-    key: "X-DNS-Prefetch-Control",
-    value: "on",
-  },
-  {
-    key: "X-XSS-Protection",
-    value: "1; mode=block",
-  },
-  {
-    key: "X-Frame-Options",
-    value: "SAMEORIGIN",
-  },
-  {
-    key: "X-Content-Type-Options",
-    value: "nosniff",
-  },
-  {
-    key: "Referrer-Policy",
-    value: "origin-when-cross-origin",
-  },
-  {
-    key: "Content-Security-Policy",
-    value:
-      "default-src 'self' social-census.com *.social-census.com; img-src https://*;",
-  },
-];
-
 if (process.env.NODE_ENV === "production") {
   module.exports.headers = async function () {
     return [
       {
         source: "/(.*)",
-        headers: securityHeaders,
+        headers: createSecureHeaders({
+          forceHTTPSRedirect: [
+            true,
+            {
+              maxAge: 60 * 60 * 24 * 4,
+              includeSubDomains: true,
+              preload: true,
+            },
+          ],
+          referrerPolicy: "same-origin",
+        }),
       },
     ];
   };
