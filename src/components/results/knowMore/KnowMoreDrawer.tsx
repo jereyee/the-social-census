@@ -39,7 +39,9 @@ const KnowMoreDrawer = ({ data, onClose }: IKnowMoreDrawer) => {
             color="brand.pink"
             textDecoration="underline"
           >
-            <Link href={source.url}>{source.title}</Link>
+            <a href={source.url} target="_blank" rel="noreferrer">
+              {source.title}
+            </a>
           </Text>
         ))}
       </DrawerBody>
