@@ -58,6 +58,7 @@ const Home = () => {
     }
     if (!questions) {
       localStorage.setItem("questions", JSON.stringify(fetchedQuestions));
+      setQuestionsList(fetchedQuestions);
     }
 
     /* update the global question the moment the questions list */
