@@ -38,6 +38,7 @@ const Home = () => {
   const [questionIndex, setQuestionIndex] = useState(questionState.lastIndex);
 
   useEffect(() => {
+    console.log('hi');
     /* if it's a shared question, dont need to update */
     if (questionState.shared) return;
     /* if questionlist is already in local storage, set these as the questions */

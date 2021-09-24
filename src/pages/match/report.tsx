@@ -5,7 +5,7 @@ import {
   Heading,
   HStack,
   Spacer,
-  VStack
+  VStack,
 } from "@chakra-ui/layout";
 import { Skeleton, Spinner, Text, useToast } from "@chakra-ui/react";
 import Header from "components/layout/menu/Header";
@@ -15,7 +15,7 @@ import { useRouter } from "next/dist/client/router";
 import nookies from "nookies";
 import React, { useEffect } from "react";
 import useSWR from "swr";
-import { IQuestion, IReport, IReportResponse } from "types/shared";
+import { IQuestion, IReport, IReportResponse, UserObject } from "types/shared";
 import { trackEvent } from "utils/analytics";
 import { APIEndpoints, getEndpoint } from "utils/api/functions";
 import { fetcher } from "utils/api/GET";
@@ -24,10 +24,14 @@ const MatchCard = ({
   responseData,
   token,
   sameResponse,
+  user,
+  otherUser,
 }: {
   responseData: Array<IReportResponse[]>;
   token: string;
   sameResponse: boolean;
+  user: UserObject;
+  otherUser: UserObject;
 }) => {
   const { data: questionData, error } = useSWR<IQuestion, string>(
     [
@@ -61,7 +65,7 @@ const MatchCard = ({
 
   return (
     <Skeleton isLoaded={!!(!error && questionData)} w="100%" speed={1.2}>
-      <Card w="100%" h="72px">
+      <Card w="100%" py={4}>
         <VStack
           w="100%"
           h="100%"
@@ -70,27 +74,51 @@ const MatchCard = ({
           justifyContent="center"
         >
           <Text variant="caption">{questionData?.body}</Text>
-          <Flex>
-            <Text variant="caption" color="brand.pink">
-              {optionBodies[0].map(
-                (body, index) =>
-                  `${body ?? ""}${
-                    index + 1 < optionBodies[0].length ? ", " : ""
-                  }`
+          <VStack alignItems="flex-start">
+            <HStack>
+              {!sameResponse && (
+                <UserAvatar
+                  currentUser={false}
+                  width="24px"
+                  height="24px"
+                  otherUser={{
+                    displayName: user.displayName,
+                    photoURL: user.photoURL,
+                  }}
+                />
               )}
-            </Text>
-            <Spacer />
-            {!sameResponse && (
-              <Text variant="caption" color="brand.orange">
-                {optionBodies[1].map(
+              <Text variant="caption" color="brand.pink">
+                {optionBodies[0].map(
                   (body, index) =>
                     `${body ?? ""}${
-                      index + 1 < optionBodies[1].length ? ", " : ""
+                      index + 1 < optionBodies[0].length ? ", " : ""
                     }`
                 )}
               </Text>
+            </HStack>
+            {!sameResponse && (
+              <HStack mt={2}>
+                (
+                <UserAvatar
+                  currentUser={false}
+                  width="24px"
+                  height="24px"
+                  otherUser={{
+                    displayName: otherUser.displayName,
+                    photoURL: otherUser.photoURL,
+                  }}
+                />
+                <Text variant="caption" color="brand.orange">
+                  {optionBodies[1].map(
+                    (body, index) =>
+                      `${body ?? ""}${
+                        index + 1 < optionBodies[1].length ? ", " : ""
+                      }`
+                  )}
+                </Text>
+              </HStack>
             )}
-          </Flex>
+          </VStack>
         </VStack>
       </Card>
     </Skeleton>
@@ -146,7 +174,7 @@ const Report = () => {
       response,
       matchReport?.differentResponses2[index],
     ]) ?? [];
-  
+
   return !fetchError && matchReport ? (
     <Box>
       {/* match responses header */}
@@ -214,6 +242,8 @@ const Report = () => {
                 token={token.token}
                 responseData={[question]}
                 sameResponse={true}
+                user={matchReport.user}
+                otherUser={matchReport.otherUser}
               />
             ))}
           </VStack>
@@ -232,6 +262,8 @@ const Report = () => {
                   token={token.token}
                   responseData={question}
                   sameResponse={false}
+                  user={matchReport.user}
+                  otherUser={matchReport.otherUser}
                 />
               ))}
             </VStack>
